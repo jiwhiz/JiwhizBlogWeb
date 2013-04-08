@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+<head>
+
+<title>Welcome to Jiwhiz Blog Website</title>
+<meta charset="utf-8" />
+
+<!-- Le styles -->
+<link href="../../../resources/css/bootstrap-2.3.1.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/font-awesome-3.0.0.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/icon-style.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/application.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/bootstrap-responsive-2.3.1.css" rel="stylesheet" type="text/css"/>
+
+</head>
+
+<body>
+
+	<!-- Top Fixed Menu-bar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="home.html">Jiwhiz Blog</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li><a href="home.html"><i class="icon-home"></i>Home</a></li>
+						<li><a href="blogs.html"><i class="icon-th-list"></i> Blog</a></li>
+						<li><a href="about.html"><i class="icon-info-sign"></i> About</a></li>
+						<li><a href="contact.html"><i class="icon-phone"></i> Contact</a></li>
+						<li><a href="signin.html"><i class="icon-signin"></i> Sign In</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<!-- Title Row -->
+		<div class="row" tiles:fragment="title">
+			<div class="span12 page-title">
+				<hr class="alt" />
+				<div class="page-titles">
+					<h3>User Profile</h3>
+				</div>
+				<hr class="alt" />
+			</div>
+		</div>
+		
+		<!-- Main Content Row -->
+		<div class="row">
+			<div class="span12" id="content">
+				<div class="row">
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- START of the content to be included in the execution result.  -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<div class="span9" tiles:fragment="content">
+					<div class="content-area">
+						<!-- Profile Row -->
+						<div class="row">
+							<div class="container-fluid">
+								<div class="row-fluid">
+									<div class="span4">
+										<div class="center">
+											<img th:if="${!profileUser.hasImageUrl}" src="../.../resources/img/gravatar.jpg" th:src="@{/resources/img/gravatar.jpg}" class="img img-portrait"/>
+											<img th:if="${profileUser.hasImageUrl}" th:src="${profileUser.imageUrl}" class="img img-portrait" />
+										</div>
+									</div>
+									<div class="span5">
+										<div class="row">
+											<div class="profile-name">
+												<span th:text="${profileUser.displayName}">User Display Name</span>
+											</div>
+											<span th:if="${profileUser.admin}" class="badge badge-important">Admin</span>
+											<span th:if="${profileUser.author}" class="badge badge-success">Author</span>
+											<hr />
+										</div>
+										<div class="row">
+											<div class="profile-website"><a th:href="${profileUser.webSiteLink}" th:text="${profileUser.webSite}">User Web Site</a></div>
+											<hr />
+											<span th:if="${profileUser.hasGoogleConnection}">
+												<a href="#" th:href="${profileUser.googleConnection.profileUrl}" rel="tooltip" th:title="${profileUser.googleConnection.displayName}" class="sb no-shadow googleplus">Google+</a>
+											</span>
+											<span th:if="${profileUser.hasTwitterConnection}">
+												<a href="#" th:href="${profileUser.twitterConnection.profileUrl}" rel="tooltip" th:title="${profileUser.twitterConnection.displayName}" class="sb no-shadow twitter">Twitter</a>
+											</span>
+											<span th:if="${profileUser.hasFacebookConnection}">
+												<a href="#" th:href="${profileUser.facebookConnection.profileUrl}" rel="tooltip" th:title="${profileUser.facebookConnection.displayName}" class="sb no-shadow facebook">Facebook</a>
+											</span>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<hr/>
+						
+						<!-- Comment List -->
+						<h2>Comments:</h2>
+						<div class="row">
+							<ul th:remove="all-but-first">
+								<li th:each="comment : ${comments}">
+									<div class="comment-info">
+										<div class="avatar">
+											<img th:if="${!comment.hasImageUrl}" src="../../../resources/img/gravatar.jpg" th:src="@{/resources/img/gravatar.jpg}" />
+											<img th:if="${comment.hasImageUrl}" th:src="@{'' + ${comment.imageUrl}}" />
+										</div>
+										<span class="comment-name" th:text="${comment.authorName}">John Doe</span> posted a comment in
+										<a href="display.html" th:href="@{'/post/' + ${comment.blogPost.fullPublishedPath} + '#comment-' + ${comment.id}}">
+											<span th:text="${comment.blogPost.title}">Blog Post Title</span></a>
+										<span class="comment-date"><span th:text="${comment.createdDateTimeString}">July 16th, 2012 at 4:49 pm</span></span>
+									</div>
+									<div class="comment-text">
+										<p th:utext="${comment.htmlContent}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+											convallis condimentum dignissim. Curabitur sapien nisi, ultrices vitae iaculis quis, consectetur ac neque.
+											Phasellus vitae lorem.</p>
+									</div>
+								</li>
+								<li class="comment-green">
+									<div class="avatar">
+										<a href="#"><img src="../../../resources/img/gravatar.jpg" /></a> <span class="comment-name"><a href="#">Jane
+												Doe</a></span> <span class="comment-date">July 16th, 2012 at 5:09 pm</span>
+									</div>
+									<div class="comment-text">
+										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis condimentum dignissim.
+											Curabitur sapien nisi, ultrices vitae iaculis quis, consectetur ac neque. Phasellus vitae lorem. Lorem ipsum
+											dolor sit amet, consectetur adipiscing elit. Curabitur convallis condimentum dignissim. Curabitur sapien
+											nisi, ultrices vitae iaculis quis, consectetur ac neque. Phasellus vitae lorem.</p>
+									</div>
+								</li>
+								<li>
+									<div class="avatar">
+										<a href="#"><img src="../../../resources/img/gravatar.jpg" /></a> <span class="comment-name"><a href="#">John
+												Doe</a></span> <span class="comment-date">July 16th, 2012 at 5:49 pm</span>
+									</div>
+									<div class="comment-text">
+										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis condimentum dignissim.
+											Curabitur sapien nisi, ultrices vitae iaculis quis, consectetur ac neque. Phasellus vitae lorem.</p>
+									</div>
+								</li>
+							</ul>
+						
+						</div>
+						<!-- end row -->
+					</div>
+
+					</div>
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- END of the content to be included in the execution result -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+					<!-- Side bar at right -->
+					<div class="span3">
+						Side bar
+					</div>
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /span12 : end of main content -->
+		</div>
+		<!-- /row -->
+
+		<!-- Footer Row -->
+		<div class="row">
+			<div class="span12">
+				<div class="copyright">
+					<span>&copy; JIWHIZ Consulting Inc. 2012. All right reserved.</span>
+					<div class="pull-right">
+						<a href="http://twitter.com/jiwhiz" rel="tooltip" title="@jiwhiz" class="sb no-shadow twitter">Twitter</a> <a
+							href="http://www.linkedin.com/in/jiwhiz" rel="tooltip" title="ca.linkedin.com/in/jiwhiz/"
+							class="sb no-shadow linkedin">LinkedIn</a> <a href="http://gplus.to/jiwhiz" rel="tooltip"
+							title="gplus.to/jiwhiz" class="sb no-shadow googleplus">Google+</a> <a href="https://github.com/jiwhiz"
+							rel="tooltip" title="github.com/jiwhiz" class="sb no-shadow github">Github</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<!-- /container wrapper -->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="../../../resources/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../../../resources/js/bootstrap-2.3.1.js"></script>
+
+</body>
+
+</html>

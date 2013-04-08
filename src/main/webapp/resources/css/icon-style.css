@@ -1,0 +1,1910 @@
+/* SOCIAL ICON */
+
+
+a.sb,
+.sb a {
+	width: 32px;
+	height: 32px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	text-indent: -900em;
+	color: #333;
+	text-decoration: none;
+	line-height: 100%;
+	white-space: nowrap;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+	margin: 0 2px 5px 0;
+	
+	/* default button color */
+	background-color: #bbb;
+	border: solid 1px #b8b8b9;
+	
+	/* default box shadow */
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
+
+	/* default border radius */
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    
+    transition:background-color 0.5s,border-color 0.3s;
+    -webkit-transition:background-color 0.5s,border-color 0.3s;
+    -moz-transition:background-color 0.5s,border-color 0.3s;
+    -o-transition:background-color 0.5s,border-color 0.3s;
+	
+}
+/* for IE */
+*:first-child+html a.sb,
+*:first-child+html .sb a {
+	text-indent: 0;
+	line-height: 0;
+	font-size: 0;
+	overflow: hidden;
+}
+
+a.sb:hover:after,
+.sb a:hover:after {
+	background-image: none;
+}
+a.sb:hover,
+.sb a:hover,
+a.sb:hover:after,
+.sb a:hover:after {
+	background-color: #5BB75B;
+    border-color: #51A351 #51A351 #387038;
+}
+
+a.sb.twitter,
+.sb a.twitter {
+	background-image: url(../img/twitter_bird.png);
+}
+
+a.sb.facebook,
+.sb a.facebook {
+	background-image: url(../img/facebook.png);
+}
+
+a.sb.googleplus,
+.sb a.googleplus {
+	background-image: url(../img/googleplus.png);
+}
+
+a.sb.github,
+.sb a.github {
+	background-image: url(../img/github.png);
+}
+
+a.sb.heart,
+.sb a.heart {
+	background-image: url(../img/heart.png);
+}
+
+a.sb.linkedin,
+.sb a.linkedin {
+	background-image: url(../img/linkedin.png);
+}
+
+a.sb.pinterest,
+.sb a.pinterest {
+	background-image: url(../img/pinterest.png);
+}
+
+a.sb.podcast,
+.sb a.podcast {
+	background-image: url(../img/podcast.png);
+}
+
+a.sb.rss,
+.sb a.rss {
+	background-image: url(../img/rss.png);
+}
+
+a.sb.share_this,
+.sb a.share_this {
+	background-image: url(../img/share_this.png);
+}
+
+a.sb.star,
+.sb a.star {
+	background-image: url(../img/star.png);
+}
+
+a.sb.vimeo,
+.sb a.vimeo {
+	background-image: url(../img/vimeo.png);
+}
+
+a.sb.youtube,
+.sb a.youtube {
+	background-image: url(../img/youtube.png);
+}
+
+a.sb.no-shadow,
+.sb.no-shadow a {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+/* ICON PACK */
+[class^="iconbig-"],
+[class*=" iconbig-"] {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  *margin-right: .3em;
+  line-height: 28px;
+  vertical-align: text-top;
+  background-image: url("../img/glyphicons.png");
+  background-position: 28px 28px;
+  background-repeat: no-repeat;
+}
+
+[class^="iconbig-"]:last-child,
+[class*=" iconbig-"]:last-child {
+  *margin-left: 0;
+}
+
+.iconbig-white {
+  background-image: url("../img/glyphicons-white.png");
+}
+/**********************************
+LINE 1
+***********************************/
+.iconbig-glass {
+  background-position: 0      0;
+}
+
+.iconbig-leaf {
+  background-position: -48px      0;
+}
+
+.iconbig-dog {
+  background-position: -96px      0;
+}
+
+.iconbig-male {
+  background-position: -144px      0;
+}
+
+.iconbig-female {
+  background-position: -192px      0;
+}
+
+.iconbig-car {
+  background-position: -240px     0;
+}
+
+.iconbig-user-plus {
+  background-position: -288px     0;
+}
+
+.iconbig-user-minus {
+  background-position: -336px     0;
+}
+
+.iconbig-film {
+  background-position: -384px     0;
+}
+
+.iconbig-ninja-star {
+  background-position: -432px     0;
+}
+
+/**********************************
+LINE 2
+***********************************/
+.iconbig-mail {
+  background-position: 0      		-48px;
+}
+
+.iconbig-camera {
+  background-position: -48px		-48px;
+}
+
+.iconbig-heart {
+  background-position: -96px		-48px;
+}
+
+.iconbig-umberella {
+  background-position: -144px		-48px;
+}
+
+.iconbig-train {
+  background-position: -192px		-48px;
+}
+
+.iconbig-print {
+  background-position: -240px		-48px;
+}
+
+.iconbig-delete {
+  background-position: -288px		-48px;
+}
+
+.iconbig-music {
+  background-position: -336px		-48px;
+}
+
+.iconbig-musical-notes {
+  background-position: -384px		-48px;
+}
+
+.iconbig-gear {
+  background-position: -432px		-48px;
+}
+
+/**********************************
+LINE 3
+***********************************/
+.iconbig-home{
+  background-position: 0		-96px;
+}
+
+.iconbig-frost {
+  background-position: -48px		-96px;
+}
+
+.iconbig-fire {
+  background-position: -96px		-96px;
+}
+
+.iconbig-2gear {
+  background-position: -144px		-96px;
+}
+
+.iconbig-couple {
+  background-position: -192px		-96px;
+}
+
+.iconbig-binoculars {
+  background-position: -240px		-96px;
+}
+
+.iconbig-gate{
+  background-position: -288px		-96px;
+}
+
+.iconbig-search {
+  background-position: -336px		-96px;
+}
+
+.iconbig-2cars {
+  background-position: -384px		-96px;
+}
+
+.iconbig-board{
+  background-position: -432px		-96px;
+}
+
+/**********************************
+LINE 4
+***********************************/
+.iconbig-pencil{
+  background-position: 0		-144px;
+}
+
+.iconbig-bus {
+  background-position: -48px		-144px;
+}
+
+.iconbig-wifi {
+  background-position: -96px		-144px;
+}
+
+.iconbig-suitcase {
+  background-position: -144px		-144px;
+}
+
+.iconbig-man {
+  background-position: -192px		-144px;
+}
+
+.iconbig-women {
+  background-position: -240px		-144px;
+}
+
+.iconbig-papper{
+  background-position: -288px		-144px;
+}
+
+.iconbig-coins{
+  background-position: -336px		-144px;
+}
+
+.iconbig-plane {
+  background-position: -384px		-144px;
+}
+
+.iconbig-board-notes{
+  background-position: -432px		-144px;
+}
+
+/**********************************
+LINE 5
+***********************************/
+.iconbig-line-graph{
+  background-position: 0		-192px;
+}
+
+.iconbig-bar-graph{
+  background-position: -48px		-192px;
+}
+
+.iconbig-pie-graph {
+  background-position: -96px		-192px;
+}
+
+.iconbig-all-user {
+  background-position: -144px		-192px;
+}
+
+.iconbig-key {
+  background-position: -192px		-192px;
+}
+
+.iconbig-calender {
+  background-position: -240px		-192px;
+}
+
+.iconbig-radio{
+  background-position: -288px		-192px;
+}
+
+.iconbig-handy-cam{
+  background-position: -336px		-192px;
+}
+
+.iconbig-white-star {
+  background-position: -384px		-192px;
+}
+
+.iconbig-black-star{
+  background-position: -432px		-192px;
+}
+
+/**********************************
+LINE 6
+***********************************/
+.iconbig-link{
+  background-position: 0		-240px;
+}
+
+.iconbig-eye{
+  background-position: -48px		-240px;
+}
+
+.iconbig-eye-slash {
+  background-position: -96px		-240px;
+}
+
+.iconbig-ticker {
+  background-position: -144px		-240px;
+}
+
+.iconbig-watch {
+  background-position: -192px		-240px;
+}
+
+.iconbig-clock {
+  background-position: -240px		-240px;
+}
+
+.iconbig-projector {
+  background-position: -288px		-240px;
+}
+
+.iconbig-timer {
+  background-position: -336px		-240px;
+}
+
+.iconbig-truck {
+  background-position: -384px		-240px;
+}
+
+.iconbig-gift{
+  background-position: -432px		-240px;
+}
+
+/**********************************
+LINE 7
+***********************************/
+.iconbig-compas {
+  background-position: 0		-288px;
+}
+
+.iconbig-mbuh {
+  background-position: -48px		-288px;
+}
+
+.iconbig-brooch {
+  background-position: -96px		-288px;
+}
+
+.iconbig-logof {
+  background-position: -144px		-288px;
+}
+
+.iconbig-lamp {
+  background-position: -192px		-288px;
+}
+
+.iconbig-tag {
+  background-position: -240px		-288px;
+}
+
+.iconbig-tags{
+  background-position: -288px		-288px;
+}
+
+.iconbig-mop{
+  background-position: -336px		-288px;
+}
+
+.iconbig-comb {
+  background-position: -384px		-288px;
+}
+
+.iconbig-gifts{
+  background-position: -432px		-288px;
+}
+
+/**********************************
+LINE 8
+***********************************/
+.iconbig-umbrella {
+  background-position: 0		-336px;
+}
+
+.iconbig-book {
+  background-position: -48px		-336px;
+}
+
+.iconbig-bookmark {
+  background-position: -96px		-336px;
+}
+
+.iconbig-signal {
+  background-position: -144px		-336px;
+}
+
+.iconbig-trophy {
+  background-position: -192px		-336px;
+}
+
+.iconbig-stroller {
+  background-position: -240px		-336px;
+}
+
+.iconbig-earphone {
+  background-position: -288px		-336px;
+}
+
+.iconbig-headphone {
+  background-position: -336px		-336px;
+}
+
+.iconbig-triangle {
+  background-position: -384px		-336px;
+}
+
+.iconbig-signals {
+  background-position: -432px		-336px;
+}
+
+/**********************************
+LINE 9
+***********************************/
+.iconbig-ref {
+  background-position: 0		-384px;
+}
+
+.iconbig-refresh {
+  background-position: -48px		-384px;
+}
+
+.iconbig-repeat {
+  background-position: -96px		-384px;
+}
+
+.iconbig-2way {
+  background-position: -144px		-384px;
+}
+
+.iconbig-river {
+  background-position: -192px		-384px;
+}
+
+.iconbig-repeats {
+  background-position: -240px		-384px;
+}
+
+.iconbig-tv {
+  background-position: -288px		-384px;
+}
+
+.iconbig-book1 {
+  background-position: -336px		-384px;
+}
+
+.iconbig-book2 {
+  background-position: -384px		-384px;
+}
+
+.iconbig-magnet {
+  background-position: -432px		-384px;
+}
+
+/**********************************
+LINE 10
+***********************************/
+.iconbig-table {
+  background-position: 0		-432px;
+}
+
+.iconbig-circlebw {
+  background-position: -48px		-432px;
+}
+
+.iconbig-water {
+  background-position: -96px		-432px;
+}
+
+.iconbig-crop {
+  background-position: -144px		-432px;
+}
+
+.iconbig-square-line {
+  background-position: -192px		-432px;
+}
+
+.iconbig-circle-line {
+  background-position: -240px		-432px;
+}
+
+.iconbig-pentagon-line {
+  background-position: -288px		-432px;
+}
+
+.iconbig-line {
+  background-position: -336px		-432px;
+}
+
+.iconbig-arc-line {
+  background-position: -384px		-432px;
+}
+
+.iconbig-squares {
+  background-position: -432px		-432px;
+}
+
+
+/**********************************
+LINE 11
+***********************************/
+.iconbig-font {
+  background-position: 0		-480px;
+}
+
+.iconbig-italic {
+  background-position: -48px		-480px;
+}
+
+.iconbig-bold {
+  background-position: -96px		-480px;
+}
+
+.iconbig-underline {
+  background-position: -144px		-480px;
+}
+
+.iconbig-line-trought {
+  background-position: -192px		-480px;
+}
+
+.iconbig-font-height {
+  background-position: -240px		-480px;
+}
+
+.iconbig-font-width {
+  background-position: -288px		-480px;
+}
+
+.iconbig-text-box {
+  background-position: -336px		-480px;
+}
+
+.iconbig-indent-left {
+  background-position: -384px		-480px;
+}
+
+.iconbig-indent-right {
+  background-position: -432px		-480px;
+}
+
+
+/**********************************
+LINE 12
+***********************************/
+.iconbig-align-left  {
+  background-position: 0		-528px;
+}
+
+.iconbig-align-center {
+  background-position: -48px		-528px;
+}
+
+.iconbig-align-right {
+  background-position: -96px		-528px;
+}
+
+.iconbig-align-justify {
+  background-position: -144px		-528px;
+}
+
+.iconbig-bullet {
+  background-position: -192px		-528px;
+}
+
+.iconbig-shrink-font {
+  background-position: -240px		-528px;
+}
+
+.iconbig-grow-font {
+  background-position: -288px		-528px;
+}
+
+.iconbig-code-open {
+  background-position: -336px		-528px;
+}
+
+.iconbig-code-close {
+  background-position: -384px		-528px;
+}
+
+.iconbig-multilevel-list {
+  background-position: -432px		-528px;
+}
+
+
+/**********************************
+LINE 13
+***********************************/
+.iconbig-message-open  {
+  background-position: 0		-573px;
+}
+
+.iconbig-message {
+  background-position: -48px		-573px;
+}
+
+.iconbig-inbox {
+  background-position: -96px		-573px;
+}
+
+.iconbig-outbox {
+  background-position: -144px		-573px;
+}
+
+.iconbig-message-send {
+  background-position: -196px		-576px;
+}
+
+.iconbig-message-pending {
+  background-position: -244px		-576px;
+}
+
+.iconbig-message-saved {
+  background-position: -292px		-576px;
+}
+
+.iconbig-message-notification1 {
+  background-position: -339px		-576px;
+}
+
+.iconbig-message-notification2 {
+  background-position: -387px		-576px;
+}
+
+.iconbig-message-notification3 {
+  background-position: -435px		-576px;
+}
+
+
+/**********************************
+LINE 14
+***********************************/
+.iconbig-messages {
+  background-position: 0		-622px;
+}
+
+.iconbig-messages-saved {
+  background-position: -50px		-621px;
+}
+
+.iconbig-messages-pending {
+  background-position: -98px		-621px;
+}
+
+.iconbig-messages-locked {
+  background-position: -146px		-621px;
+}
+
+.iconbig-messages-inbox {
+  background-position: -194px		-621px;
+}
+
+.iconbig-messages-outbox {
+  background-position: -242px		-623px;
+}
+
+.iconbig-screen-locked {
+  background-position: -289px		-624px;
+}
+
+.iconbig-screen-setting {
+  background-position: -337px		-624px;
+}
+
+.iconbig-screen-loading {
+  background-position: -385px		-624px;
+}
+
+.iconbig-phone {
+  background-position: -434px		-624px;
+}
+
+
+/**********************************
+LINE 15
+***********************************/
+.iconbig-coins-locked {
+  background-position: -2px		-669px;
+}
+
+.iconbig-coins-add {
+  background-position: -50px		-669px;
+}
+
+.iconbig-coins-edit {
+  background-position: -98px		-669px;
+}
+
+.iconbig-coins-delete {
+  background-position: -146px		-669px;
+}
+
+.iconbig-folder-open {
+  background-position: -195px		-672px;
+}
+
+.iconbig-folder-add {
+  background-position: -243px		-672px;
+}
+
+.iconbig-folder-edit {
+  background-position: -291px		-672px;
+}
+
+.iconbig-folder-locked {
+  background-position: -339px		-670px;
+}
+
+.iconbig-folder-flag {
+  background-position: -386px		-672px;
+}
+
+.iconbig-folder-setting {
+  background-position: -435px		-672px;
+}
+
+
+/**********************************
+LINE 16
+***********************************/
+.iconbig-note-checked {
+  background-position: 0      -720px;
+}
+
+.iconbig-note-write {
+  background-position: -48px      -720px;
+}
+
+.iconbig-note-open {
+  background-position: -96px      -720px;
+}
+
+.iconbig-note-copy {
+  background-position: -144px      -720px;
+}
+
+.iconbig-box {
+  background-position: -192px      -720px;
+}
+
+.iconbig-boxbox {
+  background-position: -240px     -720px;
+}
+
+.iconbig-list-item {
+  background-position: -288px     -720px;
+}
+
+.iconbig-list {
+  background-position: -336px     -720px;
+}
+
+.iconbig-list-music {
+  background-position: -384px     -720px;
+}
+
+.iconbig-pict {
+  background-position: -432px     -720px;
+}
+
+
+/**********************************
+LINE 17
+***********************************/
+.iconbig-imac {
+  background-position: 0      -768px;
+}
+
+.iconbig-itab {
+  background-position: -48px      -768px;
+}
+
+.iconbig-ipad {
+  background-position: -96px      -768px;
+}
+
+.iconbig-iphone {
+  background-position: -144px      -768px;
+}
+
+.iconbig-iphone-transfer {
+  background-position: -194px      -768px;
+}
+
+.iconbig-iphone-sharing{
+  background-position: -241px     -768px;
+}
+
+.iconbig-ipod {
+  background-position: -288px     -768px;
+}
+
+.iconbig-ipod-nano {
+  background-position: -336px     -768px;
+}
+
+.iconbig-headset {
+  background-position: -384px     -768px;
+}
+
+.iconbig-itunes {
+  background-position: -433px     -768px;
+}
+
+
+/**********************************
+LINE 18
+***********************************/
+.iconbig-skip-back {
+  background-position: 0      -816px;
+}
+
+.iconbig-decrease-speed {
+  background-position: -48px      -816px;
+}
+
+.iconbig-skip-backs {
+  background-position: -96px      -816px;
+}
+
+.iconbig-play {
+  background-position: -144px      -816px;
+}
+
+.iconbig-pause {
+  background-position: -192px      -816px;
+}
+
+.iconbig-stop {
+  background-position: -240px     -816px;
+}
+
+.iconbig-skip-forwards {
+  background-position: -288px     -816px;
+}
+
+.iconbig-increase-speed {
+  background-position: -336px     -816px;
+}
+
+.iconbig-skip-forward {
+  background-position: -384px     -816px;
+}
+
+.iconbig-step {
+  background-position: -432px     -816px;
+}
+
+
+/**********************************
+LINE 19
+***********************************/
+.iconbig-film {
+  background-position: 0      -864px;
+}
+
+.iconbig-download {
+  background-position: -48px      -864px;
+}
+
+.iconbig-speaker-mute {
+  background-position: -96px      -864px;
+}
+
+.iconbig-speaker-low {
+  background-position: -144px      -864px;
+}
+
+.iconbig-speaker-high {
+  background-position: -192px      -864px;
+}
+
+.iconbig-tele {
+  background-position: -240px     -864px;
+}
+
+.iconbig-move {
+  background-position: -288px     -864px;
+}
+
+.iconbig-3dots {
+  background-position: -336px     -864px;
+}
+
+.iconbig-little-sun {
+  background-position: -384px     -864px;
+}
+
+.iconbig-big-sun {
+  background-position: -432px     -864px;
+}
+
+
+/**********************************
+LINE 20
+***********************************/
+.iconbig-add{
+  background-position: 0      -912px;
+}
+
+.iconbig-edit {
+  background-position: -48px      -912px;
+}
+
+.iconbig-delete {
+  background-position: -96px      -912px;
+}
+
+.iconbig-success {
+  background-position: -144px      -912px;
+}
+
+.iconbig-question {
+  background-position: -192px      -912px;
+}
+
+.iconbig-hurufi {
+  background-position: -240px     -912px;
+}
+
+.iconbig-warning {
+  background-position: -288px     -912px;
+}
+
+.iconbig-delete1 {
+  background-position: -336px     -912px;
+}
+
+.iconbig-edit1 {
+  background-position: -384px     -912px;
+}
+
+.iconbig-disabled {
+  background-position: -432px     -912px;
+}
+
+
+/**********************************
+LINE 21
+***********************************/
+.iconbig-arrow-down{
+  background-position: 0      -960px;
+}
+
+.iconbig-arrow-up {
+  background-position: -48px      -960px;
+}
+
+.iconbig-cart {
+  background-position: -96px      -960px;
+}
+
+.iconbig-lock {
+  background-position: -144px      -960px;
+}
+
+.iconbig-unlock {
+  background-position: -192px      -960px;
+}
+
+.iconbig-thunderbold {
+  background-position: -240px     -960px;
+}
+
+.iconbig-check {
+  background-position: -288px     -960px;
+}
+
+.iconbig-cross {
+  background-position: -336px     -960px;
+}
+
+.iconbig-cartup {
+  background-position: -384px     -960px;
+}
+
+.iconbig-cartdown {
+  background-position: -432px     -960px;
+}
+
+
+/**********************************
+LINE 22
+***********************************/
+.iconbig-arrow-left{
+  background-position: 0      -1008px;
+}
+
+.iconbig-arrow-right {
+  background-position: -48px      -1008px;
+}
+
+.iconbig-arrow-down1 {
+  background-position: -96px      -1008px;
+}
+
+.iconbig-arrow-up1 {
+  background-position: -144px      -1008px;
+}
+
+.iconbig-resize-small {
+  background-position: -192px      -1008px;
+}
+
+.iconbig-resize-full {
+  background-position: -240px     -1008px;
+}
+
+.iconbig-arrow-left1 {
+  background-position: -288px     -1008px;
+}
+
+.iconbig-arrow-right1 {
+  background-position: -336px     -1008px;
+}
+
+.iconbig-arrow-up2 {
+  background-position: -384px     -1008px;
+}
+
+.iconbig-arrow-down2 {
+  background-position: -432px     -1008px;
+}
+
+
+/**********************************
+LINE 23
+***********************************/
+.iconbig-play{
+  background-position: 0      -1056px;
+}
+
+.iconbig-share-left {
+  background-position: -48px      -1056px;
+}
+
+.iconbig-share-right {
+  background-position: -96px      -1056px;
+}
+
+.iconbig-chevron-right {
+  background-position: -144px      -1056px;
+}
+
+.iconbig-chevron-left {
+  background-position: -192px      -1056px;
+}
+
+.iconbig-bluetooth {
+  background-position: -240px     -1056px;
+}
+
+.iconbig-euro {
+  background-position: -288px     -1056px;
+}
+
+.iconbig-dollar {
+  background-position: -336px     -1056px;
+}
+
+.iconbig-kurs {
+  background-position: -384px     -1056px;
+}
+
+.iconbig-retweet {
+  background-position: -433px     -1056px;
+}
+
+
+/**********************************
+LINE 24
+***********************************/
+.iconbig-moon{
+  background-position: 0      -1104px;
+}
+
+.iconbig-sun {
+  background-position: -48px      -1104px;
+}
+
+.iconbig-cloud {
+  background-position: -96px      -1104px;
+}
+
+.iconbig-navigator {
+  background-position: -144px      -1104px;
+}
+
+.iconbig-brush {
+  background-position: -192px      -1104px;
+}
+
+.iconbig-pen {
+  background-position: -240px     -1104px;
+}
+
+.iconbig-zoomin {
+  background-position: -288px     -1104px;
+}
+
+.iconbig-zoomout {
+  background-position: -336px     -1104px;
+}
+
+.iconbig-gardenlight {
+  background-position: -384px     -1104px;
+}
+
+.iconbig-telesk {
+  background-position: -432px     -1104px;
+}
+
+
+/**********************************
+LINE 25
+***********************************/
+.iconbig-repeat-lock{
+  background-position: 0      -1152px;
+}
+
+.iconbig-thunderbolt1{
+  background-position: -48px      -1152px;
+}
+
+.iconbig-marker {
+  background-position: -96px      -1152px;
+}
+
+.iconbig-anchor {
+  background-position: -144px      -1152px;
+}
+
+.iconbig-chat {
+  background-position: -192px      -1152px;
+}
+
+.iconbig-comment {
+  background-position: -240px     -1152px;
+}
+
+.iconbig-gent {
+  background-position: -288px     -1152px;
+}
+
+.iconbig-lady {
+  background-position: -336px     -1152px;
+}
+
+.iconbig-multiply {
+  background-position: -384px     -1152px;
+}
+
+.iconbig-divide {
+  background-position: -432px     -1152px;
+}
+
+
+/**********************************
+LINE 26
+***********************************/
+.iconbig-goggles{
+  background-position: 0      -1200px;
+}
+
+.iconbig-goggles1{
+  background-position: -48px      -1200px;
+}
+
+.iconbig-tubes {
+  background-position: -96px      -1200px;
+}
+
+.iconbig-bag {
+  background-position: -144px      -1200px;
+}
+
+.iconbig-fish {
+  background-position: -192px      -1200px;
+}
+
+.iconbig-ship {
+  background-position: -240px     -1200px;
+}
+
+.iconbig-flag {
+  background-position: -288px     -1200px;
+}
+
+.iconbig-star-serif {
+  background-position: -336px     -1200px;
+}
+
+.iconbig-qrcode {
+  background-position: -384px     -1200px;
+}
+
+.iconbig-barcode {
+  background-position: -432px     -1200px;
+}
+
+
+/**********************************
+LINE 27
+***********************************/
+.iconbig-swimming-pool{
+  background-position: 0      -1248px;
+}
+
+.iconbig-beach{
+  background-position: -48px      -1248px;
+}
+
+.iconbig-shovel {
+  background-position: -96px      -1248px;
+}
+
+.iconbig-restarea {
+  background-position: -144px      -1248px;
+}
+
+.iconbig-swimming {
+  background-position: -192px      -1248px;
+}
+
+.iconbig-swimsuit {
+  background-position: -240px     -1248px;
+}
+
+.iconbig-flag {
+  background-position: -288px     -1248px;
+}
+
+.iconbig-board {
+  background-position: -336px     -1248px;
+}
+
+.iconbig-keyboard {
+  background-position: -384px     -1248px;
+}
+
+.iconbig-keyboards {
+  background-position: -432px     -1248px;
+}
+
+
+/**********************************
+LINE 28
+***********************************/
+.iconbig-firewall {
+  background-position: 0      -1296px;
+}
+
+.iconbig-grenade {
+  background-position: -48px      -1296px;
+}
+
+.iconbig-cake {
+  background-position: -96px      -1296px;
+}
+
+.iconbig-lemonjus {
+  background-position: -144px      -1296px;
+}
+
+.iconbig-bir {
+  background-position: -192px      -1296px;
+}
+
+.iconbig-softdrink {
+  background-position: -240px     -1296px;
+}
+
+.iconbig-spoon {
+  background-position: -288px     -1296px;
+}
+
+.iconbig-pizza {
+  background-position: -336px     -1296px;
+}
+
+.iconbig-tart {
+  background-position: -384px     -1296px;
+}
+
+.iconbig-pad {
+  background-position: -432px     -1296px;
+}
+
+
+
+/**********************************
+LINE 29
+***********************************/
+.iconbig-wrench {
+  background-position: 0      -1344px;
+}
+
+.iconbig-bullets {
+  background-position: -48px      -1344px;
+}
+
+.iconbig-rate {
+  background-position: -96px      -1344px;
+}
+
+.iconbig-shirt {
+  background-position: -144px      -1344px;
+}
+
+.iconbig-jeans {
+  background-position: -192px      -1344px;
+}
+
+.iconbig-jacket {
+  background-position: -240px     -1344px;
+}
+
+.iconbig-mat {
+  background-position: -288px     -1344px;
+}
+
+.iconbig-suitcase {
+  background-position: -336px     -1344px;
+}
+
+.iconbig-scissors {
+  background-position: -384px     -1344px;
+}
+
+.iconbig-thewinner {
+  background-position: -432px     -1344px;
+}
+
+
+
+/**********************************
+LINE 30
+***********************************/
+.iconbig-skull {
+  background-position: 0      -1392px;
+}
+
+.iconbig-glass-bottle {
+  background-position: -48px      -1392px;
+}
+
+.iconbig-kettle {
+  background-position: -96px      -1392px;
+}
+
+.iconbig-teapot {
+  background-position: -144px      -1392px;
+}
+
+.iconbig-cup {
+  background-position: -192px      -1392px;
+}
+
+.iconbig-pot {
+  background-position: -240px     -1392px;
+}
+
+.iconbig-rack {
+  background-position: -288px     -1392px;
+}
+
+.iconbig-blender {
+  background-position: -336px     -1392px;
+}
+
+.iconbig-redcross {
+  background-position: -384px     -1392px;
+}
+
+.iconbig-hospital {
+  background-position: -432px     -1392px;
+}
+
+
+
+/**********************************
+LINE 31
+***********************************/
+.iconbig-mic {
+  background-position: 0      -1440px;
+}
+
+.iconbig-webcam {
+  background-position: -48px      -1440px;
+}
+
+.iconbig-gereja {
+  background-position: -96px      -1440px;
+}
+
+.iconbig-mosque {
+  background-position: -144px      -1440px;
+}
+
+.iconbig-temple {
+  background-position: -192px      -1440px;
+}
+
+.iconbig-vihara {
+  background-position: -240px     -1440px;
+}
+
+.iconbig-box1 {
+  background-position: -288px     -1440px;
+}
+
+.iconbig-box2 {
+  background-position: -336px     -1440px;
+}
+
+.iconbig-boom {
+  background-position: -384px     -1440px;
+}
+
+.iconbig-speak {
+  background-position: -432px     -1440px;
+}
+
+
+
+/**********************************
+LINE 32
+***********************************/
+.iconbig-flower {
+  background-position: 0      -1488px;
+}
+
+.iconbig-baseball {
+  background-position: -48px      -1488px;
+}
+
+.iconbig-rugbyball {
+  background-position: -96px      -1488px;
+}
+
+.iconbig-axe {
+  background-position: -144px      -1488px;
+}
+
+.iconbig-pingpong {
+  background-position: -192px      -1488px;
+}
+
+.iconbig-bowling {
+  background-position: -240px     -1488px;
+}
+
+.iconbig-pine {
+  background-position: -288px     -1488px;
+}
+
+.iconbig-tree {
+  background-position: -336px     -1488px;
+}
+
+.iconbig-file {
+  background-position: -384px     -1488px;
+}
+
+.iconbig-files {
+  background-position: -432px     -1488px;
+}
+
+
+
+/**********************************
+LINE 33
+***********************************/
+.iconbig-filter {
+  background-position: 0      -1536px;
+}
+
+.iconbig-gamestick {
+  background-position: -48px      -1536px;
+}
+
+.iconbig-dice {
+  background-position: -96px      -1536px;
+}
+
+.iconbig-calc {
+  background-position: -144px      -1536px;
+}
+
+.iconbig-tie {
+  background-position: -192px      -1536px;
+}
+
+.iconbig-diary {
+  background-position: -240px     -1536px;
+}
+
+.iconbig-data-cable {
+  background-position: -288px     -1536px;
+}
+
+.iconbig-domino {
+  background-position: -336px     -1536px;
+}
+
+.iconbig-piano {
+  background-position: -384px     -1536px;
+}
+
+.iconbig-box-globe {
+  background-position: -432px     -1536px;
+}
+
+
+
+/**********************************
+LINE 34
+***********************************/
+.iconbig-book {
+  background-position: 0      -1584px;
+}
+
+.iconbig-speedmeter {
+  background-position: -48px      -1584px;
+}
+
+.iconbig-certificate {
+  background-position: -96px      -1584px;
+}
+
+.iconbig-bell {
+  background-position: -144px      -1584px;
+}
+
+.iconbig-wax {
+  background-position: -192px      -1584px;
+}
+
+.iconbig-pin {
+  background-position: -240px     -1584px;
+}
+
+.iconbig-smartphone {
+  background-position: -288px     -1584px;
+}
+
+.iconbig-flags {
+  background-position: -336px     -1584px;
+}
+
+.iconbig-turtle {
+  background-position: -384px     -1584px;
+}
+
+.iconbig-rabbit {
+  background-position: -432px     -1584px;
+}
+
+
+
+/**********************************
+LINE 35
+***********************************/
+.iconbig-globe {
+  background-position: 0      -1632px;
+}
+
+.iconbig-bags {
+  background-position: -48px      -1632px;
+}
+
+.iconbig-hdd {
+  background-position: -96px      -1632px;
+}
+
+.iconbig-thumbs-up {
+  background-position: -144px      -1632px;
+}
+
+.iconbig-thumbs-down {
+  background-position: -192px      -1632px;
+}
+
+.iconbig-hand-right {
+  background-position: -240px     -1632px;
+}
+
+.iconbig-hand-left {
+  background-position: -288px     -1632px;
+}
+
+.iconbig-hand-up {
+  background-position: -336px     -1631px;
+}
+
+.iconbig-hand-down {
+  background-position: -384px     -1632px;
+}
+
+.iconbig-fullscreen {
+  background-position: -432px     -1632px;
+}
+
+
+/**********************************
+LINE 36
+***********************************/
+.iconbig-hand-bag {
+  background-position: 0      -1680px;
+}
+
+.iconbig-book-open {
+  background-position: -48px      -1680px;
+}
+
+.iconbig-cocard {
+  background-position: -96px      -1680px;
+}
+
+.iconbig-idcard {
+  background-position: -144px      -1680px;
+}
+
+.iconbig-gucci {
+  background-position: -192px      -1680px;
+}
+
+.iconbig-bullhorn {
+  background-position: -240px     -1680px;
+}
+
+.iconbig-barble {
+  background-position: -288px     -1680px;
+}
+
+.iconbig-briefcase {
+  background-position: -336px     -1680px;
+}
+
+.iconbig-file-in {
+  background-position: -384px     -1680px;
+}
+
+.iconbig-file-out {
+  background-position: -432px     -1680px;
+}
+
+
+/**********************************
+LINE 37
+***********************************/
+.iconbig-path {
+  background-position: 0      -1728px;
+}
+
+.iconbig-dropbox {
+  background-position: -48px      -1728px;
+}
+
+.iconbig-googleplus {
+  background-position: -96px      -1728px;
+}
+
+.iconbig-mobileme {
+  background-position: -144px      -1728px;
+}
+
+.iconbig-yahoo {
+  background-position: -192px      -1728px;
+}
+
+.iconbig-blogger {
+  background-position: -240px     -1728px;
+}
+
+.iconbig-picasa {
+  background-position: -288px     -1728px;
+}
+
+.iconbig-amazon {
+  background-position: -336px     -1728px;
+}
+
+.iconbig-tumblr {
+  background-position: -384px     -1728px;
+}
+
+.iconbig-wordpress {
+  background-position: -432px     -1728px;
+}
+
+
+/**********************************
+LINE 38
+***********************************/
+.iconbig-social1 {
+  background-position: 0      -1776px;
+}
+
+.iconbig-evernote {
+  background-position: -48px      -1776px;
+}
+
+.iconbig-xing {
+  background-position: -96px      -1776px;
+}
+
+.iconbig-social2 {
+  background-position: -144px      -1776px;
+}
+
+.iconbig-dribble {
+  background-position: -192px      -1776px;
+}
+
+.iconbig-deviantart {
+  background-position: -240px     -1776px;
+}
+
+.iconbig-faves {
+  background-position: -288px     -1776px;
+}
+
+.iconbig-linkedin {
+  background-position: -336px     -1776px;
+}
+
+.iconbig-forrst {
+  background-position: -384px     -1776px;
+}
+
+.iconbig-pinterest {
+  background-position: -432px     -1776px;
+}
+
+
+/**********************************
+LINE 39
+***********************************/
+.iconbig-social3 {
+  background-position: 0      -1824px;
+}
+
+.iconbig-reddit {
+  background-position: -48px      -1824px;
+}
+
+.iconbig-youtube {
+  background-position: -96px      -1824px;
+}
+
+.iconbig-lovedesign {
+  background-position: -144px      -1824px;
+}
+
+.iconbig-forsquare {
+  background-position: -192px      -1824px;
+}
+
+.iconbig-social4 {
+  background-position: -240px     -1824px;
+}
+
+.iconbig-gplus {
+  background-position: -288px     -1824px;
+}
+
+.iconbig-spotify {
+  background-position: -336px     -1824px;
+}
+
+.iconbig-stumbleupon {
+  background-position: -384px     -1824px;
+}
+
+.iconbig-social5 {
+  background-position: -432px     -1824px;
+}
+
+
+/**********************************
+LINE 40
+***********************************/
+.iconbig-facebook {
+  background-position: 0      -1872px;
+}
+
+.iconbig-twitt {
+  background-position: -48px      -1872px;
+}
+
+.iconbig-twitter {
+  background-position: -96px      -1872px;
+}
+
+.iconbig-googlebuzz {
+  background-position: -144px      -1872px;
+}
+
+.iconbig-vimeo {
+  background-position: -192px      -1872px;
+}
+
+.iconbig-flickr {
+  background-position: -240px     -1872px;
+}
+
+.iconbig-lastfm {
+  background-position: -288px     -1872px;
+}
+
+.iconbig-feed {
+  background-position: -336px     -1872px;
+}
+
+.iconbig-skipe {
+  background-position: -384px     -1872px;
+}
+
+.iconbig-mention {
+  background-position: -432px     -1872px;
+}

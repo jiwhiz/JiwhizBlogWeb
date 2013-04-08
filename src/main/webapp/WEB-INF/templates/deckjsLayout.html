@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title th:text="${slide.title}"></title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="author" content="Yuan Ji" />
+
+	<!-- Core and extension CSS files -->
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.core.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.goto.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.menu.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.navigation.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.status.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.hash.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/deckjs/css/deck.scale.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/shCore.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/resources/css/shThemeDefault.css}" />
+
+
+	<!-- Style theme. -->
+	<link rel="stylesheet" th:href="@{/resources/deckjs/css/jiwhiz-slide.css}"/>
+
+	<!-- Transition theme. -->
+	<link rel="stylesheet" th:href="@{/resources/deckjs/css/horizontal-slide.css}"/>
+
+	<script th:src="@{/resources/deckjs/js/modernizr.custom.js}"></script>
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="../../resources/img/favicon.ico" th:href="@{/resources/img/favicon.ico}"
+	type="image/x-icon" />
+<link rel="icon" href="../../resources/img/favicon.ico" th:href="@{/resources/img/favicon.ico}" type="image/x-icon" />
+</head>
+
+<body class="slides">
+
+<article class="deck-container" th:inline="text">
+
+<!-- Begin slides -->
+[[${slide.content}]]
+<!-- End -->
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+</article>
+
+
+<footer>
+<a th:href="@{/}"><img class="img-logo" th:src="@{/resources/img/logo.png}"/></a>
+</footer>
+
+<!-- Deck Core and extensions -->
+<script type="text/javascript" th:src="@{/resources/js/jquery-1.9.1.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.core.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.hash.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.menu.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.status.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.navigation.js}"></script>
+<script type="text/javascript" th:src="@{/resources/deckjs/js/deck.scale.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shCore.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shBrushJava.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shBrushJScript.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shBrushXml.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shBrushPlain.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/shBrushCss.js}"></script>
+
+
+<!-- Initialize the deck -->
+<script>
+$(function() {
+	$.deck('.slide');
+});
+</script>
+	<script type="text/javascript">
+		SyntaxHighlighter.defaults['toolbar'] = false;
+		SyntaxHighlighter.all();
+	</script>
+</body>
+</html>

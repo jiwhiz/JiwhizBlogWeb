@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+<head>
+
+<title>Welcome to Jiwhiz Blog Website</title>
+<meta charset="utf-8" />
+
+<!-- Le styles -->
+<link href="../../../resources/css/bootstrap-2.3.1.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/font-awesome-3.0.0.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/icon-style.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/application.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/bootstrap-responsive-2.3.1.css" rel="stylesheet" type="text/css"/>
+
+</head>
+
+<body>
+	<!-- Top Fixed Menu-bar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="home.html">Jiwhiz Blog</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li><a href="home.html"><i class="icon-home"></i>Home</a></li>
+						<li class="active"><a href="blogs.html"><i class="icon-th-list"></i> Blog</a></li>
+						<li><a href="about.html"><i class="icon-info-sign"></i> About</a></li>
+						<li><a href="contact.html"><i class="icon-phone"></i> Contact</a></li>
+						<li><a href="signin.html"><i class="icon-signin"></i> Sign In</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<!-- Title Row -->
+		<div class="row" tiles:fragment="title">
+			<div class="span12 page-title">
+				<hr class="alt" />
+				<div class="page-titles">
+					<h3>My Personal Blog</h3>
+					<p>Some of my thoughts and experiences.</p>
+				</div>
+				<hr class="alt" />
+			</div>
+		</div>
+		
+		<!-- Main Content Row -->
+		<div class="row">
+			<div class="span12" id="content">
+				<div class="row">
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- START of the content to be included in the execution result.  -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<div class="span9" tiles:fragment="content">
+						
+						<div class="row">
+							<div th:include="sharedLayout::paginationbar">Pagination</div>
+						</div>
+
+						<div class="row" th:each="blog : ${page.content}">
+							<div class="span9">
+								<div class="post">
+									<hr class="alt" />
+									<div class="post-content-meta">
+										<h4>
+											<span th:text="${blog.publishedDateString}">22 October, 2012</span>
+										</h4>
+										<h2 class="post-title">
+											<a href="post.html" th:href="@{'/post/' + ${blog.fullPublishedPath}}"><span th:text="${blog.title}">Blog
+													Post #1 Title</span></a>
+										</h2>
+									</div>
+									<div class="post-content-body">
+										<span th:utext="${blog.contentFirstParagraph}">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+											Vivamus congue pellentesque tincidunt. Vivamus a porttitor felis. Phasellus tortor nunc, pulvinar quis
+											vehicula eu, vestibulum non urna. Nam nec enim urna, a congue nisi. Suspendisse et urna nisl. Suspendisse
+											quis tortor non orci fermentum vehicula vel in justo. Pellentesque habitant morbi tristique senectus et netus
+											et malesuada fames ac turpis egestas. Praesent eu ipsum in est... </span>
+										<br/>
+										<strong><a href="post.html" th:href="@{'/post/' + ${blog.fullPublishedPath}}">Read more &raquo;</a></strong>
+									</div>
+									<div class="post-footer">
+										<div class="post-tags">
+											<span th:each="tag : ${blog.tags}"><a href="#"><span class="label label-success" th:text="${tag}">Java</span></a>
+											</span>
+										</div>
+										<p>
+											Published by <strong><a href="#" th:href="@{'/profile/' + ${blog.authorId}}"
+												th:text="${blog.authorName}">John Doe</a> </strong> on <span th:text="${blog.publishedDateString}">22 October,
+												2012</span> at <span th:text="${blog.publishedTimeString}">4:52:48 AM</span> | <span class="post-comment-count">
+												<a href="post.html#comments" th:href="@{'/post/' + ${blog.fullPublishedPath} + '#comments'}"> <i
+													class="icon-comments"></i> <span th:text="${blog.commentCount}">3</span> Comments
+											</a>
+											</span>
+										</p>
+
+									</div>
+								</div>
+
+							</div>
+							<hr />
+						</div>
+						<div class="row">
+							<div th:include="sharedLayout::paginationbar">Pagination</div>
+						</div>
+
+					</div>
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- END of the content to be included in the execution result -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+					<!-- Side bar at right -->
+					<div class="span3">
+						Side bar
+					</div>
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /span12 : end of main content -->
+		</div>
+		<!-- /row -->
+
+		<!-- Footer Row -->
+		<div class="row">
+			<div class="span12">
+				<div class="copyright">
+					<span>&copy; JIWHIZ Consulting Inc. 2012. All right reserved.</span>
+					<div class="pull-right">
+						<a href="http://twitter.com/jiwhiz" rel="tooltip" title="@jiwhiz" class="sb no-shadow twitter">Twitter</a> <a
+							href="http://www.linkedin.com/in/jiwhiz" rel="tooltip" title="ca.linkedin.com/in/jiwhiz/"
+							class="sb no-shadow linkedin">LinkedIn</a> <a href="http://gplus.to/jiwhiz" rel="tooltip"
+							title="gplus.to/jiwhiz" class="sb no-shadow googleplus">Google+</a> <a href="https://github.com/jiwhiz"
+							rel="tooltip" title="github.com/jiwhiz" class="sb no-shadow github">Github</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<!-- /container wrapper -->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="../../../resources/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../../../resources/js/bootstrap-2.3.1.js"></script>
+
+</body>
+
+</html>

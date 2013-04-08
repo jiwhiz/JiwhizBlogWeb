@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+<head>
+
+<title>Welcome to Jiwhiz Blog Website</title>
+<meta charset="utf-8" />
+
+<!-- Le styles -->
+<link href="../../../resources/css/bootstrap-2.3.1.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/font-awesome-3.0.0.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/icon-style.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/application.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/bootstrap-responsive-2.3.1.css" rel="stylesheet" type="text/css"/>
+
+</head>
+
+<body>
+
+	<!-- Top Fixed Menu-bar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="home.html">Jiwhiz Blog</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li><a href="home.html"><i class="icon-home"></i>Home</a></li>
+						<li><a href="blogs.html"><i class="icon-th-list"></i> Blog</a></li>
+						<li class="active"><a href="about.html"><i class="icon-info-sign"></i> About</a></li>
+						<li><a href="contact.html"><i class="icon-phone"></i> Contact</a></li>
+						<li><a href="signin.html"><i class="icon-signin"></i> Sign In</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<!-- Title Row -->
+		<div class="row" tiles:fragment="title">
+			<div class="span12 page-title">
+				<hr class="alt" />
+				<div class="page-titles">
+					<h3>About</h3>
+					<p>Something about Jiwhiz Blog.</p>
+				</div>
+				<hr class="alt" />
+			</div>
+		</div>
+		
+		<!-- Main Content Row -->
+		<div class="row">
+			<div class="span12" id="content">
+				<div class="row">
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- START of the content to be included in the execution result.  -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<div class="span9" tiles:fragment="content">
+						<div class="row">
+							<div class="span9">
+								<div class="post">
+									<h2>What is Jiwhiz Blog?</h2>
+									<p>A small blog application developed by <a href="http://www.jiwhiz.com">Yuan Ji</a>.</p>
+									<hr />
+									<blockquote>
+									<p>Everything should be made as simple as possible, but not one bit simpler.</p>
+									<small>Albert Einstein </small>
+									</blockquote>
+									<hr />
+									<p>This is a simple blog website I build with all open source projects, to experience the Java architecture
+										design for Web and mobile applications. The whole system is built upon 
+										<a href="http://www.springsource.org/spring-framework">Spring Framework</a>, using SpringMVC,
+										<a href="http://www.springsource.org/spring-security">Spring Security</a>, 
+										<a href="http://www.springsource.org/spring-social">Spring Social</a>, 
+										<a href="http://www.springsource.org/spring-data">Spring Data</a>, 
+										and some other open source projects, like
+										<a href="http://www.thymeleaf.org/">Thyemleaf</a>, 
+										<a href="http://code.google.com/p/mockito/">Mockito</a>, etc. All data is stored in a NoSQL database - 
+										<a href="http://www.mongodb.org/">MongoDB</a>, and front end UI is using 
+										<a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> with 
+										<a href="http://jquery.com/">jQuery</a>. The Web application is deployed to 
+										<a href="http://www.cloudfoundry.com/">Cloud Foundry</a> (Running at 
+										<a href="http://www.appfog.com/">AppFog.com</a>), an open source PAAS
+										cloud platform.</p>
+									<p>The whole application code is put at GitHub: 
+										<a href="https://github.com/jiwhiz/JiwhizBlogWeb">github.com/jiwhiz/JiwhizBlogWeb</a>
+										under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a>.
+									</p>
+									<hr />
+								</div>
+							</div>
+						</div>
+						<!-- /row -->
+						
+						<div class="row">
+							<div class="span3">
+								<div class="post">
+									<h4>Open Source Solution:</h4>
+								</div>
+							</div>
+							<div class="span3">
+								<div class="post">
+									<h4>PaaS and CloudFoundry:</h4>
+								</div>
+							</div>
+							<div class="span3">
+								<div class="post">
+									<h4>Domain Driven Design:</h4>
+								</div>
+							</div>
+						</div>
+						<!-- /row -->
+
+					</div>
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- END of the content to be included in the execution result -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+					<!-- Side bar at right -->
+					<div class="span3">
+						Side bar
+					</div>
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /span12 : end of main content -->
+		</div>
+		<!-- /row -->
+
+		<!-- Footer Row -->
+		<div class="row">
+			<div class="span12">
+				<div class="copyright">
+					<span>&copy; JIWHIZ Consulting Inc. 2012. All right reserved.</span>
+					<div class="pull-right">
+						<a href="http://twitter.com/jiwhiz" rel="tooltip" title="@jiwhiz" class="sb no-shadow twitter">Twitter</a> <a
+							href="http://www.linkedin.com/in/jiwhiz" rel="tooltip" title="ca.linkedin.com/in/jiwhiz/"
+							class="sb no-shadow linkedin">LinkedIn</a> <a href="http://gplus.to/jiwhiz" rel="tooltip"
+							title="gplus.to/jiwhiz" class="sb no-shadow googleplus">Google+</a> <a href="https://github.com/jiwhiz"
+							rel="tooltip" title="github.com/jiwhiz" class="sb no-shadow github">Github</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- /container wrapper -->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="../../../resources/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../../../resources/js/bootstrap-2.3.1.js"></script>
+
+</body>
+
+</html>

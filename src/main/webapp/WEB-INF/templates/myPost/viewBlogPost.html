@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+<head>
+<title>Welcome to Jiwhiz Blog Website</title>
+<meta charset="utf-8" />
+
+<!-- Le styles -->
+<link href="../../../resources/css/bootstrap-2.3.1.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/font-awesome-3.0.0.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/icon-style.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/application.css" rel="stylesheet" type="text/css"/>
+<link href="../../../resources/css/bootstrap-responsive-2.3.1.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+	<!-- Top Fixed Menu-bar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="home.html">Jiwhiz Blog</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li><a href="../site/home.html"><i class="icon-home"></i>Home</a></li>
+						<li><a href="../site/blogs.html"><i class="icon-th-list"></i> Blog</a></li>
+						<li><a href="../site/about.html"><i class="icon-info-sign"></i> About</a></li>
+						<li><a href="../site/contact.html"><i class="icon-phone"></i> Contact</a></li>
+						<li><a href="#"><i class="icon-user"></i> John Doe</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<div class="row">
+			<div class="span12" id="content">
+				<div class="row">
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- START of the content to be included in the execution result.  -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<div class="span12" tiles:fragment="content">
+						<div class="post">
+							<h2>View Blog Post:</h2>
+							<article class="post">
+								<header>
+									<h4 th:if="${blog.published}">
+										<span th:text="${blog.publishedDateTimeString}">Oct 22, 2012 3:43:36 AM</span>
+									</h4>
+									<h4 th:if="${!blog.published}">Un-published</h4>
+									<h3 class="post-title">
+										<span th:text="${blog.title}">Blog Title - First Post!!!</span>
+									</h3>
+								</header>
+	
+								<div class="post-body">
+									<span th:utext="${blog.content}"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus congue
+										pellentesque tincidunt. Vivamus a porttitor felis. Phasellus tortor nunc, pulvinar quis vehicula eu, vestibulum
+										non urna. Nam nec enim urna, a congue nisi. Suspendisse et urna nisl. Suspendisse quis tortor non orci
+										fermentum vehicula vel in justo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+										turpis egestas. Praesent eu ipsum in est... </span>
+								</div>
+								<p></p>
+								<footer class="post-footer">
+									<div class="post-tags">
+										<span th:each="tag : ${blog.tags}"><a href="#"><span class="label label-success" th:text="${tag}">Java</span></a> </span>
+									</div>
+									<p>Create at <span th:text="${blog.createdDateTimeString}">22 October, 2012</span></p>
+									<p th:if="${blog.published}">Published
+											on <span th:text="${blog.publishedDateString}">22 October, 2012</span>
+											at <span th:text="${blog.publishedTimeString}">4:52:48 AM</span>
+										<a class="btn" href="#" th:href="@{'/myPost/unpublishBlogPost/' + ${blog.id}}">Un-Publish</a>
+									</p>
+										
+									<div th:if="${!blog.published}">
+										<form action="#" th:action="@{/myPost/publishBlogPost}" th:object="${publishForm}" method="POST">
+											<input type="hidden" name="_method" value="PUT" />
+											<input type="hidden" th:field="*{id}"/>
+											<div class="control-group">
+												<label class="control-label">* Path: <span th:text="${publishForm.yearMonthPath}">/2012/10/</span></label>
+												<div class="controls">
+													<input type="text" class="input-xxlarge" th:field="*{path}" />
+													<p th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Incorrect Input</p>
+												</div>
+											</div>
+											<div class="control-group">
+												<div class="controls">
+													<button type="submit" class="btn btn-primary">Publish</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</footer>
+							</article>
+						</div>
+					</div>
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+					<!-- END of the content to be included in the execution result.    -->
+					<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+				</div>
+				<!-- end row -->
+			</div>
+			<!-- /span12 -->
+		</div>
+		<!-- /row -->
+
+		<!-- Footer Row -->
+		<div class="row">
+			<div class="span12">
+				<div class="copyright">
+					<span>&copy; JIWHIZ Consulting Inc. 2012. All right reserved.</span>
+					<div class="pull-right">
+						<a href="http://twitter.com/jiwhiz" rel="tooltip" title="@jiwhiz" class="sb no-shadow twitter">Twitter</a> <a
+							href="http://www.linkedin.com/in/jiwhiz" rel="tooltip" title="ca.linkedin.com/in/jiwhiz/"
+							class="sb no-shadow linkedin">LinkedIn</a> <a href="http://gplus.to/jiwhiz" rel="tooltip"
+							title="gplus.to/jiwhiz" class="sb no-shadow googleplus">Google+</a> <a href="https://github.com/jiwhiz"
+							rel="tooltip" title="github.com/jiwhiz" class="sb no-shadow github">Github</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- /contaoner /wrapper -->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="../../../resources/js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../../../resources/js/bootstrap-2.3.1.js"></script>
+
+</body>
+</html>

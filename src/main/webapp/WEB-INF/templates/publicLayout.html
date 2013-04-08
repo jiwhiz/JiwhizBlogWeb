@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+<head>
+
+<title>Welcome to Jiwhiz Blog Website</title>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="author" content="Yuan Ji" />
+
+<!-- Le styles -->
+<link href="../../resources/css/bootstrap-2.3.1.css" rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/bootstrap-2.3.1.css}" />
+<link href="../../resources/css/font-awesome-3.0.0.css" rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/font-awesome-3.0.0.css}" />
+<link href="../../resources/css/application.css" rel="stylesheet" type="text/css" th:href="@{/resources/css/application.css}" />
+<link href="../../resources/css/bootstrap-responsive-2.3.1.css" rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/bootstrap-responsive-2.3.1.css}" />
+<link href="../../resources/css/icon-style.css" rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/icon-style.css}" /><link href="../../resources/css/shCore.css" rel="stylesheet" type="text/css" th:href="@{/resources/css/shCore.css}" />
+<link href="../../resources/css/shThemeDefault.css" rel="stylesheet" type="text/css"
+	th:href="@{/resources/css/shThemeDefault.css}" />
+
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="../../resources/img/favicon.ico" th:href="@{/resources/img/favicon.ico}" type="image/x-icon" />
+<link rel="icon" href="../../resources/img/favicon.ico" th:href="@{/resources/img/favicon.ico}" type="image/x-icon" />
+</head>
+
+<body>
+
+	<!-- Head Menu -->
+	<div id="header" th:include="sharedLayout::headmenu">
+	</div>
+
+	<div class="container">
+
+		<!-- Title Row : used for all public pages except home page -->
+		<div class="row" tiles:include="title">
+		</div>
+
+		<!-- Message Row -->
+		<div class="row" th:if="${message ne null}">
+			<div th:include="sharedLayout::messageblock">Message...</div>
+		</div>
+
+		<!-- Main Content : content and Side-bar -->
+		<div class="row">
+			<div class="span12" id="content">
+				<div class="row">
+					<div class="span9" tiles:include="body">
+			          <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->      
+			          <!-- At runtime, the body of this <div> will be substituted by -->
+			          <!-- Tiles in order to create the final HTML page that will be -->
+			          <!-- sent to the browser.                                      -->
+			          <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->      
+					</div>
+
+					<!-- Side bar at right -->
+					<div class="span3">
+						<div th:include="sharedLayout::rightside">Side bar</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- Credit Row -->
+		<div class="row">
+			<div class="span12">
+				<div class="footer">
+					<h3>Credits</h3>
+					<p>Many thanks to these awesome open source projects:</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span4">
+				<div class="footer">
+					<ul>
+						<li><a href="http://www.springsource.org/spring-framework">Spring Framework</a></li>
+						<li><a href="http://www.springsource.org/spring-security">Spring Security</a></li>
+						<li><a href="http://www.springsource.org/spring-social">Spring Social</a></li>
+						<li><a href="http://www.springsource.org/spring-data">Spring Data</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="footer">
+					<ul>
+						<li><a href="http://www.mongodb.org/">MongoDB</a></li>
+						<li><a href="http://twitter.github.com/bootstrap/index.html">Twitter Bootstrap</a></li>
+						<li><a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a></li>
+						<li><a href="http://www.thymeleaf.org/index.html">Thymeleaf</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="span4">
+				<div class="footer">
+					<ul>
+						<li><a href="http://maven.apache.org/">Apache Maven</a></li>
+						<li><a href="http://www.eclipse.org/">Eclipse</a></li>
+						<li><a href="http://developer.android.com/index.html/">Android</a></li>
+						<li><a href="http://www.cloudfoundry.org/">Cloud Foundry</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="span12"></div>
+		</div>
+
+		<!-- Footer Row -->
+		<div class="row" th:include="sharedLayout::footer">
+		</div>
+
+	</div>
+	<!-- /container wrapper -->
+
+	<!-- Le javascript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="../../resources/js/jquery-1.9.1.js" th:src="@{/resources/js/jquery-1.9.1.js}"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap-2.3.1.js" th:src="@{/resources/js/bootstrap-2.3.1.js}"></script>
+	<script type="text/javascript" src="../../resources/js/jquery.tagcloud.js" th:src="@{/resources/js/jquery.tagcloud.js}"></script>
+	<script type="text/javascript" src="../../resources/js/application.js" th:src="@{/resources/js/application.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shCore.js" th:src="@{/resources/js/shCore.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shBrushJava.js" th:src="@{/resources/js/shBrushJava.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shBrushJScript.js" th:src="@{/resources/js/shBrushJScript.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shBrushXml.js" th:src="@{/resources/js/shBrushXml.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shBrushPlain.js" th:src="@{/resources/js/shBrushPlain.js}"></script>
+	<script type="text/javascript" src="../../resources/js/shBrushCss.js" th:src="@{/resources/js/shBrushCss.js}"></script>
+	<script type="text/javascript">
+		SyntaxHighlighter.defaults['toolbar'] = false;
+		SyntaxHighlighter.all();
+	</script>
+	
+</body>
+</html>
