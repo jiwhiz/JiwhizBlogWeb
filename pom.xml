@@ -415,11 +415,16 @@
 				<!-- Must use java 1.5 or higher for annotations -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.1</version>
+				<version>3.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -464,14 +469,13 @@
 				<artifactId>cf-maven-plugin</artifactId>
 				<version>1.0.0.M4</version>
 				<configuration>
-					<server>myappfog-instance</server>
-					<target>https://api.appfog.com</target>
-					<appname>jiwhizblog</appname>
-					<url>jiwhiz.com</url>
+					<server>mycloudfoundry-instance</server>
+					<target>http://api.cloudfoundry.com</target>
+					<appname>[yourappname]</appname>
 					<memory>1024</memory>
 					<services>
 						<service>
-							<name>mongodb-blog</name>
+							<name>[yourmongodbservicename]</name>
 							<vendor>mongodb</vendor>
 						</service>
 					</services>
