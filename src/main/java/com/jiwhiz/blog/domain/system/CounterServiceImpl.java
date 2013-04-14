@@ -90,8 +90,9 @@ public class CounterServiceImpl implements CounterService {
         if (counter == null){
             counter = new Counter();
             counter.setName(counterName);
-            counter.setSequence(1);
+            counter.setSequence(2); //should increase by one.
             mongoTemplate.save(counter);
+            return 1;
         }
         return counter.getSequence();
     }
