@@ -471,11 +471,11 @@
 				<configuration>
 					<server>mycloudfoundry-instance</server>
 					<target>http://api.cloudfoundry.com</target>
-					<appname>[yourappname]</appname>
+					<appname>jiwhizblogweb</appname>
 					<memory>1024</memory>
 					<services>
 						<service>
-							<name>[yourmongodbservicename]</name>
+							<name>mongodb-jiwhizblog</name>
 							<vendor>mongodb</vendor>
 						</service>
 					</services>

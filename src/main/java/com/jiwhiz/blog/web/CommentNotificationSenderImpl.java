@@ -17,10 +17,12 @@ package com.jiwhiz.blog.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.comfirm.alphamail.services.client.AlphaMailService;
 import com.comfirm.alphamail.services.client.AlphaMailServiceException;
 import com.comfirm.alphamail.services.client.entities.EmailContact;
+import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.post.CommentPost;
 import com.jiwhiz.mail.AbstractMailSender;
 
@@ -40,21 +42,34 @@ public class CommentNotificationSenderImpl extends AbstractMailSender implements
      */
     @Override
     public void send(CommentPost comment) {
-        EmailContact receiver = new EmailContact(getSenderName(), getSenderEmail());  //send to me now. TODO send to author
+    	UserAccount blogAuthor = comment.getBlogPost().getAuthorAccount();
+    	
+    	EmailContact sender = new EmailContact(comment.getAuthorAccount().getDisplayName(), comment.getAuthorAccount().getEmail());
+        EmailContact receiver = new EmailContact(blogAuthor.getDisplayName(), blogAuthor.getEmail());
+        EmailContact admin = new EmailContact(getAdminName(), getAdminEmail());
         Payload payload  = new Payload();
-        payload.author = comment.getBlogPost().getAuthorId();
+        payload.author = comment.getBlogPost().getAuthorAccount().getDisplayName();
         payload.user = comment.getAuthorAccount().getDisplayName();
         payload.post = comment.getBlogPost().getFullPublishedPath();
         payload.comment = comment.getContent();
-                
+
         try {
-            doSend(receiver, payload);
+            if (StringUtils.isEmpty(blogAuthor.getEmail())){
+                logger.info(String.format("Cannot send comment notification email. User %s email address is not set.", blogAuthor.getUserId()));
+            } else {
+                doSend(sender, receiver, payload);
+            }
+            
+            if (!admin.getEmail().equals(receiver.getEmail())){
+                payload.author = "admin";
+                doSend(sender, admin, payload);
+            }
         } catch (AlphaMailServiceException e) {
             e.printStackTrace();
             String logMessage = String.format("AlphaMail returned exception: Error Code: %s, Error Message: %s", e
                     .getResponse().getErrorCode(), e.getResponse().getMessage());
             logger.warn(logMessage);
-            // TODO display error in UI and let user contact Yuan?
+            // TODO display error in UI and let user contact admin?
         }
 
     }
@@ -64,6 +79,10 @@ public class CommentNotificationSenderImpl extends AbstractMailSender implements
         public String user;
         public String post;
         public String comment;
+        
+        public String toString() {
+            return String.format("Payload{author:'%s', user:'%s', post:'%s', comment:'%s'", author, user, post, comment);
+        }
     }
 
 }

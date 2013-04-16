@@ -39,8 +39,25 @@ public class AbstractMailSender {
 
     private final AlphaMailService mailService;
     private int projectId;
-    private String senderName;
-    private String senderEmail;
+
+    private String adminName;
+    private String adminEmail;
+    
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public String getAdminEmail() {
+        return adminEmail;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
+    }
 
     public int getProjectId() {
         return projectId;
@@ -48,22 +65,6 @@ public class AbstractMailSender {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    public String getSenderEmail() {
-        return senderEmail;
-    }
-
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
     }
 
     @Inject
@@ -78,10 +79,10 @@ public class AbstractMailSender {
      * @return response from Alpha Mail service
      * @throws AlphaMailServiceException
      */
-    protected ServiceIdentityResponse doSend(EmailContact receiver, Object payload) throws AlphaMailServiceException {
+    protected ServiceIdentityResponse doSend(EmailContact sender, EmailContact receiver, Object payload) 
+            throws AlphaMailServiceException {
         EmailMessagePayload message = new EmailMessagePayload().setProjectId(getProjectId()).setReceiverId(0)
-                .setSender(new EmailContact(getSenderName(), getSenderEmail())).setReceiver(receiver)
-                .setBodyObject(payload);
+                .setSender(sender).setReceiver(receiver).setBodyObject(payload);
         ServiceIdentityResponse response = mailService.queue(message);
         logger.debug("send email content ='"+payload.toString());
         logger.info(String.format("Send email to %s, result is %s ", receiver.getEmail(), response.getResult()));

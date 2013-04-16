@@ -141,11 +141,11 @@ public class BlogController extends AbstractPublicPageController {
      * @param httpServletRequest
      * @return
      */
-    @RequestMapping(value = "/comment/{id}", method = RequestMethod.POST, produces = "text/html")
-    public String postComment(@PathVariable("id") String id,
+    @RequestMapping(value = "/comment/{blogPostId}", method = RequestMethod.POST, produces = "text/html")
+    public String postComment(@PathVariable("blogPostId") String blogPostId,
             @ModelAttribute("commentForm") @Valid CommentForm commentForm, BindingResult bindingResult, Model uiModel,
             HttpServletRequest httpServletRequest) {
-        logger.debug("==>BlogController.postComment() for blog id=" + id);
+        logger.debug("==>BlogController.postComment() for blogPostId =" + blogPostId);
         
         //get login user id
         UserAccount account = AccountUtils.getLoginUserAccount();
@@ -154,17 +154,16 @@ public class BlogController extends AbstractPublicPageController {
             return "redirect:/signin";
         }
         
-        CommentPost comment = commentPostService.addComment(id, commentForm.getContent());
+        CommentPost comment = commentPostService.addComment(blogPostId, commentForm.getContent());
         if (comment == null){
             return "redirect:/blog";
         }
 
-        BlogPost blogPost = comment.getBlogPost();
+        BlogPost blogPost = this.blogPostService.getPublishedPostById(blogPostId);
         
         if (this.commentNotificationSender != null){
-            //send notification email to author
+            //send notification email to bog post author
             comment.setBlogPost(blogPost);
-            comment.setAuthorAccount(account);
             this.commentNotificationSender.send(comment);
         }
         

@@ -54,8 +54,8 @@ public class CloudConfig {
     public ContactMessageSender contactMessageSender() {
         ContactMessageSenderImpl sender = new ContactMessageSenderImpl(alphaMailService());
         sender.setProjectId(environment.getProperty("alphamail.project.contactMessage.id", int.class));
-        sender.setSenderName(environment.getProperty("alphamail.senderName"));
-        sender.setSenderEmail(environment.getProperty("alphamail.senderEmail"));
+        sender.setAdminName(environment.getProperty("alphamail.adminName"));
+        sender.setAdminEmail(environment.getProperty("alphamail.adminEmail"));
         return sender;
     }
 
@@ -63,8 +63,8 @@ public class CloudConfig {
     public CommentNotificationSender commentNotificationSender() {
         CommentNotificationSenderImpl sender = new CommentNotificationSenderImpl(alphaMailService());
         sender.setProjectId(environment.getProperty("alphamail.project.comment.notification.id", int.class));
-        sender.setSenderName(environment.getProperty("alphamail.senderName"));
-        sender.setSenderEmail(environment.getProperty("alphamail.senderEmail"));
+        sender.setAdminName(environment.getProperty("alphamail.adminName"));
+        sender.setAdminEmail(environment.getProperty("alphamail.adminEmail"));
         return sender;
     }
 }

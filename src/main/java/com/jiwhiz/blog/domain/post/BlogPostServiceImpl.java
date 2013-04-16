@@ -149,22 +149,38 @@ public class BlogPostServiceImpl extends AbstractPostServiceImpl implements Blog
     @Override
     public BlogPost getPostByPublishedPath(int year, int month, String path) {
         BlogPost blogPost = blogPostRepository.findByPublishedYearAndPublishedMonthAndPublishedPath(year, month, path);
-        if (blogPost == null) {
+        if (blogPost == null || !blogPost.isPublished()) {
             return null;
         }
 
+        return loadPublishBlogPost(blogPost);
+    }
+
+    private BlogPost loadPublishBlogPost(BlogPost blogPost){
         loadAuthorProfile(blogPost);
-        // load published comments with user profile
         List<CommentPost> comments = this.commentPostRepository.findByPostIdAndPublishedIsTrue(blogPost.getId(),
                         new Sort(Sort.Direction.ASC, "createdTime"));
         loadAuthorProfile(comments);
         blogPost.setComments(comments);
         blogPost.setCommentCount(comments.size());
-
-        return blogPost;
+    	return blogPost;
     }
+    
+    /* (non-Javadoc)
+     * 
+	 * @see com.jiwhiz.blog.domain.post.BlogPostService#getPublishedPostById(java.lang.String)
+	 */
+	@Override
+	public BlogPost getPublishedPostById(String id) {
+		BlogPost blogPost = blogPostRepository.findOne(id);
+		if (!blogPost.isPublished()){
+			return null;
+		}
+		
+		return loadPublishBlogPost(blogPost);
+	}
 
-    /*
+	/*
      * (non-Javadoc)
      * 
      * @see com.jiwhiz.blog.domain.post.BlogService#getPostById(java.lang.String)

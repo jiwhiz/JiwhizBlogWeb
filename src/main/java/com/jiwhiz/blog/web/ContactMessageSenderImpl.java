@@ -33,7 +33,7 @@ import com.jiwhiz.mail.AbstractMailSender;
 public class ContactMessageSenderImpl extends AbstractMailSender implements ContactMessageSender {
     final static Logger logger = LoggerFactory.getLogger(ContactMessageSenderImpl.class);
     
-    public ContactMessageSenderImpl(AlphaMailService mailService){
+	public ContactMessageSenderImpl(AlphaMailService mailService){
         super(mailService);
     }
     
@@ -42,18 +42,17 @@ public class ContactMessageSenderImpl extends AbstractMailSender implements Cont
      */
     @Override
     public void send(ContactForm contact) {
-        EmailContact receiver = new EmailContact(getSenderName(), getSenderEmail());  //send to me
-        setSenderName(contact.getName());
-        setSenderEmail(contact.getEmail());
+        EmailContact sender = new EmailContact(contact.getName(), contact.getEmail());
+        EmailContact receiver = new EmailContact(getAdminName(), getAdminEmail());
         
         try {
-            doSend(receiver, contact);
+            doSend(sender, receiver, contact);
         } catch (AlphaMailServiceException e) {
             e.printStackTrace();
             String logMessage = String.format("AlphaMail returned exception: Error Code: %s, Error Message: %s", e
                     .getResponse().getErrorCode(), e.getResponse().getMessage());
             logger.warn(logMessage);
-            // TODO display error in UI and let user contact Yuan?
+            // TODO display error in UI and let user contact admin?
         }
 
     }

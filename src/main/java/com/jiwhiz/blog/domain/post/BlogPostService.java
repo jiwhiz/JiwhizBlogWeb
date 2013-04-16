@@ -73,10 +73,19 @@ public interface BlogPostService {
     BlogPost getPostByPublishedPath(int year, int month, String path);
 
     /**
+     * Gets published BlogPost object by id. The BlogPost object will be pre-loaded 
+     * with authorAccount and published comments (also pre-loaded with authorAccount).
+     *  
+     * @param id
+     * @return null if BlogPost object is not published.
+     */
+    BlogPost getPublishedPostById(String id);
+
+    /**
      * Gets BlogPost object by id. The BlogPost object will be pre-loaded 
-     * with authorAccount and all comments. 
-     * SECURITY: Current logged in user must have ROLE_ADMIN;
-     * Or current user has ROLE_AUTHOR and is the author of the post.
+     * with authorAccount and all comments (include unpublished). 
+     * SECURITY: Current logged in user must have ROLE_ADMIN; Or current user has 
+     * ROLE_AUTHOR and is the author of the post.
      * 
      * @param id
      * @return
