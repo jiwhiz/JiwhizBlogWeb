@@ -15,11 +15,11 @@ import com.jiwhiz.blog.domain.system.CounterService;
  * Implementation for UserAdminService.
  * 
  * @author Yuan Ji
- *
+ * 
  */
 public class UserAdminServiceImpl implements UserAdminService {
     public static final String USER_ID_PREFIX = "user";
-    
+
     private final UserAccountRepository accountRepository;
     private final CounterService counterService;
 
@@ -31,15 +31,24 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /*
      * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.account.UserAdminService#createUserAccount(org.springframework.social.connect.ConnectionData)
+     * 
+     * @see
+     * com.jiwhiz.blog.domain.account.UserAdminService#createUserAccount(org.springframework.social.connect.ConnectionData
+     * )
      */
     @Override
     public UserAccount createUserAccount(ConnectionData data) {
+        long userIdSequence = this.counterService.getNextUserIdSequence();
         UserAccount account = new UserAccount();
-        account.setUserId(USER_ID_PREFIX + this.counterService.getNextUserIdSequence());
+        account.setUserId(USER_ID_PREFIX + userIdSequence);
         account.setDisplayName(data.getDisplayName());
         account.setImageUrl(data.getImageUrl());
-        account.setRoles(new UserRoleType[] { UserRoleType.ROLE_USER });
+        if (userIdSequence == 1l) {
+            account.setRoles(new UserRoleType[] { UserRoleType.ROLE_USER, UserRoleType.ROLE_AUTHOR,
+                    UserRoleType.ROLE_ADMIN });
+        } else {
+            account.setRoles(new UserRoleType[] { UserRoleType.ROLE_USER });
+        }
         this.accountRepository.save(account);
 
         return account;
@@ -47,27 +56,28 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /*
      * (non-Javadoc)
+     * 
      * @see com.jiwhiz.blog.domain.account.UserAdminService#setAuthor(java.lang.String, boolean)
      */
     @Override
-    public void setAuthor(String userId, boolean isAuthor) throws UsernameNotFoundException{
+    public void setAuthor(String userId, boolean isAuthor) throws UsernameNotFoundException {
         UserAccount account = loadUserByUserId(userId);
-            Set<UserRoleType> roleSet = new HashSet<UserRoleType>();
-            for (UserRoleType role : account.getRoles()) {
-                roleSet.add(role);
-            }
-            if (isAuthor) {
-                roleSet.add(UserRoleType.ROLE_AUTHOR);
-            } else {
-                roleSet.remove(UserRoleType.ROLE_AUTHOR);
-            }
-            account.setRoles(roleSet.toArray(new UserRoleType[roleSet.size()]));
-            this.accountRepository.save(account);
+        Set<UserRoleType> roleSet = new HashSet<UserRoleType>();
+        for (UserRoleType role : account.getRoles()) {
+            roleSet.add(role);
+        }
+        if (isAuthor) {
+            roleSet.add(UserRoleType.ROLE_AUTHOR);
+        } else {
+            roleSet.remove(UserRoleType.ROLE_AUTHOR);
+        }
+        account.setRoles(roleSet.toArray(new UserRoleType[roleSet.size()]));
+        this.accountRepository.save(account);
     }
-
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.social.security.SocialUserDetailsService#loadUserByUserId(java.lang.String)
      */
     @Override
@@ -81,6 +91,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
      */
     @Override
@@ -90,6 +101,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.springframework.social.UserIdSource#getUserId()
      */
     @Override
@@ -99,6 +111,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /*
      * (non-Javadoc)
+     * 
      * @see com.jiwhiz.blog.domain.account.UserAdminService#getCurrentUser()
      */
     @Override

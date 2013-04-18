@@ -17,6 +17,7 @@ package com.jiwhiz.blog.domain.account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,7 +55,7 @@ public class UserAdminServiceImplTest {
     // -------------------------------------------------------------------------
 
     @Test
-    public void testCreateAuthorAccount() throws Exception {
+    public void testCreateFirstUserAccount() throws Exception {
         
         when(mockCounterService.getNextUserIdSequence()).thenReturn(1l);
         
@@ -63,11 +64,26 @@ public class UserAdminServiceImplTest {
         UserAccount account = service.createUserAccount(data);
         verify(mockCounterService).getNextUserIdSequence();
         verify(mockRepository).save(account);
-        assertFalse(account.isAuthor());
-        assertFalse(account.isAdmin());
+        assertTrue(account.isAuthor());
+        assertTrue(account.isAdmin());
         assertEquals("user1", account.getUserId());
     }
     
+    @Test
+    public void testCreateNonFirstUserAccount() throws Exception {
+        
+        when(mockCounterService.getNextUserIdSequence()).thenReturn(2l);
+        
+        ConnectionData data = new ConnectionData("providerId", "providerUserId", "John", "url", "url",  null, null, null, null);
+
+        UserAccount account = service.createUserAccount(data);
+        verify(mockCounterService).getNextUserIdSequence();
+        verify(mockRepository).save(account);
+        assertFalse(account.isAuthor());
+        assertFalse(account.isAdmin());
+        assertEquals("user2", account.getUserId());
+    }
+
     @Test
     public void testAddAuthorRole() throws Exception {
         UserAccount account = new UserAccount();
