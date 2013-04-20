@@ -105,6 +105,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.setMessageSource(messageSource());
 
         Set<IDialect> additionalDialects = new HashSet<IDialect>();
         additionalDialects.add(new org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect());

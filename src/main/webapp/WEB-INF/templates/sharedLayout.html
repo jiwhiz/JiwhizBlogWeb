@@ -10,7 +10,7 @@
 					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
-					<a class="brand" href="home.html" th:href="@{/}">Jiwhiz Blog</a>
+					<a class="brand" href="home.html" th:href="@{/}" th:text="#{application_name}">Jiwhiz Blog</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav pull-right">
 							<li><a href="home.html" th:href="@{/}"><i class="icon-home"></i> Home</a></li>
@@ -108,7 +108,7 @@
 	<div th:fragment="footer">
 		<div class="span12">
 			<div class="copyright">
-				<span>&copy; <a href="http://www.jiwhiz.com">JIWHIZ Consulting Inc.</a> 2012-2013. All right reserved.</span>
+				<span th:text="#{page_footer_copyright}"></span>
 				<div class="pull-right">
 					<a href="http://twitter.com/jiwhiz" rel="tooltip" title="@jiwhiz" class="sb no-shadow twitter">Twitter</a> <a
 						href="http://www.linkedin.com/in/jiwhiz" rel="tooltip" title="ca.linkedin.com/in/jiwhiz/"
