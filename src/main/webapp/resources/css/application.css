@@ -208,14 +208,6 @@ body {
     padding: 0px 0 7px 15px;
 }
 
-.sidebar ul li a{
-    color: #2E7B22;
-}
-
-.sidebar ul li a:hover{
-    color:#468847;
-}
-
 /* COPYRIGHT FOOTER */
 .copyright{
 	background:#bbb;

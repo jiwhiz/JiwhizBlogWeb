@@ -54,7 +54,7 @@ a.sb:hover,
 .sb a:hover,
 a.sb:hover:after,
 .sb a:hover:after {
-	background-color: #5BB75B;
+	background-color: blue;
     border-color: #51A351 #51A351 #387038;
 }
 
