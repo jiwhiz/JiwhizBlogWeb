@@ -30,7 +30,6 @@ import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.post.BlogPostService;
 import com.jiwhiz.blog.domain.post.CommentPostService;
 import com.jiwhiz.blog.domain.post.SlidePostService;
-import com.jiwhiz.blog.domain.system.AdminService;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**
@@ -47,8 +46,6 @@ public class AbstractPageController {
     protected CommentPostService commentPostService;
     @Inject
     protected SlidePostService slidePostService;
-    @Inject
-    protected AdminService adminService;
     @Inject
     protected CounterService counterService;
 

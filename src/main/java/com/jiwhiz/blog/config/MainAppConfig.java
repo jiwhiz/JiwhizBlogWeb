@@ -37,9 +37,6 @@ import com.jiwhiz.blog.domain.post.CommentPostServiceImpl;
 import com.jiwhiz.blog.domain.post.SlidePostRepository;
 import com.jiwhiz.blog.domain.post.SlidePostService;
 import com.jiwhiz.blog.domain.post.SlidePostServiceImpl;
-import com.jiwhiz.blog.domain.system.AccessRecordRepository;
-import com.jiwhiz.blog.domain.system.AdminService;
-import com.jiwhiz.blog.domain.system.AdminServiceImpl;
 import com.jiwhiz.blog.domain.system.CounterService;
 import com.jiwhiz.blog.domain.system.CounterServiceImpl;
 
@@ -63,8 +60,6 @@ class MainAppConfig {
     private CommentPostRepository commentPostRepository;
     @Inject
     private SlidePostRepository slidePostRepository;
-    @Inject
-    private AccessRecordRepository accessRecordRepository;
     @Inject
     private UserSocialConnectionRepository userSocialConnectionRepository;
 
@@ -95,12 +90,6 @@ class MainAppConfig {
     public SlidePostService slidePostService(MongoTemplate mongoTemplate) {
         SlidePostServiceImpl service = new SlidePostServiceImpl(accountRepository, slidePostRepository, 
                 userAdminService(mongoTemplate), counterService(mongoTemplate));
-        return service;
-    }
-
-    @Bean
-    public AdminService adminService() {
-        AdminServiceImpl service = new AdminServiceImpl(accessRecordRepository);
         return service;
     }
 
