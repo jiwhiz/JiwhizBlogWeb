@@ -22,13 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -42,8 +36,6 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.impl.GoogleTemplate;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
-import org.springframework.social.security.SocialAuthenticationFilter;
-import org.springframework.social.security.SocialAuthenticationProvider;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
 import org.springframework.social.security.SocialAuthenticationServiceRegistry;
 import org.springframework.social.security.provider.OAuth1AuthenticationService;
@@ -55,40 +47,36 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.jiwhiz.blog.domain.account.AccountService;
 import com.jiwhiz.blog.domain.account.AccountUtils;
-import com.jiwhiz.blog.domain.account.MongoPersistentTokenRepositoryImpl;
 import com.jiwhiz.blog.domain.account.MongoUsersConnectionRepositoryImpl;
-import com.jiwhiz.blog.domain.account.RememberMeTokenRepository;
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAdminService;
 import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.web.AutoConnectionSignUp;
 
 /**
- * Configuration for Spring Social and Security.
+ * Configuration for Spring Social.
  * 
  * @author Yuan Ji
  *
  */
 @Configuration
-public class SocialAndSecurityConfig {
+public class SocialConfig {
+
     @Inject
     private Environment environment;
 
     @Inject
     private AccountService accountService;
 
-    @Inject UserAdminService userAdminService;
-    
+    @Inject 
+    private UserAdminService userAdminService;
+        
     @Inject
-    private AuthenticationManager authenticationManager;
-    
-    @Inject
-    private RememberMeTokenRepository rememberMeTokenRepository;
+    private UserSocialConnectionRepository userSocialConnectionRepository;
 
     /**
      * When a new provider is added to the app, register its {@link SocialAuthenticationService} here.
      * 
-     * @see FacebookConnectionFactory
      */
     @Bean
     public SocialAuthenticationServiceLocator socialAuthenticationServiceLocator() {
@@ -121,7 +109,7 @@ public class SocialAndSecurityConfig {
      * Singleton data access object providing access to connections across all users.
      */
     @Bean
-    public UsersConnectionRepository usersConnectionRepository(UserSocialConnectionRepository userSocialConnectionRepository) {
+    public UsersConnectionRepository usersConnectionRepository() {
         MongoUsersConnectionRepositoryImpl repository = new MongoUsersConnectionRepositoryImpl(userSocialConnectionRepository,
                 socialAuthenticationServiceLocator(), Encryptors.noOpText());
         repository.setConnectionSignUp(autoConnectionSignUp());
@@ -133,9 +121,9 @@ public class SocialAndSecurityConfig {
      */
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public ConnectionRepository connectionRepository(UserSocialConnectionRepository userSocialConnectionRepository) {
+    public ConnectionRepository connectionRepository() {
         UserAccount user = AccountUtils.getLoginUserAccount();
-        return usersConnectionRepository(userSocialConnectionRepository).createConnectionRepository(user.getUsername());
+        return usersConnectionRepository().createConnectionRepository(user.getUsername());
     }
 
     /**
@@ -146,22 +134,22 @@ public class SocialAndSecurityConfig {
      */
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public Google google(UserSocialConnectionRepository userSocialConnectionRepository) {
-        Connection<Google> google = connectionRepository(userSocialConnectionRepository).findPrimaryConnection(Google.class);
+    public Google google() {
+        Connection<Google> google = connectionRepository().findPrimaryConnection(Google.class);
         return google != null ? google.getApi() : new GoogleTemplate();
     }
 
     @Bean
     @Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)   
-    public Facebook facebook(UserSocialConnectionRepository userSocialConnectionRepository) {
-        Connection<Facebook> facebook = connectionRepository(userSocialConnectionRepository).findPrimaryConnection(Facebook.class);
+    public Facebook facebook() {
+        Connection<Facebook> facebook = connectionRepository().findPrimaryConnection(Facebook.class);
         return facebook != null ? facebook.getApi() : new FacebookTemplate();
     }
 
     @Bean
     @Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)   
-    public Twitter twitter(UserSocialConnectionRepository userSocialConnectionRepository) {
-        Connection<Twitter> twitter = connectionRepository(userSocialConnectionRepository).findPrimaryConnection(Twitter.class);
+    public Twitter twitter() {
+        Connection<Twitter> twitter = connectionRepository().findPrimaryConnection(Twitter.class);
         return twitter != null ? twitter.getApi() : new TwitterTemplate();
     }
 
@@ -170,45 +158,5 @@ public class SocialAndSecurityConfig {
         return new AutoConnectionSignUp(accountService);
     }
 
-    @Bean
-    public SocialAuthenticationFilter socialAuthenticationFilter(UserSocialConnectionRepository userSocialConnectionRepository) {
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager, userAdminService,
-                usersConnectionRepository(userSocialConnectionRepository), socialAuthenticationServiceLocator());
-        filter.setFilterProcessesUrl("/signin");
-        filter.setSignupUrl(null); 
-        filter.setConnectionAddedRedirectUrl("/myAccount");
-        filter.setPostLoginUrl("/myAccount"); //??? Remove it?
-        filter.setRememberMeServices(rememberMeServices());
-        return filter;
-    }
 
-    @Bean
-    public SocialAuthenticationProvider socialAuthenticationProvider(UserSocialConnectionRepository userSocialConnectionRepository){
-        return new SocialAuthenticationProvider(usersConnectionRepository(userSocialConnectionRepository), userAdminService);
-    }
-    
-    @Bean
-    public LoginUrlAuthenticationEntryPoint socialAuthenticationEntryPoint(){
-        return new LoginUrlAuthenticationEntryPoint("/signin");
-    }
-
-    @Bean
-    public RememberMeServices rememberMeServices(){
-        PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
-                        environment.getProperty("application.key"), userAdminService, persistentTokenRepository());
-        rememberMeServices.setAlwaysRemember(true);
-        return rememberMeServices;
-    }
-    
-    @Bean 
-    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider(){
-        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = 
-                        new RememberMeAuthenticationProvider(environment.getProperty("application.key"));
-        return rememberMeAuthenticationProvider; 
-    }
-
-    @Bean 
-    public PersistentTokenRepository persistentTokenRepository() {
-        return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
-    }
 }
