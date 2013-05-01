@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/signin");
         filter.setSignupUrl(null); 
         filter.setConnectionAddedRedirectUrl("/myAccount");
-        filter.setPostLoginUrl("/myAccount"); //??? Remove it?
+        filter.setPostLoginUrl("/myAccount"); //always open account profile page after login
         filter.setRememberMeServices(rememberMeServices());
         return filter;
     }
@@ -139,6 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logout()
             .deleteCookies("JSESSIONID")
             .logoutUrl("/signout")
+            .logoutSuccessUrl("/")
             .permitAll()
             .and()
         .rememberMe()
