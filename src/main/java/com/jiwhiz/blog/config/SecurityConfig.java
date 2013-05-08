@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.AuthenticationRegistry;
 import org.springframework.security.config.annotation.method.EnableGlobalMethodSecurity;
@@ -63,17 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private RememberMeTokenRepository rememberMeTokenRepository;
     
     @Inject
-    private AuthenticationManager authenticationManager;
-    
-    @Inject
     private UsersConnectionRepository usersConnectionRepository;
     
     @Inject
     private SocialAuthenticationServiceLocator socialAuthenticationServiceLocator;
     
     @Bean
-    public SocialAuthenticationFilter socialAuthenticationFilter() {
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager, userAdminService,
+    public SocialAuthenticationFilter socialAuthenticationFilter() throws Exception{
+        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAdminService,
                 usersConnectionRepository, socialAuthenticationServiceLocator);
         filter.setFilterProcessesUrl("/signin");
         filter.setSignupUrl(null); 
@@ -134,16 +130,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpConfigurator http) throws Exception {
         http
-        .authenticationEntryPoint(socialAuthenticationEntryPoint())
-        .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
-        .logout()
-            .deleteCookies("JSESSIONID")
-            .logoutUrl("/signout")
-            .logoutSuccessUrl("/")
-            .permitAll()
-            .and()
-        .rememberMe()
-        	.rememberMeServices(rememberMeServices());
+	        .authenticationEntryPoint(socialAuthenticationEntryPoint())
+	        .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
+	        .logout()
+	            .deleteCookies("JSESSIONID")
+	            .logoutUrl("/signout")
+	            .logoutSuccessUrl("/")
+	            .permitAll()
+	            .and()
+	        .rememberMe()
+	        	.rememberMeServices(rememberMeServices());
 	}
     
     @Override
