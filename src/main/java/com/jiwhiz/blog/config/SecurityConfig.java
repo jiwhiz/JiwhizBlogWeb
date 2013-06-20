@@ -20,13 +20,13 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.AuthenticationRegistry;
 import org.springframework.security.config.annotation.method.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.ExpressionUrlAuthorizations;
-import org.springframework.security.config.annotation.web.HttpConfigurator;
-import org.springframework.security.config.annotation.web.SpringSecurityFilterChainBuilder.IgnoredRequestRegistry;
+import org.springframework.security.config.annotation.web.HttpConfiguration;
+import org.springframework.security.config.annotation.web.WebSecurityBuilder;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -110,27 +110,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void ignoredRequests(IgnoredRequestRegistry ignoredRequests) {
-        ignoredRequests
-            .antMatchers("/resources/**");
+    public void configure(WebSecurityBuilder builder) throws Exception {
+        builder
+            .ignoring()
+                .antMatchers("/resources/**");
     }
-    
-    @Override
-    protected void authorizeUrls(ExpressionUrlAuthorizations interceptUrls) {
-        interceptUrls
-            .antMatchers("/favicon.ico", "/robots.txt").permitAll()
-            .antMatchers("/presentation/**").hasRole("USER")
-            .antMatchers("/myAccount/**").hasRole("USER")
-            .antMatchers("/myPost/**").hasRole("AUTHOR")
-            .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/**").permitAll();
-    }
-
 
 	@Override
-	protected void configure(HttpConfigurator http) throws Exception {
+	protected void configure(HttpConfiguration  http) throws Exception {
         http
-	        .authenticationEntryPoint(socialAuthenticationEntryPoint())
+            .authorizeUrls()
+                .antMatchers("/favicon.ico","robots.txt","/resources/**","/site/**").permitAll()
+                .antMatchers("/presentation/**").hasRole("USER")
+                .antMatchers("/myAccount/**").hasRole("USER")
+                .antMatchers("/myPost/**").hasRole("AUTHOR")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
+	        //.authenticationEntryPoint(socialAuthenticationEntryPoint())
 	        .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
 	        .logout()
 	            .deleteCookies("JSESSIONID")
@@ -147,6 +143,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         registry
         	.add(socialAuthenticationProvider())
         	.add(rememberMeAuthenticationProvider())
-        	.add(userAdminService);
-    } 
+        	.userDetailsService(userAdminService);
+    }
+    
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean()
+            throws Exception {
+        return super.authenticationManagerBean();
+    }
 }
