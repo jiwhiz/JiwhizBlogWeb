@@ -359,6 +359,12 @@
 
 	<build>
 	    <finalName>JiwhizBlogWeb</finalName>
+	    <resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <filtering>true</filtering>
+	        </resource>
+	    </resources>
 		<plugins>
 			<plugin>
 				<!-- Must use java 1.5 or higher for annotations -->
