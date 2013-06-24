@@ -35,18 +35,12 @@ public class MongoPersistentTokenRepositoryImpl implements PersistentTokenReposi
         this.rememberMeTokenRepository = rememberMeTokenRepository;
     }
     
-    /* (non-Javadoc)
-     * @see org.springframework.security.web.authentication.rememberme.PersistentTokenRepository#createNewToken(org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken)
-     */
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
         RememberMeToken newToken = new RememberMeToken(token);
         this.rememberMeTokenRepository.save(newToken);
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.web.authentication.rememberme.PersistentTokenRepository#updateToken(java.lang.String, java.lang.String, java.util.Date)
-     */
     @Override
     public void updateToken(String series, String tokenValue, Date lastUsed) {
         RememberMeToken token = this.rememberMeTokenRepository.findBySeries(series);
@@ -58,9 +52,6 @@ public class MongoPersistentTokenRepositoryImpl implements PersistentTokenReposi
 
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.web.authentication.rememberme.PersistentTokenRepository#getTokenForSeries(java.lang.String)
-     */
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
         RememberMeToken token = this.rememberMeTokenRepository.findBySeries(seriesId);
@@ -70,9 +61,6 @@ public class MongoPersistentTokenRepositoryImpl implements PersistentTokenReposi
         return new PersistentRememberMeToken(token.getUsername(), token.getSeries(), token.getTokenValue(), token.getDate());
     }
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.web.authentication.rememberme.PersistentTokenRepository#removeUserTokens(java.lang.String)
-     */
     @Override
     public void removeUserTokens(String username) {
         List<RememberMeToken> tokens = this.rememberMeTokenRepository.findByUsername(username);

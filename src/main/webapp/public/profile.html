@@ -1,0 +1,69 @@
+<!-- 
+	User Profile page content 
+-->
+<div class="content-area">
+	<h2>User Profile:</h2>
+	<!-- Profile Row -->
+	<div class="row">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span4">
+					<div class="center">
+						<img class="img img-portrait" src="{{profile.imageUrl}}"/>
+					</div>
+				</div>
+				<div class="span5">
+					<div class="row">
+						<div class="profile-name">
+							<span>{{profile.displayName}}</span>
+						</div>
+						<span ng-show="profile.admin" class="badge badge-important">Admin</span>
+						<span gn-show="profile.author" class="badge badge-success">Author</span>
+						<hr />
+					</div>
+					<div class="row">
+						<div class="profile-website">
+							<a href="{{profile.webSite | ExternalURL}}" target="_blank">{{profile.webSite}}</a>
+						</div>
+						<hr />
+						<span ng-show="profile.socialConnections['google']"> 
+							<a href="{{profile.socialConnections['google'].profileUrl | ExternalURL}}}}"
+								rel="tooltip" title="{{profile.socialConnections['google'].displayName}}"
+								class="sb no-shadow googleplus" target="_blank">Google+</a>
+						</span> 
+						<span ng-show="profile.socialConnections['twitter']">
+							<a href="{{profile.socialConnections['twitter'].profileUrl | ExternalURL}}}}"
+								rel="tooltip" title="{{profileUser.socialConnections['twitter'].displayName}}"
+								class="sb no-shadow twitter" target="_blank">Twitter</a>
+						</span> 
+						<span ng-show="profile.socialConnections['facebook']"> 
+							<a href="{{profile.socialConnections['facebook'].profileUrl | ExternalURL}}"
+								rel="tooltip" title="{{profile.socialConnections['facebook'].displayName}}"
+								class="sb no-shadow facebook" target="_blank">Facebook</a>
+						</span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<hr />
+
+	<!-- Comment List -->
+	<h2>Published Comments:</h2>
+	<div class="row">
+		<div ng-repeat="comment in profile.comments">
+			<div class="comment-info">
+				On {{comment.postedTime | date:'mediumDate'}} at {{comment.postedTime | date:'mediumTime'}}
+				{{profile.displayName}} posted a comment in 
+				<a href="#/blog/{{comment.blog.fullPublishedPath}}#{{comment.commentId}}">{{comment.blog.title}}</a>
+			</div>
+			<br/>
+			<div class="comment-text">
+				<markdown content="{{comment.content}}"></markdown>
+			</div>
+		</div>
+	</div>
+	<!-- end row -->
+</div>

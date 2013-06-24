@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
  * @author Yuan Ji
  *
  */
+@Deprecated
 public class PageWrapper<T> {
     public static final int MAX_PAGE_ITEM_DISPLAY = 5;
     private Page<T> page;

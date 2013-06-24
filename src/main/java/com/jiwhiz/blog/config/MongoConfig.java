@@ -15,15 +15,23 @@
  */
 package com.jiwhiz.blog.config;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.cloudfoundry.runtime.env.CloudEnvironment;
+import org.cloudfoundry.runtime.env.MongoServiceInfo;
+import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.data.authentication.UserCredentials;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
 /**
@@ -34,29 +42,31 @@ import com.mongodb.WriteConcern;
  */
 @Configuration
 @EnableMongoRepositories(basePackages = "com.jiwhiz.blog.domain")
-public class MongoConfig extends AbstractMongoConfiguration {
+public class MongoConfig {
     @Inject
     private Environment environment;
     
-    @Override
-    public String getDatabaseName() {
-        return environment.getProperty("mongodb.dbname");
-    }
-    
-    @Override
-    protected UserCredentials getUserCredentials() {
-        return new UserCredentials(environment.getProperty("mongodb.username"), environment.getProperty("mongodb.password"));
-    }
-
-    @Override
-    public String getMappingBasePackage() {
-        return "com.jiwhiz.blog.domain";
-    }
-
-    @Override
     public Mongo mongo() throws Exception {
-        Mongo mongo = new Mongo("localhost");
+        Mongo mongo = new MongoClient("localhost");
         mongo.setWriteConcern(WriteConcern.SAFE);
         return mongo;
+    }
+
+    @Bean
+    public MongoDbFactory mongoDbFactory() throws Exception {
+        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+
+        if (cloudEnvironment.isCloudFoundry()) {
+            List<MongoServiceInfo> serviceInfo = cloudEnvironment.getServiceInfos(MongoServiceInfo.class);
+            MongoServiceCreator serviceCreator = new MongoServiceCreator();
+            return serviceCreator.createService(serviceInfo.get(0));
+        } else {
+            return new SimpleMongoDbFactory(mongo(), environment.getProperty("mongodb.dbname"));
+        }
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() throws Exception {
+        return new MongoTemplate(mongoDbFactory());
     }
 }

@@ -1,0 +1,42 @@
+<!--
+	Edit current logged in user profile data. 
+-->
+<div class="content-area" ng-controller="MyProfileUpdateController">
+	<h2>Update My Account</h2>
+
+	<!-- Edit Profile Form -->
+	<form>
+		<!-- Display Name -->
+		<div class="control-group">
+			<label class="control-label">* Display Name:</label>
+			<div class="controls">
+				<input type="text" class="input-xlarge" required ng-model="profileForm.displayName" />
+			</div>
+		</div>
+
+		<!-- Email -->
+		<div class="control-group">
+			<label class="control-label">Email: </label>
+			<div class="controls">
+				<input type="email" class="input-xlarge" ng-model="profileForm.email" 
+					popover="Your email address will not be published!" 
+        			popover-trigger="focus" />
+			</div>
+		</div>
+
+		<!-- Web Site -->
+		<div class="control-group">
+			<label class="control-label">Web Site: </label>
+			<div class="controls">
+				<input type="text" class="input-xlarge" ng-model="profileForm.webSite"  />
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				 <button ng-click="cancel()" class="btn">Cancel</button>
+				 <button ng-click="submit()" class="btn btn-primary">Save</button>
+			</div>
+		</div>
+	</form>
+</div>
+

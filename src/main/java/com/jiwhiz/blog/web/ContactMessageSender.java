@@ -18,7 +18,7 @@ package com.jiwhiz.blog.web;
 import com.jiwhiz.blog.web.site.ContactForm;
 
 /**
-* Send contact messages by Web contact form in Contact page.
+* Send contact messages by Web contact form in Contact page to web site administrator.
 * 
 * @author Yuan Ji
 *

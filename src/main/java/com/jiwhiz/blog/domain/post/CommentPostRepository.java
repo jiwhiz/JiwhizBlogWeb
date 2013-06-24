@@ -17,8 +17,6 @@ package com.jiwhiz.blog.domain.post;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -27,15 +25,22 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  */
 public interface CommentPostRepository extends MongoRepository<CommentPost, String>{
-    List<CommentPost> findByPostId(String postId, Sort sort);
     
-    List<CommentPost> findByPostIdAndPublishedIsTrue(String postId, Sort sort);
+    List<CommentPost> findAll(Sort sort);
     
-    List<CommentPost> findByAuthorIdAndPublishedIsTrue(String authorId, Sort sort);
+    List<CommentPost> findByBlogPostKey(String blogPostKey, Sort sort);
     
-    List<CommentPost> findByPublishedIsTrue(Sort sort);
+    List<CommentPost> findByBlogPostKeyAndStatus(String blogPostKey, CommentStatusType status, Sort sort);
     
-    Page<CommentPost> findAll(Pageable pageable);
+    List<CommentPost> findByAuthorKey(String authorKey, Sort sort);
     
-    Page<CommentPost> findByAuthorId(String authorId, Pageable pageable);
+    List<CommentPost> findByAuthorKeyAndStatus(String authorKey, CommentStatusType status, Sort sort);
+    
+    List<CommentPost> findByStatus(CommentStatusType status, Sort sort);
+    
+    CommentPost findByPostId(String postId); 
+    
+    int countByBlogPostKeyAndStatus(String blogPostKey, CommentStatusType status);
+    
+    int countByBlogPostKey(String blogPostKey);
 }

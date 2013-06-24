@@ -17,12 +17,14 @@ package com.jiwhiz.blog.web;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import com.jiwhiz.blog.domain.account.AccountService;
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 
 /**
  * Automatically sign up user who is already signin through other social network account (google or twitter).
@@ -32,18 +34,26 @@ import com.jiwhiz.blog.domain.account.UserAccount;
  *
  */
 public class AutoConnectionSignUp implements ConnectionSignUp{
-    private final AccountService accountService;
+    private static final Logger logger = LoggerFactory.getLogger(AutoConnectionSignUp.class);
+    
+    private final UserAccountService userAccountService;
+    private final SystemMessageSender systemMessageSender;
     
     @Inject
-    public AutoConnectionSignUp(AccountService accountService){
-        this.accountService = accountService;
+    public AutoConnectionSignUp(UserAccountService userAccountService, SystemMessageSender systemMessageSender){
+        this.userAccountService = userAccountService;
+        this.systemMessageSender = systemMessageSender;
     }
     
     public String execute(Connection<?> connection) {
         ConnectionData data = connection.createData();
+        UserAccount account = this.userAccountService.createUserAccount(data);
+        systemMessageSender.sendNewUserRegistered(account);
         
-        UserAccount account = this.accountService.createUserAccount(data);
-        
+        if (logger.isDebugEnabled()) {
+            logger.debug("Automatically create a new user account '"+account.getUserId()+"', for "+account.getDisplayName());
+            logger.debug("connection data is from provider '"+data.getProviderId()+"', providerUserId is '"+data.getProviderUserId());
+        }
         return account.getUserId();
     }
 }

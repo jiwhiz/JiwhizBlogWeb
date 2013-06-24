@@ -3,3 +3,5 @@
 .classpath
 .settings
 target
+/target
+/manifest.yml

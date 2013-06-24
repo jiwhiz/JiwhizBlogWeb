@@ -16,7 +16,6 @@
 package com.jiwhiz.blog.domain.post;
 
 import java.io.StringReader;
-import java.text.DateFormat;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,7 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.util.StringUtils;
 import org.xml.sax.InputSource;
 
 import com.jiwhiz.blog.domain.BaseEntity;
@@ -39,26 +37,33 @@ import com.jiwhiz.blog.domain.account.UserAccount;
 @SuppressWarnings("serial")
 public abstract class AbstractPost extends BaseEntity{
 
+    /*
+     * Reference to UserAccount object of the post author.
+     */
     @Indexed
-    private String authorId;
-    
+    private String authorKey;
+
+    /*
+     * Application generated unique ID for public usage.
+     */
+    @Indexed(unique=true)
+    private String postId;
+
     private String content;
     
     private Date createdTime;
     
     private Date lastModifiedTime;
     
-    private boolean published;
-    
     @Transient
     private UserAccount authorAccount;
 
-    public String getAuthorId() {
-        return authorId;
+    public String getAuthorKey() {
+        return authorKey;
     }
 
-    void setAuthorId(String authorId) {
-        this.authorId = authorId;
+    public String getPostId() {
+        return postId;
     }
     
     public String getContent() {
@@ -73,16 +78,12 @@ public abstract class AbstractPost extends BaseEntity{
         return createdTime;
     }
 
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-    
-    void setPublished(boolean published){
-        this.published = published;
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
     }
 
     public UserAccount getAuthorAccount() {
@@ -97,51 +98,19 @@ public abstract class AbstractPost extends BaseEntity{
         
     }
 
-    public AbstractPost(String authorId, String content) {
-        this.authorId = authorId;
+    /**
+     * Constructor for creating a new post object.
+     * 
+     * @param postId Application generated unique ID
+     * @param author UserAccount object of author
+     * @param content
+     */
+    public AbstractPost(String postId, UserAccount author, String content) {
+        this.postId = postId;
+        this.authorAccount = author;
+        this.authorKey = author.getKey();
         this.content = content;
         this.createdTime = new Date();
-    }
-
-    public String getCreatedDateTimeString() {
-        DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        return formatter.format(createdTime);
-    }
-
-    public String getLastModifiedDateTimeString() {
-        if (lastModifiedTime == null) {
-            return "";
-        }
-        DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        return formatter.format(lastModifiedTime);
-    }
-
-    public String getAuthorName() {
-        if (authorAccount != null) {
-            return authorAccount.getDisplayName();
-        }
-        return authorId;
-    }
-
-    public String getAuthorNameLink() {
-        if (authorAccount != null) {
-            return authorAccount.getNameLink();
-        }
-        return authorId;
-    }
-
-    public boolean isHasImageUrl(){
-        if (authorAccount != null && StringUtils.hasLength(authorAccount.getImageUrl())){
-            return true;
-        }
-        return false;
-    }
-
-    public String getImageUrl(){
-        if (authorAccount != null && StringUtils.hasLength(authorAccount.getImageUrl())){
-            return authorAccount.getImageUrl();
-        }
-        return null;
     }
 
     void triggerModified(){

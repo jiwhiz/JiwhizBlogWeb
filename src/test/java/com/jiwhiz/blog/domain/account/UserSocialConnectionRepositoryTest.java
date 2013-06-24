@@ -40,7 +40,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.domain.TestConfig.class })
+@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
 public class UserSocialConnectionRepositoryTest {
 
     @Inject
@@ -96,25 +96,25 @@ public class UserSocialConnectionRepositoryTest {
                 ("jiwhiz", "google", "google-jiwhz", 1, "Yuan", "http://", "http://", "token", "secret", "token", 1000000l);
 
         userSocialConnectionRepository.save(userSocialConnection);
-        String id = userSocialConnection.getId();
-        assertTrue(userSocialConnectionRepository.exists(id));
+        String key = userSocialConnection.getKey();
+        assertTrue(userSocialConnectionRepository.exists(key));
 
         // read
-        UserSocialConnection userSocialConnectionInDb = userSocialConnectionRepository.findOne(id);
+        UserSocialConnection userSocialConnectionInDb = userSocialConnectionRepository.findOne(key);
         assertEquals("jiwhiz", userSocialConnectionInDb.getUserId());
 
         // update
         String newProfileUrl = "www.hello.com";
         userSocialConnection.setProfileUrl(newProfileUrl);
         userSocialConnectionRepository.save(userSocialConnection);
-        userSocialConnectionInDb = userSocialConnectionRepository.findOne(id);
+        userSocialConnectionInDb = userSocialConnectionRepository.findOne(key);
         assertEquals(newProfileUrl, userSocialConnectionInDb.getProfileUrl());
 
         // delete
         userSocialConnectionRepository.delete(userSocialConnection);
-        userSocialConnectionInDb = userSocialConnectionRepository.findOne(id);
+        userSocialConnectionInDb = userSocialConnectionRepository.findOne(key);
         assertNull(userSocialConnectionInDb);
-        assertFalse(userSocialConnectionRepository.exists(id));
+        assertFalse(userSocialConnectionRepository.exists(key));
     }
 
     @Test

@@ -20,13 +20,13 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.AuthenticationRegistry;
+import org.springframework.security.config.annotation.authentication.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.ExpressionUrlAuthorizations;
-import org.springframework.security.config.annotation.web.HttpConfigurator;
-import org.springframework.security.config.annotation.web.SpringSecurityFilterChainBuilder.IgnoredRequestRegistry;
+import org.springframework.security.config.annotation.web.HttpConfiguration;
+import org.springframework.security.config.annotation.web.WebSecurityBuilder;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -40,10 +40,10 @@ import org.springframework.social.security.SocialAuthenticationServiceLocator;
 
 import com.jiwhiz.blog.domain.account.MongoPersistentTokenRepositoryImpl;
 import com.jiwhiz.blog.domain.account.RememberMeTokenRepository;
-import com.jiwhiz.blog.domain.account.UserAdminService;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 
 /**
- * Configuration for Spring Social and Security.
+ * Configuration for Spring Security and Spring Social Security.
  * 
  * @author Yuan Ji
  *
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private Environment environment;
 
     @Inject 
-    private UserAdminService userAdminService;
+    private UserAccountService userAccountService;
     
     @Inject
     private RememberMeTokenRepository rememberMeTokenRepository;
@@ -69,19 +69,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     public SocialAuthenticationFilter socialAuthenticationFilter() throws Exception{
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAdminService,
+        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAccountService,
                 usersConnectionRepository, socialAuthenticationServiceLocator);
         filter.setFilterProcessesUrl("/signin");
         filter.setSignupUrl(null); 
-        filter.setConnectionAddedRedirectUrl("/myAccount");
-        filter.setPostLoginUrl("/myAccount"); //always open account profile page after login
+        filter.setConnectionAddedRedirectUrl("/#/myAccount");
+        filter.setPostLoginUrl("/#/myAccount"); //always open account profile page after login
         filter.setRememberMeServices(rememberMeServices());
         return filter;
     }
 
     @Bean
     public SocialAuthenticationProvider socialAuthenticationProvider(){
-        return new SocialAuthenticationProvider(usersConnectionRepository, userAdminService);
+        return new SocialAuthenticationProvider(usersConnectionRepository, userAccountService);
     }
     
     @Bean
@@ -92,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RememberMeServices rememberMeServices(){
         PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
-                        environment.getProperty("application.key"), userAdminService, persistentTokenRepository());
+                        environment.getProperty("application.key"), userAccountService, persistentTokenRepository());
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
@@ -110,43 +110,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void ignoredRequests(IgnoredRequestRegistry ignoredRequests) {
-        ignoredRequests
-            .antMatchers("/resources/**");
+    public void configure(WebSecurityBuilder builder) throws Exception {
+        builder
+            .ignoring()
+                .antMatchers("/resources/**");
     }
     
-    @Override
-    protected void authorizeUrls(ExpressionUrlAuthorizations interceptUrls) {
-        interceptUrls
-            .antMatchers("/favicon.ico", "/robots.txt").permitAll()
-            .antMatchers("/presentation/**").hasRole("USER")
-            .antMatchers("/myAccount/**").hasRole("USER")
-            .antMatchers("/myPost/**").hasRole("AUTHOR")
-            .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/**").permitAll();
-    }
-
-
 	@Override
-	protected void configure(HttpConfigurator http) throws Exception {
+	protected void configure(HttpConfiguration http) throws Exception {
         http
-	        .authenticationEntryPoint(socialAuthenticationEntryPoint())
+            .authorizeUrls()
+                .antMatchers("/**").permitAll()
+                .and()
+	        //.authenticationEntryPoint(socialAuthenticationEntryPoint())
 	        .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
 	        .logout()
 	            .deleteCookies("JSESSIONID")
 	            .logoutUrl("/signout")
 	            .logoutSuccessUrl("/")
-	            .permitAll()
 	            .and()
 	        .rememberMe()
 	        	.rememberMeServices(rememberMeServices());
 	}
     
     @Override
-    protected void registerAuthentication(AuthenticationRegistry registry) throws Exception{
-        registry
+    protected void registerAuthentication(AuthenticationManagerBuilder builder) throws Exception{
+        builder
         	.add(socialAuthenticationProvider())
         	.add(rememberMeAuthenticationProvider())
-        	.add(userAdminService);
+        	.userDetailsService(userAccountService);
     } 
+    
+    /**
+     * ???
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean()
+            throws Exception {
+        return super.authenticationManagerBean();
+    }
 }

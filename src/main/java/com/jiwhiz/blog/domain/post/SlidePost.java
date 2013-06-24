@@ -19,6 +19,8 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
+
 /**
  * Domain Entity for slide post.
  * 
@@ -29,7 +31,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "SlidePost")
 public class SlidePost extends AbstractPost{
     
-    private StyleType type;
+    private StyleType style;
     
     private String title;
     
@@ -63,21 +65,21 @@ public class SlidePost extends AbstractPost{
         this.title = title;
     }
 
-    public StyleType getType() {
-        return type;
+    public StyleType getStyle() {
+        return style;
     }
 
-    void setType(StyleType type) {
-        this.type = type;
+    void setStyle(StyleType style) {
+        this.style = style;
     }
 
     public SlidePost() {
         super();
     }
     
-    public SlidePost (String authorId, StyleType type, String title, String content, String path) {
-        super(authorId, content);
-        this.type = type;
+    public SlidePost(String postId, UserAccount author, StyleType style, String title, String content, String path) {
+        super(postId, author, content);
+        this.style = style;
         this.title = title;
         this.publishedPath = path;
     }

@@ -39,5 +39,5 @@ public interface SlidePostRepository extends MongoRepository<SlidePost, String>{
      * @param pageable
      * @return
      */
-    Page<SlidePost> findByAuthorId(String authorId, Pageable pageable);
+    Page<SlidePost> findByAuthorKey(String authorKey, Pageable pageable);
 }

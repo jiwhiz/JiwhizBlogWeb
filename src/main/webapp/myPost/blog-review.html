@@ -1,0 +1,71 @@
+<!--
+	Review blog post. 
+-->
+<div class="post">
+	<h2>Review Blog Post:</h2>
+	<article class="post">
+		<header>
+			<h4 ng-show="blog.published">
+				{{blog.publishedTime | date:'mediumDate'}}
+			</h4>
+			<h4 ng-show="!blog.published" class="text-warning">Un-published</h4>
+			<h3 class="post-title">
+				{{blog.title}}
+			</h3>
+		</header>
+
+		<div class="post-content-body">
+			<blog-post content="{{blog.content}}"></blog-post>
+		</div>
+		<p></p>
+		<footer class="post-footer">
+			<div class="post-tags">
+				<span ng-repeat="tag in blog.tags">
+				<a href="#"><span class="label label-info">{{tag}}</span></a>
+			</span>
+			</div>
+			<p>
+				Create on {{blog.createdTime | date:'mediumDate'}} at {{blog.createdTime | date:'mediumTime'}}
+			</p>
+			<div ng-show="blog.published">
+				<p>Published on {{blog.publishedTime | date:'mediumDate'}}
+				at {{blog.publishedTime | date:'mediumTime'}}</p>
+				<div class="control-group">
+					<a href="#/myPost/updateBlogMeta/{{blog.blogId}}" class="btn">
+						<i class="icon-pencil" title="Edit Meta"></i> Edit Meta
+					</a>
+					<a href="#/myPost/updateBlogContent/{{blog.blogId}}" class="btn">
+						<i class="icon-pencil" title="Edit Content"></i> Edit Content
+					</a>
+					<a ng-click="unpublish()" class="btn">
+						<i class="icon-undo" title="Un-publish"></i> Un-Publish
+					</a>
+					<a href="#/blog/{{blog.fullPublishedPath}}" class="btn">
+						<i class="icon-file-text" title="Go to blog post and read"></i> Read
+					</a>
+				</div>
+			</div>
+
+			<div ng-show="!blog.published">
+				<form>
+					<div class="control-group">
+						<label class="control-label">* Path: </label>
+						<div class="controls">
+							/<input type="text" class="input-mini" ng-model="blogForm.publishedYear" />
+							/<input type="text" class="input-mini" ng-model="blogForm.publishedMonth" />
+							/<input type="text" class="input-xxlarge" ng-model="blogForm.publishedPath" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<a href="#/myPost/updateBlogContent/{{blog.blogId}}" class="btn">
+								<i class="icon-pencil" title="Edit Content"></i> Edit Content
+							</a>
+							<button ng-click="publish()" class="btn btn-primary"><i class="icon-file-text" title="Publish"></i> Publish</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</footer>
+	</article>
+</div>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.mail;
+package com.jiwhiz.blog.web.mail;
 
 import javax.inject.Inject;
 
@@ -27,8 +27,7 @@ import com.comfirm.alphamail.services.client.entities.EmailMessagePayload;
 import com.comfirm.alphamail.services.client.entities.ServiceIdentityResponse;
 
 /**
- * Abstract super class for all email sender classes. Using Alpha Mail as
- * underline email service provider.
+ * Abstract super class for all email sender classes. Using Alpha Mail as underline email service provider.
  * 
  * 
  * @author Yuan Ji
@@ -42,7 +41,18 @@ public class AbstractMailSender {
 
     private String adminName;
     private String adminEmail;
-    
+    private String systemName;
+    private String systemEmail;
+    private String applicationBaseUrl;
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
     public String getAdminName() {
         return adminName;
     }
@@ -59,12 +69,28 @@ public class AbstractMailSender {
         this.adminEmail = adminEmail;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public String getSystemName() {
+        return systemName;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setSystemName(String systemName) {
+        this.systemName = systemName;
+    }
+
+    public String getSystemEmail() {
+        return systemEmail;
+    }
+
+    public void setSystemEmail(String systemEmail) {
+        this.systemEmail = systemEmail;
+    }
+
+    public String getApplicationBaseUrl() {
+        return applicationBaseUrl;
+    }
+
+    public void setApplicationBaseUrl(String applicationBaseUrl) {
+        this.applicationBaseUrl = applicationBaseUrl;
     }
 
     @Inject
@@ -72,20 +98,37 @@ public class AbstractMailSender {
         this.mailService = mailService;
     }
 
+    protected String getBlogBaseUrl() {
+        return getApplicationBaseUrl() + "#/blog/";
+    }
+
+    protected String getUserProfileBaseUrl() {
+        return getApplicationBaseUrl() + "#/profile/";
+    }
+
     /**
      * Call Alpha Mail service API to send payload object.
+     * 
      * @param receiver
      * @param payload
      * @return response from Alpha Mail service
      * @throws AlphaMailServiceException
      */
-    protected ServiceIdentityResponse doSend(EmailContact sender, EmailContact receiver, Object payload) 
-            throws AlphaMailServiceException {
-        EmailMessagePayload message = new EmailMessagePayload().setProjectId(getProjectId()).setReceiverId(0)
-                .setSender(sender).setReceiver(receiver).setBodyObject(payload);
-        ServiceIdentityResponse response = mailService.queue(message);
-        logger.debug("send email content ='"+payload.toString());
-        logger.info(String.format("Send email to %s, result is %s ", receiver.getEmail(), response.getResult()));
-        return response;
+    protected ServiceIdentityResponse doSend(EmailContact sender, EmailContact receiver, Object payload) {
+        try {
+            EmailMessagePayload message = new EmailMessagePayload().setProjectId(getProjectId()).setReceiverId(0)
+                    .setSender(sender).setReceiver(receiver).setBodyObject(payload);
+            ServiceIdentityResponse response = mailService.queue(message);
+            logger.debug("send email content ='" + payload.toString());
+            logger.info(String.format("Send email to %s, result is %s ", receiver.getEmail(), response.getResult()));
+            return response;
+        } catch (AlphaMailServiceException e) {
+            e.printStackTrace();
+            String logMessage = String.format("AlphaMail returned exception: Error Code: %s, Error Message: %s", e
+                    .getResponse().getErrorCode(), e.getResponse().getMessage());
+            logger.error(logMessage);
+            return null;
+        }
+
     }
 }

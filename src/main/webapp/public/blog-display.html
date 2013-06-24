@@ -1,0 +1,116 @@
+<!--
+	Display one public blog post. 
+-->
+<div class="post" ng-show="blog != null">
+	<div class="post-content-meta">
+		<h4>
+			{{blog.publishedTime | date:'mediumDate'}}
+		</h4>
+		<h2>
+			<a href="#/blog/{{blog.fullPublishedPath}}">{{blog.title}}</a>
+		</h2>
+		<p>
+			Published by <strong><a href="#/profile/{{blog.author.userId}}">{{blog.author.displayName}}</a></strong> 
+			on {{blog.publishedTime | date:'mediumDate'}} at {{blog.publishedTime | date:'mediumTime'}}
+			| <span class="post-comment-count"> 
+				<a href="#/blog/{{blog.fullPublishedPath}}#comments">
+					<i class="icon-comments"></i> {{blog.approvedCommentCount | CommentCount}}</a>
+			  </span>
+		</p>
+	</div>
+	
+	<div class="post-content-body"> 
+		<blog-post content="{{blog.content}}"></blog-post>
+	</div>
+	
+	<div class="post-footer">
+		<div class="post-tags">
+			<span ng-repeat="tag in blog.tags">
+				<a href="#"><span class="label label-info">{{tag}}</span></a>
+			</span>
+		</div>
+	</div>
+
+</div>
+
+<!-- Comment List -->
+<div class="comment" ng-show="blog != null">
+	<a id="comments"></a><!-- anchor for blog comments link -->
+	<h3>{{blog.approvedCommentCount | CommentCount}} On This Post</h3>
+	
+	<div ng-show="blog.approvedCommentCount > 0">
+		<div ng-repeat="comment in blog.comments">
+			<a id="{{comment.commentId}}"></a>
+			<div class="avatar">
+				<img src="{{comment.user.imageUrl}}" />
+				<span class="comment-name">
+					<a href="#/profile/{{comment.user.userId}}">{{comment.user.displayName}}</a>
+				</span>
+				<span class="comment-date">
+					posted on {{comment.postedTime | date:'mediumDate'}} at {{comment.postedTime | date:'mediumTime'}}
+				</span>
+			</div>
+			<br/>
+			<div class="comment-text">
+				<markdown content="{{comment.content}}"></markdown>
+			</div>
+			<hr class="alt" />
+		</div>
+	</div>
+</div>
+
+<!-- Post Comment Form -->
+<div class="comment" ng-show="currentUser.authenticated">
+	<h3 class="marg20-btm">Post Comment</h3>
+	<form class="form-horizontal">
+		<div class="avatar">
+			<img src="{{currentUser.imageUrl}}" />
+		</div>
+		<textarea ng-model="commentForm.content" rows="5" class="input-xxlarge inp-btm" style="resize: none;"
+				placeholder="Enter your comment here as {{currentUser.displayName}}..." required="required"></textarea>
+		<span class="help-block">You can use 
+			<a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown syntax</a>
+			in your comment.<br/> For example, 
+			<code>[an example](http://example.com/ "Title")</code> will generate an inline link.
+		</span>
+		<br />
+		<button ng-click="postComment()" class="btn btn-primary">Post Comment</button>
+	</form>
+	
+	<!-- Modal Message Dialog -->
+	<div id="messageModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			<h3 id="myModalLabel">Thank you!</h3>
+		</div>
+		<div class="modal-body">
+			<p>{{message}}</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		</div>
+	</div>
+	
+</div>
+
+<!-- Message if not logged in -->
+<div class="post" ng-show="!currentUser.authenticated">
+	<div class="text-warning">
+		You must
+		<div class="btn-group">
+			<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+				sign in
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu">
+				<!-- dropdown menu links -->
+				<li><a href="signin/google"><i class="icon-google-plus"></i> Google Sign In</a></li>
+				<li><a href="signin/facebook"><i class="icon-facebook"></i> Facebook Sign In</a></li>
+				<li><a href="signin/twitter"><i class="icon-twitter"></i> Twitter Sign In</a></li>
+			</ul>
+		</div>
+		to post your comment.
+	</div>
+</div>
+	
+

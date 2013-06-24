@@ -1,0 +1,48 @@
+<!-- 
+	Home page, with latest blog post. 
+-->
+<div class="post" ng-show="!hasBlog">
+	<p>No blog post yet. Stay tuned...</p>
+</div>
+
+<div class="post" ng-show="hasBlog">
+	<div class="post-content-meta">
+		<h4>
+			{{blog.publishedTime | date:'mediumDate'}}
+		</h4>
+		<h2>
+			<a href="#/blog/{{blog.fullPublishedPath}}">{{blog.title}}</a>
+		</h2>
+		<p>
+			Published by <strong><a href="#/profile/{{blog.author.userId}}">{{blog.author.displayName}}</a></strong> 
+			on {{blog.publishedTime | date:'mediumDate'}} at {{blog.publishedTime | date:'mediumTime'}}
+			| <span class="post-comment-count"> 
+				<a href="#/blog/{{blog.fullPublishedPath}}#comments">
+					<i class="icon-comments"></i> {{blog.approvedCommentCount | CommentCount}}</a>
+			  </span>
+		</p>
+	</div>
+	
+	<div class="post-content-body">
+		<blog-post content="{{blog.content}}"></blog-post>
+	</div>
+	
+	<div class="post-footer">
+		<div class="post-tags">
+			<span ng-repeat="tag in blog.tags">
+				<a href="#"><span class="label label-info">{{tag}}</span></a>
+			</span>
+		</div>
+	</div>
+	<div>
+		<p>
+			Published by <strong><a href="#/profile/{{blog.author.userId}}">{{blog.author.displayName}}</a></strong> 
+			on {{blog.publishedTime | date:'mediumDate'}} at {{blog.publishedTime | date:'mediumTime'}}
+			| <span class="post-comment-count"> 
+				<a href="#/blog/{{blog.fullPublishedPath}}#comments">
+					<i class="icon-comments"></i> {{blog.approvedCommentCount | CommentCount}}</a>
+			  </span>
+		</p>	
+	</div>
+</div>
+

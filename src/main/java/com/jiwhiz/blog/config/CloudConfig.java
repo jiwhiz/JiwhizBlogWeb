@@ -26,9 +26,12 @@ import org.springframework.core.env.Environment;
 import com.comfirm.alphamail.services.client.AlphaMailService;
 import com.comfirm.alphamail.services.client.DefaultAlphaMailService;
 import com.jiwhiz.blog.web.CommentNotificationSender;
-import com.jiwhiz.blog.web.CommentNotificationSenderImpl;
 import com.jiwhiz.blog.web.ContactMessageSender;
-import com.jiwhiz.blog.web.ContactMessageSenderImpl;
+import com.jiwhiz.blog.web.SystemMessageSender;
+import com.jiwhiz.blog.web.mail.AbstractMailSender;
+import com.jiwhiz.blog.web.mail.CommentNotificationSenderImpl;
+import com.jiwhiz.blog.web.mail.ContactMessageSenderImpl;
+import com.jiwhiz.blog.web.mail.SystemMessageSenderImpl;
 
 /**
  * Cloud Deployment configuration. Use real email service.
@@ -54,8 +57,7 @@ public class CloudConfig {
     public ContactMessageSender contactMessageSender() {
         ContactMessageSenderImpl sender = new ContactMessageSenderImpl(alphaMailService());
         sender.setProjectId(environment.getProperty("alphamail.project.contactMessage.id", int.class));
-        sender.setAdminName(environment.getProperty("alphamail.adminName"));
-        sender.setAdminEmail(environment.getProperty("alphamail.adminEmail"));
+        configEmailSender(sender);
         return sender;
     }
 
@@ -63,8 +65,23 @@ public class CloudConfig {
     public CommentNotificationSender commentNotificationSender() {
         CommentNotificationSenderImpl sender = new CommentNotificationSenderImpl(alphaMailService());
         sender.setProjectId(environment.getProperty("alphamail.project.comment.notification.id", int.class));
-        sender.setAdminName(environment.getProperty("alphamail.adminName"));
-        sender.setAdminEmail(environment.getProperty("alphamail.adminEmail"));
+        configEmailSender(sender);
         return sender;
+    }
+    
+    @Bean
+    public SystemMessageSender systemMessageSender() {
+        SystemMessageSenderImpl sender = new SystemMessageSenderImpl(alphaMailService());
+        sender.setProjectId(environment.getProperty("alphamail.project.system.message.id", int.class));
+        configEmailSender(sender);
+        return sender;
+    }
+
+    private void configEmailSender(AbstractMailSender sender) {
+        sender.setSystemName(environment.getProperty("application.systemName"));
+        sender.setSystemEmail(environment.getProperty("application.systemEmail"));
+        sender.setAdminName(environment.getProperty("application.adminName"));
+        sender.setAdminEmail(environment.getProperty("application.adminEmail"));
+        sender.setApplicationBaseUrl(environment.getProperty("application.baseUrl"));
     }
 }

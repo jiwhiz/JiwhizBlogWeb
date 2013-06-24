@@ -35,7 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.domain.TestConfig.class })
+@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
 public class UserAccountRepositoryTest {
     private String userId1 = "jsmith";
 
@@ -62,11 +62,11 @@ public class UserAccountRepositoryTest {
         account.setRoles(new UserRoleType[] { UserRoleType.ROLE_ADMIN, UserRoleType.ROLE_AUTHOR });
         account.setDisplayName("John");
         accountRepository.save(account);
-        String id = account.getId();
-        assertTrue(accountRepository.exists(id));
+        String key = account.getKey();
+        assertTrue(accountRepository.exists(key));
 
         // read
-        UserAccount accountInDb = accountRepository.findOne(id);
+        UserAccount accountInDb = accountRepository.findOne(key);
         assertEquals(accountInDb.getUsername(), userId1);
         assertEquals("John", accountInDb.getDisplayName());
 
@@ -74,13 +74,13 @@ public class UserAccountRepositoryTest {
         String newWebSite = "www.hello.com";
         account.setWebSite(newWebSite);
         accountRepository.save(account);
-        accountInDb = accountRepository.findOne(id);
+        accountInDb = accountRepository.findOne(key);
         assertEquals(newWebSite, accountInDb.getWebSite());
 
         // delete
         accountRepository.delete(account);
-        accountInDb = accountRepository.findOne(id);
+        accountInDb = accountRepository.findOne(key);
         assertNull(accountInDb);
-        assertFalse(accountRepository.exists(id));
+        assertFalse(accountRepository.exists(key));
     }
 }

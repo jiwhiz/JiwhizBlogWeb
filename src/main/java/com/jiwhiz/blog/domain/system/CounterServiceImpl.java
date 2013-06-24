@@ -28,6 +28,9 @@ import org.springframework.data.mongodb.core.query.Update;
  */
 public class CounterServiceImpl implements CounterService {
     public static final String USER_ID_SEQUENCE_NAME = "user_id";
+    public static final String BLOG_POST__ID_SEQUENCE_NAME = "post_id";
+    public static final String COMMENT_POST_ID_ID_SEQUENCE_NAME = "comment_id";
+    public static final String SLIDE_POST_ID_ID_SEQUENCE_NAME = "slide_id";
     public static final String VISIT_SEQUENCE_NAME = "visit_num";
     public static final String BLOG_VISIT_SEQUENCE_NAME_PREFIX = "blog_visit_num_";
     public static final String SLIDE_VISIT_SEQUENCE_NAME_PREFIX = "slide_visit_num_";
@@ -39,25 +42,31 @@ public class CounterServiceImpl implements CounterService {
         this.mongoTemplate = mongoTemplate;
     }
     
-    /* (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.counter.CounterService#getNextUserIdSequence()
-     */
     @Override
     public long getNextUserIdSequence() {
         return increaseCounter(USER_ID_SEQUENCE_NAME);
     }
 
-    /* (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.counter.CounterService#logVisit()
-     */
+    @Override
+    public long getNextBlogPostIdSequence() {
+        return increaseCounter(BLOG_POST__ID_SEQUENCE_NAME);
+    }
+
+    @Override
+    public long getNextCommentPostIdSequence() {
+        return increaseCounter(COMMENT_POST_ID_ID_SEQUENCE_NAME);
+    }
+
+    @Override
+    public long getNextSlidePostIdSequence() {
+        return increaseCounter(SLIDE_POST_ID_ID_SEQUENCE_NAME);
+    }
+
     @Override
     public long logVisit() {
         return increaseCounter(VISIT_SEQUENCE_NAME);
     }
     
-    /* (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.counter.CounterService#getVisitCount()
-     */
     @Override
     public long getVisitCount() {
         return getCount(VISIT_SEQUENCE_NAME);

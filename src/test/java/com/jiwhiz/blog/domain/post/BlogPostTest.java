@@ -44,7 +44,7 @@ public class BlogPostTest {
         assertTrue(post.getPublishedYear() == 0);
         assertTrue(post.getPublishedMonth() == 0);
         
-        post.publish("path");
+        post.publish("path", 0, 0);
         assertTrue(post.isPublished());
         assertTrue(post.getPublishedYear() > 0);
         assertTrue(post.getPublishedMonth() > 0);

@@ -21,7 +21,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
-import com.jiwhiz.blog.domain.account.UserAdminService;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**
@@ -33,13 +33,14 @@ import com.jiwhiz.blog.domain.system.CounterService;
 public abstract class AbstractPostServiceImpl {
     
     protected final UserAccountRepository accountRepository;
-    protected final UserAdminService userAdminService;
+    protected final UserAccountService userAccountService;
     protected final CounterService counterService;
 
     @Inject
-    public AbstractPostServiceImpl(UserAccountRepository accountRepository, UserAdminService userAdminService, CounterService counterService) {
+    public AbstractPostServiceImpl(UserAccountRepository accountRepository, 
+            UserAccountService userAccountService, CounterService counterService) {
         this.accountRepository = accountRepository;
-        this.userAdminService = userAdminService;
+        this.userAccountService = userAccountService;
         this.counterService = counterService;
     }
     
@@ -51,7 +52,7 @@ public abstract class AbstractPostServiceImpl {
 
     protected void loadAuthorProfile(AbstractPost post) {
         if (post != null){
-            post.setAuthorAccount(accountRepository.findByUserId(post.getAuthorId()));
+            post.setAuthorAccount(accountRepository.findOne(post.getAuthorKey()));
         }
     }
 
@@ -62,8 +63,8 @@ public abstract class AbstractPostServiceImpl {
      * @throws AccessDeniedException
      */
     protected void checkIsAuthorOfPost(AbstractPost post) throws AccessDeniedException {
-        if (post == null || !post.getAuthorId().equals(userAdminService.getUserId())){
-            throw new AccessDeniedException("Cannot access the post by current user.");
+        if (post == null || !post.getAuthorKey().equals(userAccountService.getCurrentUser().getKey())){
+            throw new AccessDeniedException("Cannot access the post, becasue current user is not the author of the post.");
         }
     }
     
@@ -74,9 +75,9 @@ public abstract class AbstractPostServiceImpl {
      * @throws AccessDeniedException
      */
     protected void checkIsAdminOrAuthorOfPost(AbstractPost post) throws AccessDeniedException{
-        UserAccount currentUser = userAdminService.getCurrentUser();
+        UserAccount currentUser = userAccountService.getCurrentUser();
         if (currentUser == null){
-            throw new AccessDeniedException("No logged in user.");
+            throw new AccessDeniedException("User not logged in.");
         }
         
         if (currentUser.isAdmin()){

@@ -20,9 +20,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.post.BlogPost;
 import com.jiwhiz.blog.domain.post.CommentPost;
 import com.jiwhiz.blog.web.CommentNotificationSender;
 import com.jiwhiz.blog.web.ContactMessageSender;
+import com.jiwhiz.blog.web.SystemMessageSender;
 import com.jiwhiz.blog.web.site.ContactForm;
 
 /**
@@ -32,25 +35,47 @@ import com.jiwhiz.blog.web.site.ContactForm;
  */
 @Configuration
 @Profile("local")
-@PropertySource(value={"classpath:localConfig.properties"})
+@PropertySource(value = { "classpath:localConfig.properties" })
 public class LocalConfig {
     @Bean
     public ContactMessageSender contactMessageSender() {
-        return new ContactMessageSender(){
-            public void send(ContactForm contact){
-                System.out.println(String.format("Send email message to jiwhiz. From  %s: \" %s \""
-                                , contact.getName(), contact.getMessage()));
+        return new ContactMessageSender() {
+            @Override
+            public void send(ContactForm contact) {
+                System.out.println(String.format("Send email message to jiwhiz. From  %s: \" %s \"", contact.getName(),
+                        contact.getMessage()));
             }
         };
     }
 
     @Bean
     public CommentNotificationSender commentNotificationSender() {
-        return new CommentNotificationSender(){
-            public void send(CommentPost comment){
-                System.out.println(String.format("Send email message to author. %s posted a comment to your blog '%s': \" %s \""
-                                , comment.getAuthorAccount().getDisplayName(), comment.getBlogPost().getTitle(), comment.getContent()));
+        return new CommentNotificationSender() {
+            @Override
+            public void send(UserAccount receivingUser, UserAccount commentUser, CommentPost comment, BlogPost blog) {
+                System.out.println(String.format(
+                        "Send email message to '%s': %s posted a comment to blog '%s': \" %s \"",
+                        receivingUser.getDisplayName(), commentUser.getDisplayName(), blog.getTitle(),
+                        comment.getContent()));
             }
+        };
+    }
+
+    @Bean
+    public SystemMessageSender systemMessageSender() {
+        return new SystemMessageSender() {
+            @Override
+            public void sendNewUserRegistered(UserAccount user) {
+                System.out.println(String.format(
+                        "Send email message to admin: a new user '%s' was registered.", user.getDisplayName()));
+            }
+
+            @Override
+            public void sendNewPostPublished(UserAccount author, BlogPost blog) {
+                System.out.println(String.format("'%s' published a new blog. See %s", 
+                        author.getDisplayName(), blog.getFullPublishedPath()));                
+            }
+
         };
     }
 

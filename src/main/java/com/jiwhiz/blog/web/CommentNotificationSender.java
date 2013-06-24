@@ -15,6 +15,8 @@
  */
 package com.jiwhiz.blog.web;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.post.BlogPost;
 import com.jiwhiz.blog.domain.post.CommentPost;
 
 /**
@@ -22,5 +24,13 @@ import com.jiwhiz.blog.domain.post.CommentPost;
  *
  */
 public interface CommentNotificationSender {
-    void send(CommentPost comment);
+    /**
+     * Send message to user when a new comment was posted to the blog.
+     * 
+     * @param receivingUser
+     * @param commentUser
+     * @param comment
+     * @param blog
+     */
+    void send(UserAccount receivingUser, UserAccount commentUser, CommentPost comment, BlogPost blog);
 }

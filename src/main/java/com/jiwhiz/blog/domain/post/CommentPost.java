@@ -15,12 +15,10 @@
  */
 package com.jiwhiz.blog.domain.post;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.github.rjeschke.txtmark.Configuration;
-import com.github.rjeschke.txtmark.Processor;
+import com.jiwhiz.blog.domain.account.UserAccount;
 
 /**
  * Domain Entity for blog comment.
@@ -31,54 +29,65 @@ import com.github.rjeschke.txtmark.Processor;
 @SuppressWarnings("serial")
 @Document(collection = "CommentPost")
 public class CommentPost extends AbstractPost {
-    
+    /*
+     * Reference to BlogPost commented by this CommentPost
+     */
     @Indexed
-    private String postId;
+    private String blogPostKey;
     
-    private boolean spam;
-
-    @Transient
-    private BlogPost blogPost;
-
-    public String getPostId() {
-        return postId;
+    private CommentStatusType status;
+    
+    public String getBlogPostKey() {
+        return blogPostKey;
     }
 
-    void setPostId(String postId) {
-        this.postId = postId;
-    }
-
-    public boolean isSpam() {
-        return spam;
-    }
-
-    void setSpam(boolean spam) {
-        this.spam = spam;
-    }
-
-    public BlogPost getBlogPost() {
-        return blogPost;
-    }
-
-    public void setBlogPost(BlogPost blogPost) {
-        this.blogPost = blogPost;
+    public CommentStatusType getStatus() {
+        return status;
     }
 
     public CommentPost() {
 
     }
 
-    public CommentPost(String postId, String userId, String content) {
-        super(userId, content);
-        this.postId = postId;
+    public CommentPost(String postId, UserAccount author, BlogPost blog, String content) {
+        super(postId, author, content);
+        this.blogPostKey = blog.getKey();
+        this.status = CommentStatusType.PENDING;
     }
-
-    public String getHtmlContent(){
-         return Processor.process(getContent(),  Configuration.builder().setSafeMode(true).build());
+    
+    public CommentPost update(String newContent) {
+        setContent(newContent);
+        triggerModified();
+        return this;
+    }
+    
+    public CommentPost approve() {
+        assert status == CommentStatusType.PENDING;
+        this.status = CommentStatusType.APPROVED;
+        return this;
+    }
+    
+    public CommentPost disapprove() {
+        assert status == CommentStatusType.APPROVED;
+        this.status = CommentStatusType.PENDING;
+        return this;
+    }
+    
+    public CommentPost markSpam() {
+        assert status == CommentStatusType.PENDING;
+        this.status = CommentStatusType.SPAM;
+        return this;
+    }
+    
+    public CommentPost unmarkSpam() {
+        assert status == CommentStatusType.SPAM;
+        this.status = CommentStatusType.PENDING;
+        return this;
     }
     
     public String toString() {
-        return String.format("Comment{by='%s';on='%s'}", getAuthorId(), getCreatedDateTimeString());
+        return String.format("Comment{ author : '%s'; status : '%s', created : '%tT'}", 
+                (getAuthorAccount() == null) ? getAuthorKey() : getAuthorAccount().getDisplayName(), 
+                getStatus(), getCreatedTime());
     }
-    
 }

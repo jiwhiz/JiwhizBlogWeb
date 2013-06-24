@@ -45,13 +45,12 @@ import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
-import com.jiwhiz.blog.domain.account.AccountService;
-import com.jiwhiz.blog.domain.account.AccountUtils;
 import com.jiwhiz.blog.domain.account.MongoUsersConnectionRepositoryImpl;
 import com.jiwhiz.blog.domain.account.UserAccount;
-import com.jiwhiz.blog.domain.account.UserAdminService;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.web.AutoConnectionSignUp;
+import com.jiwhiz.blog.web.SystemMessageSender;
 
 /**
  * Configuration for Spring Social.
@@ -65,15 +64,14 @@ public class SocialConfig {
     @Inject
     private Environment environment;
 
-    @Inject
-    private AccountService accountService;
-
     @Inject 
-    private UserAdminService userAdminService;
+    private UserAccountService userAccountService;
         
     @Inject
     private UserSocialConnectionRepository userSocialConnectionRepository;
 
+    @Inject
+    private  SystemMessageSender systemMessageSender;
     /**
      * When a new provider is added to the app, register its {@link SocialAuthenticationService} here.
      * 
@@ -122,7 +120,7 @@ public class SocialConfig {
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
     public ConnectionRepository connectionRepository() {
-        UserAccount user = AccountUtils.getLoginUserAccount();
+        UserAccount user = userAccountService.getCurrentUser();
         return usersConnectionRepository().createConnectionRepository(user.getUsername());
     }
 
@@ -155,7 +153,7 @@ public class SocialConfig {
 
     @Bean
     public ConnectionSignUp autoConnectionSignUp() {
-        return new AutoConnectionSignUp(accountService);
+        return new AutoConnectionSignUp(userAccountService, systemMessageSender);
     }
 
 

@@ -19,15 +19,10 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
-import com.jiwhiz.blog.domain.account.UserAdminService;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**
@@ -38,75 +33,21 @@ import com.jiwhiz.blog.domain.system.CounterService;
  */
 public class SlidePostServiceImpl extends AbstractPostServiceImpl implements SlidePostService{
     final static Logger logger = LoggerFactory.getLogger(SlidePostServiceImpl.class);
+    public static final String SLIDE_POST_ID_PREFIX = "slide";
     
     private final SlidePostRepository slidePostRepository;
 
     @Inject
     public SlidePostServiceImpl(UserAccountRepository accountRepository, SlidePostRepository slidePostRepository, 
-            UserAdminService userAdminService, CounterService counterService) {
+            UserAccountService userAdminService, CounterService counterService) {
         super(accountRepository, userAdminService, counterService);
         this.slidePostRepository = slidePostRepository;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.post.SlidePostService#getSlideByPublishedPath(java.lang.String)
-     */
     @Override
-    public SlidePost getSlideByPublishedPath(String path) {
-        return this.slidePostRepository.findByPublishedPath(path);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.post.SlidePostService#getSlidePostsForCurrentUser(org.springframework.data.domain.Pageable)
-     */
-    @Override
-    @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    public Page<SlidePost> getSlidePostsForCurrentUser(Pageable pageable){
-        pageable = new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), 
-                new Sort(Sort.Direction.DESC, "createdTime"));
-        UserAccount account = userAdminService.getCurrentUser();
-        Page<SlidePost> slideList = slidePostRepository.findByAuthorId(
-                    account.getUserId(), pageable);
-        
-        for (SlidePost slide : slideList){
-            slide.setVisits(counterService.getSlidePostVisitCount(slide.getId()));
-        }
-        return slideList;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.post.SlidePostService#getSlideById(java.lang.String)
-     */
-    @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')") //TODO check user is the author of the slide 
-    public SlidePost getSlideById(String id) {
-        return this.slidePostRepository.findOne(id);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.post.SlidePostService#createSlide(com.jiwhiz.blog.domain.post.StyleType, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    @PreAuthorize("hasRole('ROLE_AUTHOR')")
-    public SlidePost createSlide(StyleType type, String title, String content, String path) {
-        UserAccount account = userAdminService.getCurrentUser();
-        SlidePost slidePost = new SlidePost(account.getUserId(), type, title, content, path);
-        slidePostRepository.save(slidePost);
-        return slidePost;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.jiwhiz.blog.domain.post.SlidePostService#updateSlide(com.jiwhiz.blog.domain.post.SlidePost)
-     */
-    @Override
-    @PreAuthorize("hasRole('ROLE_AUTHOR')") //TODO check user is the author of the slide 
-    public SlidePost updateSlide(SlidePost slidePost) {
+    public SlidePost createSlide(UserAccount author, StyleType style, String title, String content, String path) {
+        String postId = SLIDE_POST_ID_PREFIX + this.counterService.getNextSlidePostIdSequence();
+        SlidePost slidePost = new SlidePost(postId, author, style, title, content, path);
         return slidePostRepository.save(slidePost);
     }
-
 }

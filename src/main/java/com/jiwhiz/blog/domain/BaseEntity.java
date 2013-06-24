@@ -29,15 +29,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @SuppressWarnings("serial")
 public abstract class BaseEntity implements Serializable {
     @Id
-    private String id;
+    private String key;
 
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
     @Override
     public int hashCode() {
-        return (id == null) ? 0 : id.hashCode();
+        return (key == null) ? 0 : key.hashCode();
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class BaseEntity implements Serializable {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         BaseEntity other = (BaseEntity) obj;
-        if (id == null) return other.id == null;
-        return id.equals(other.id);
+        if (key == null) return other.key == null;
+        return key.equals(other.key);
     }
 }

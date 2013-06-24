@@ -24,9 +24,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.security.SocialUserDetails;
-import org.springframework.util.StringUtils;
 
 import com.jiwhiz.blog.domain.BaseEntity;
+import com.jiwhiz.blog.domain.post.CommentPost;
 
 /**
  * Domain Entity for user account.
@@ -37,7 +37,7 @@ import com.jiwhiz.blog.domain.BaseEntity;
 @SuppressWarnings("serial")
 @Document(collection = "UserAccount")
 public class UserAccount extends BaseEntity implements SocialUserDetails {
-    @Indexed
+    @Indexed(unique=true)
     private String userId;
     
     private UserRoleType[] roles;
@@ -56,6 +56,9 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
 
     @Transient
     private List<UserSocialConnection> connections;
+
+    @Transient
+    private List<CommentPost> comments;
 
     public String getUserId() {
         return userId;
@@ -129,7 +132,22 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
         this.connections = connections;
     }
 
-    public UserAccount() {}
+    public List<CommentPost> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentPost> comments) {
+        this.comments = comments;
+    }
+
+    public UserAccount() {
+        this.roles = new UserRoleType[0];
+    }
+    
+    public UserAccount(String userId, UserRoleType[] roles) {
+        this.userId = userId;
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -166,22 +184,6 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
     public String getUsername() {
         return getUserId();
     }
-
-    public String getWebSiteLink(){
-        if (StringUtils.hasText(getWebSite())){
-            if (getWebSite().startsWith("http://") || getWebSite().startsWith("https://")){
-                return getWebSite();
-            }
-            return "http://"+getWebSite();
-            // add http:// to fix URL 
-        }
-        return "#";
-    }
-
-    public String getNameLink(){
-        //TODO link to profile page
-        return getWebSiteLink();
-    }
     
     public boolean isAuthor(){
         for (UserRoleType role : getRoles()) {
@@ -200,13 +202,9 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
         }        
         return false;
     }
-    
-    public boolean isHasImageUrl(){
-        return StringUtils.hasLength(getImageUrl());
-    }
-    
+
     // used for account social connection
-    private UserSocialConnection getConnection(String providerId) {
+    public UserSocialConnection getConnection(String providerId) {
         if (this.connections != null){
             for (UserSocialConnection connection : this.connections){
                 if (connection.getProviderId().equals(providerId)){
@@ -241,7 +239,7 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
         return getFacebookConnection()  != null;
     }
     
-    void updateProfile(String displayName, String email, String webSite){
+    public void updateProfile(String displayName, String email, String webSite){
         setDisplayName(displayName);
         setEmail(email);
         setWebSite(webSite);

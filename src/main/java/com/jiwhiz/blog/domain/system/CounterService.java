@@ -25,6 +25,12 @@ public interface CounterService {
     
     long getNextUserIdSequence();
     
+    long getNextBlogPostIdSequence();
+    
+    long getNextCommentPostIdSequence();
+    
+    long getNextSlidePostIdSequence();
+    
     long logVisit();
     
     long logBlogPostVisit(String blogPostId);

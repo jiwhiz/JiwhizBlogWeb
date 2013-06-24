@@ -15,16 +15,16 @@
  */
 package com.jiwhiz.blog.domain.post;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.jiwhiz.blog.domain.account.UserAccount;
 
 /**
  * Domain Entity for blog post.
@@ -35,9 +35,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @SuppressWarnings("serial")
 @Document(collection = "BlogPost")
 public class BlogPost extends AbstractPost {
+    
+    private String title; 
 
-    private String title;
-
+    private boolean published;
+    
     @Indexed
     private Date publishedTime;
 
@@ -52,25 +54,16 @@ public class BlogPost extends AbstractPost {
 
     private List<String> tags;
 
-    @Transient
-    private int commentCount;
-
-    @Transient
-    private List<CommentPost> comments;
-
-    @Transient
-    private long visits;
-    
-    public long getVisits() {
-        return visits;
-    }
-
-    void setVisits(long visits) {
-        this.visits = visits;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+    
+    void setPublished(boolean published){
+        this.published = published;
     }
 
     public Date getPublishedTime() {
@@ -109,42 +102,25 @@ public class BlogPost extends AbstractPost {
         return tags;
     }
 
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public List<CommentPost> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentPost> comments) {
-        this.comments = comments;
-    }
-
     public BlogPost() {
         this.tags = new ArrayList<String>();
-        this.comments = new ArrayList<CommentPost>();
     }
 
-    public BlogPost(String authorId, String title, String content, String tagString) {
-        super(authorId, content);
+    public BlogPost(String postId, UserAccount author, String title, String content, String tagString) {
+        super(postId, author, content);
         this.title = title;
         this.tags = new ArrayList<String>();
         parseAndSetTags(tagString);
-        this.comments = new ArrayList<CommentPost>();
     }
 
-    void updateContent(String content) {
+    public void updateContent(String content) {
         setContent(content);
         triggerModified();
     }
 
-    void updateMeta(String title, String tagString) {
+    public void updateMeta(String title, String publishedPath, String tagString) {
         this.title = title;
+        this.publishedPath = publishedPath;
         parseAndSetTags(tagString);
         triggerModified();
     }
@@ -159,47 +135,32 @@ public class BlogPost extends AbstractPost {
         }
     }
 
-    void publish(String path) {
+    public void publish(String path, int year, int month) {
         assert isPublished() == false;
 
         setPublished(true);
         publishedPath = path;
         publishedTime = new Date();
-        publishedYear = Calendar.getInstance().get(Calendar.YEAR);
-        publishedMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        // month starts at 0 for January, but we want to display 1.
+        if (year <=0 ) {
+            publishedYear = Calendar.getInstance().get(Calendar.YEAR);
+        } else {
+            publishedYear = year;
+        }
+        if (month <= 0) {
+            publishedMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+            // month starts at 0 for January, but we want to display 1.
+        } else {
+            publishedMonth = month;
+        }
         triggerModified();
     }
 
-    void unpublish() {
+    public void unpublish() {
         assert isPublished() == true;
         setPublished(false);
         triggerModified();
     }
 
-    public String getPublishedDateString() {
-        if (!isPublished()) {
-            return "";
-        }
-        DateFormat formatter = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        return formatter.format(publishedTime);
-    }
-
-    public String getPublishedTimeString() {
-        if (!isPublished()) {
-            return "";
-        }
-        DateFormat formatter = DateFormat.getTimeInstance(DateFormat.MEDIUM);
-        return formatter.format(publishedTime);
-    }
-
-    public String getPublishedDateTimeString() {
-        if (!isPublished()) {
-            return "";
-        }
-        DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        return formatter.format(publishedTime);
-    }
 
     public String getFormatTagString() {
         StringBuffer sb = new StringBuffer();
@@ -243,6 +204,7 @@ public class BlogPost extends AbstractPost {
     }
 
     public String toString() {
-        return String.format("BlogPost{id='%s';path='%s';title='%s'}", getId(), getFullPublishedPath(), getTitle());
+        return String.format("BlogPost{postId='%s';path='%s';title='%s'}", 
+                getPostId(), getFullPublishedPath(), getTitle());
     }
 }

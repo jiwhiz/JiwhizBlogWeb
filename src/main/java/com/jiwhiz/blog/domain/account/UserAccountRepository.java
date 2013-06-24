@@ -15,8 +15,9 @@
  */
 package com.jiwhiz.blog.domain.account;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 
@@ -30,5 +31,5 @@ public interface UserAccountRepository extends MongoRepository<UserAccount, Stri
     
     UserAccount findByUserId(String userId);
     
-    Page<UserAccount> findAllOrderByUserId(Pageable pageable);
+    List<UserAccount> findAll(Sort sort);
 }
