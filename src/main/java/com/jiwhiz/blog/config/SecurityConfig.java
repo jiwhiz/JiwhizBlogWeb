@@ -22,12 +22,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.HttpConfiguration;
-import org.springframework.security.config.annotation.web.WebSecurityBuilder;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -110,14 +110,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurityBuilder builder) throws Exception {
+    public void configure(WebSecurity builder) throws Exception {
         builder
             .ignoring()
                 .antMatchers("/resources/**");
     }
     
 	@Override
-	protected void configure(HttpConfiguration http) throws Exception {
+	protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeUrls()
                 .antMatchers("/**").permitAll()
@@ -136,8 +136,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void registerAuthentication(AuthenticationManagerBuilder builder) throws Exception{
         builder
-        	.add(socialAuthenticationProvider())
-        	.add(rememberMeAuthenticationProvider())
+        	.authenticationProvider(socialAuthenticationProvider())
+        	.authenticationProvider(rememberMeAuthenticationProvider())
         	.userDetailsService(userAccountService);
     } 
     
