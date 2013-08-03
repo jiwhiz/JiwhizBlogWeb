@@ -18,6 +18,8 @@ package com.jiwhiz.blog.web.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -32,9 +34,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.post.BlogPost;
+import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.CommentPost;
-import com.jiwhiz.blog.web.AbstractRestController;
+import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.web.dto.BlogPostDTO;
 import com.jiwhiz.blog.web.dto.CommentPostDTO;
 import com.jiwhiz.blog.web.dto.UserAccountDTO;
@@ -62,8 +66,20 @@ import com.jiwhiz.blog.web.dto.UserAccountDTO;
  */
 @Controller
 @RequestMapping("/rest/admin/comments")
-public class ManageCommentRestService extends AbstractRestController {
+public class ManageCommentRestService {
     private static final Logger logger = LoggerFactory.getLogger(ManageCommentRestService.class);
+
+    private final UserAccountRepository userAccountRepository;
+    private final BlogPostRepository blogPostRepository;
+    private final CommentPostRepository commentPostRepository;
+
+    @Inject
+    public ManageCommentRestService(UserAccountRepository userAccountRepository, BlogPostRepository blogPostRepository,
+            CommentPostRepository commentPostRepository) {
+        this.userAccountRepository = userAccountRepository;
+        this.blogPostRepository = blogPostRepository;
+        this.commentPostRepository = commentPostRepository;
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody

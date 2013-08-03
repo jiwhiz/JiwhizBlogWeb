@@ -17,6 +17,8 @@ package com.jiwhiz.blog.web.account;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,15 +31,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserSocialConnection;
-import com.jiwhiz.blog.web.AbstractRestController;
+import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.web.dto.UserAccountDTO;
 
 /**
  * RESTful Service for current logged in user account management.
  * 
- * <p>API: '<b>rest/myAccount/:action</b>'</p>
- * <p><b>:action</b> can be
+ * <p>
+ * API: '<b>rest/myAccount/:action</b>'
+ * </p>
+ * <p>
+ * <b>:action</b> can be
  * <ul>
  * <li>'overview' - return current logged in user account data, with social connections and all comments.</li>
  * <li>'profile' - retrieve or update logged in user profile.</li>
@@ -46,20 +53,31 @@ import com.jiwhiz.blog.web.dto.UserAccountDTO;
  * </p>
  * 
  * @author Yuan Ji
- *
+ * 
  */
 @Controller
 @RequestMapping("/rest/myAccount")
-public class MyAccountRestService extends AbstractRestController {
-	private static final Logger logger = LoggerFactory.getLogger(MyAccountRestService.class);
-	
-	/**
-	 * Return current logged in user @{link UserAccountDTO} data, 
-	 * with connections of @{link SocialConnectionDTO}
-	 * and comments of @{link CommentPostDTO}
-	 * 
-	 * @return
-	 */
+public class MyAccountRestService {
+    private static final Logger logger = LoggerFactory.getLogger(MyAccountRestService.class);
+
+    private final UserAccountRepository userAccountRepository;
+    private final UserSocialConnectionRepository userSocialConnectionRepository;
+    private final UserAccountService userAccountService;
+
+    @Inject
+    public MyAccountRestService(UserAccountRepository userAccountRepository,
+            UserSocialConnectionRepository userSocialConnectionRepository, UserAccountService userAccountService) {
+        this.userAccountRepository = userAccountRepository;
+        this.userSocialConnectionRepository = userSocialConnectionRepository;
+        this.userAccountService = userAccountService;
+    }
+
+    /**
+     * Return current logged in user @{link UserAccountDTO} data, with connections of @{link SocialConnectionDTO} and
+     * comments of @{link CommentPostDTO}
+     * 
+     * @return
+     */
     @RequestMapping(value = "/overview", method = RequestMethod.GET)
     @ResponseBody
     public UserAccountDTO getCurrentUserAccount() {
@@ -84,10 +102,9 @@ public class MyAccountRestService extends AbstractRestController {
     @RequestMapping(value = "/profile", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProfile(@RequestBody UserAccountDTO profile) {
-    	UserAccount currentUser = userAccountService.getCurrentUser();
-    	currentUser.updateProfile(profile.getDisplayName(),
-    	        profile.getEmail(), profile.getWebSite());
-    	userAccountRepository.save(currentUser);
+        UserAccount currentUser = userAccountService.getCurrentUser();
+        currentUser.updateProfile(profile.getDisplayName(), profile.getEmail(), profile.getWebSite());
+        userAccountRepository.save(currentUser);
     }
 
     @RequestMapping(value = "/useSocialImage", method = RequestMethod.PUT)
@@ -95,17 +112,16 @@ public class MyAccountRestService extends AbstractRestController {
     public UserAccountDTO useSocialImage(@RequestParam("provider") String provider) {
         UserAccount currentUser = userAccountService.getCurrentUser();
         List<UserSocialConnection> connections = userSocialConnectionRepository.findByUserId(currentUser.getUserId());
-        
+
         for (UserSocialConnection connection : connections) {
             if (connection.getProviderId().equals(provider)) {
                 currentUser.setImageUrl(connection.getImageUrl());
-                logger.debug("Change user image to social account image of "+provider);
+                logger.debug("Change user image to social account image of " + provider);
                 break;
             }
         }
         currentUser = userAccountRepository.save(currentUser);
         return UserAccountDTO.transferForAccountOverview(currentUser, connections);
     }
-
 
 }

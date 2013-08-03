@@ -18,6 +18,8 @@ package com.jiwhiz.blog.web.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -29,8 +31,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserSocialConnection;
-import com.jiwhiz.blog.web.AbstractRestController;
+import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.web.dto.UserAccountDTO;
 
 
@@ -59,9 +63,21 @@ import com.jiwhiz.blog.web.dto.UserAccountDTO;
  */
 @Controller
 @RequestMapping("/rest/admin/users")
-public class ManageUserRestService extends AbstractRestController {
+public class ManageUserRestService {
 	private static final Logger logger = LoggerFactory.getLogger(ManageUserRestService.class);
 	
+	private final UserAccountRepository userAccountRepository;
+	private final UserSocialConnectionRepository userSocialConnectionRepository;
+	private final UserAccountService userAccountService;
+	
+    @Inject
+    public ManageUserRestService(UserAccountRepository userAccountRepository,
+            UserSocialConnectionRepository userSocialConnectionRepository, UserAccountService userAccountService) {
+        this.userAccountRepository = userAccountRepository;
+        this.userSocialConnectionRepository = userSocialConnectionRepository;
+        this.userAccountService = userAccountService;
+    }
+
     @RequestMapping(value = "/list" , method = RequestMethod.GET)
     @ResponseBody
     public List<UserAccountDTO> listUsers() {

@@ -33,25 +33,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.post.AbstractPost;
 import com.jiwhiz.blog.domain.post.BlogPost;
+import com.jiwhiz.blog.domain.post.BlogPostRepository;
+import com.jiwhiz.blog.domain.post.BlogPostService;
+import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.domain.post.CommentStatusType;
-import com.jiwhiz.blog.web.AbstractRestController;
 import com.jiwhiz.blog.web.SystemMessageSender;
 import com.jiwhiz.blog.web.dto.BlogPostDTO;
 
 /**
  * RESTful Service for current logged in author managing blog posts.
  * 
- * <p>API: '<b>rest/myPost/blogs/:action:blogId/:blogAction</b>'
+ * <p>
+ * API: '<b>rest/myPost/blogs/:action:blogId/:blogAction</b>'
  * 
- * <p><b>:action</b> can be
+ * <p>
+ * <b>:action</b> can be
  * <ul>
  * <li>'list' - return current user's blogs.</li>
  * <li>'create' - create a new blog.</li>
  * </ul>
  * </p>
- * <p><b>:blogAction</b> can be
+ * <p>
+ * <b>:blogAction</b> can be
  * <ul>
  * <li>'updateContent' - update blog content.</li>
  * <li>'updateMeta' - update blog meta data, like title, path, tags.</li>
@@ -59,104 +65,116 @@ import com.jiwhiz.blog.web.dto.BlogPostDTO;
  * <li>'unpublish' - un-publish blog.</li>
  * </ul>
  * </p>
-
+ * 
  * @author Yuan Ji
- *
+ * 
  */
 @Controller
 @RequestMapping("/rest/myPost/blogs")
-public class MyBlogPostRestService extends AbstractRestController {
-	private static final Logger logger = LoggerFactory.getLogger(MyBlogPostRestService.class);
-	
-	@Inject
-	private SystemMessageSender systemMessageSender;
-	
-    @RequestMapping( value = "/list", method = RequestMethod.GET )
+public class MyBlogPostRestService {
+    private static final Logger logger = LoggerFactory.getLogger(MyBlogPostRestService.class);
+
+    private final BlogPostRepository blogPostRepository;
+    private final CommentPostRepository commentPostRepository;
+    private final UserAccountService userAccountService;
+    private final BlogPostService blogPostService;
+    private final SystemMessageSender systemMessageSender;
+
+    @Inject
+    public MyBlogPostRestService(BlogPostRepository blogPostRepository, CommentPostRepository commentPostRepository,
+            UserAccountService userAccountService, BlogPostService blogPostService, SystemMessageSender systemMessageSender) {
+        this.blogPostRepository = blogPostRepository;
+        this.commentPostRepository = commentPostRepository;
+        this.userAccountService = userAccountService;
+        this.blogPostService = blogPostService;
+        this.systemMessageSender = systemMessageSender;
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public List<BlogPostDTO> listCurrentUserBlogPosts() {
         List<BlogPostDTO> result = new ArrayList<BlogPostDTO>();
-    	UserAccount currentUser = userAccountService.getCurrentUser();
-    	List<BlogPost> blogs = blogPostRepository.findByAuthorKeyOrderByCreatedTimeDesc(currentUser.getKey());
-    	for (BlogPost blog : blogs) {
-    	    result.add(new BlogPostDTO(blog, 
-    	            commentPostRepository.countByBlogPostKey(blog.getKey()),
-    	            commentPostRepository.countByBlogPostKeyAndStatus(blog.getKey(), CommentStatusType.APPROVED), 
-    	            commentPostRepository.countByBlogPostKeyAndStatus(blog.getKey(), CommentStatusType.PENDING)));
-    	}
-    	
-    	return result;
+        UserAccount currentUser = userAccountService.getCurrentUser();
+        List<BlogPost> blogs = blogPostRepository.findByAuthorKeyOrderByCreatedTimeDesc(currentUser.getKey());
+        for (BlogPost blog : blogs) {
+            result.add(new BlogPostDTO(blog, commentPostRepository.countByBlogPostKey(blog.getKey()),
+                    commentPostRepository.countByBlogPostKeyAndStatus(blog.getKey(), CommentStatusType.APPROVED),
+                    commentPostRepository.countByBlogPostKeyAndStatus(blog.getKey(), CommentStatusType.PENDING)));
+        }
+
+        return result;
     }
 
-    @RequestMapping( value = "/{blogId}", method = RequestMethod.GET )
+    @RequestMapping(value = "/{blogId}", method = RequestMethod.GET)
     @ResponseBody
     public BlogPostDTO getBlogForEdit(@PathVariable("blogId") String blogId) {
         BlogPost blog = blogPostRepository.findByPostId(blogId);
         return new BlogPostDTO(blog);
     }
 
-    @RequestMapping( value = "/create", method = RequestMethod.POST )
-    @ResponseBody @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
     public BlogPostDTO createBlogPost(@RequestBody BlogPostDTO blogPostDto) {
-    	UserAccount currentUser = userAccountService.getCurrentUser();
-        BlogPost newBlog = blogPostService.createPost(
-                currentUser, blogPostDto.getTitle(), blogPostDto.getContent(), blogPostDto.getTagString());
+        UserAccount currentUser = userAccountService.getCurrentUser();
+        BlogPost newBlog = blogPostService.createPost(currentUser, blogPostDto.getTitle(), blogPostDto.getContent(),
+                blogPostDto.getTagString());
         logger.debug("After save, blog id=" + newBlog.getPostId());
         return new BlogPostDTO(newBlog);
     }
 
-    @RequestMapping( value = "/{blogId}/updateContent", method = RequestMethod.PUT )
+    @RequestMapping(value = "/{blogId}/updateContent", method = RequestMethod.PUT)
     @ResponseBody
     public BlogPostDTO updateBlogPostContent(@PathVariable("blogId") String blogId, @RequestBody BlogPostDTO blogPostDto) {
-    	BlogPost blogPost = blogPostRepository.findByPostId(blogId);
-    	checkIsAuthorOfPost(blogPost);
-    	blogPost.updateContent(blogPostDto.getContent());
-    	blogPost = blogPostRepository.save(blogPost);
-    	return new BlogPostDTO(blogPost);
-    }
-
-    @RequestMapping( value = "/{blogId}/updateMeta", method = RequestMethod.PUT )
-    @ResponseBody
-    public BlogPostDTO updateBlogPostMeta(@PathVariable("blogId") String blogId, @RequestBody BlogPostDTO blogPostDto) {
-    	BlogPost blogPost = blogPostRepository.findByPostId(blogId);
-    	checkIsAuthorOfPost(blogPost);
-    	blogPost.updateMeta(blogPostDto.getTitle(), blogPostDto.getPublishedPath(), blogPostDto.getTagString());
-    	blogPost = blogPostRepository.save(blogPost);
+        BlogPost blogPost = blogPostRepository.findByPostId(blogId);
+        checkIsAuthorOfPost(blogPost);
+        blogPost.updateContent(blogPostDto.getContent());
+        blogPost = blogPostRepository.save(blogPost);
         return new BlogPostDTO(blogPost);
     }
 
-    @RequestMapping( value = "/{blogId}/publish", method = RequestMethod.PUT )
+    @RequestMapping(value = "/{blogId}/updateMeta", method = RequestMethod.PUT)
+    @ResponseBody
+    public BlogPostDTO updateBlogPostMeta(@PathVariable("blogId") String blogId, @RequestBody BlogPostDTO blogPostDto) {
+        BlogPost blogPost = blogPostRepository.findByPostId(blogId);
+        checkIsAuthorOfPost(blogPost);
+        blogPost.updateMeta(blogPostDto.getTitle(), blogPostDto.getPublishedPath(), blogPostDto.getTagString());
+        blogPost = blogPostRepository.save(blogPost);
+        return new BlogPostDTO(blogPost);
+    }
+
+    @RequestMapping(value = "/{blogId}/publish", method = RequestMethod.PUT)
     @ResponseBody
     public BlogPostDTO publishBlog(@PathVariable("blogId") String blogId, @RequestBody BlogPostDTO blogPostDto) {
         BlogPost blogPost = blogPostRepository.findByPostId(blogId);
         checkIsAuthorOfPost(blogPost);
-        blogPost.publish(blogPostDto.getPublishedPath(), blogPostDto.getPublishedYear(), blogPostDto.getPublishedMonth());
+        blogPost.publish(blogPostDto.getPublishedPath(), blogPostDto.getPublishedYear(),
+                blogPostDto.getPublishedMonth());
         blogPost = blogPostRepository.save(blogPost);
-        
+
         systemMessageSender.sendNewPostPublished(userAccountService.getCurrentUser(), blogPost);
-        return new BlogPostDTO(blogPost, 
-                commentPostRepository.countByBlogPostKey(blogPost.getKey()),
-                commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.APPROVED), 
+        return new BlogPostDTO(blogPost, commentPostRepository.countByBlogPostKey(blogPost.getKey()),
+                commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.APPROVED),
                 commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.PENDING));
     }
 
-    @RequestMapping( value = "/{blogId}/unpublish", method = RequestMethod.PUT )
+    @RequestMapping(value = "/{blogId}/unpublish", method = RequestMethod.PUT)
     @ResponseBody
     public BlogPostDTO unpublishBlog(@PathVariable("blogId") String blogId, @RequestBody BlogPostDTO blogPostDto) {
         BlogPost blogPost = blogPostRepository.findByPostId(blogId);
         checkIsAuthorOfPost(blogPost);
         blogPost.unpublish();
         blogPost = blogPostRepository.save(blogPost);
-        return new BlogPostDTO(blogPost, 
-                commentPostRepository.countByBlogPostKey(blogPost.getKey()),
-                commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.APPROVED), 
+        return new BlogPostDTO(blogPost, commentPostRepository.countByBlogPostKey(blogPost.getKey()),
+                commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.APPROVED),
                 commentPostRepository.countByBlogPostKeyAndStatus(blogPost.getKey(), CommentStatusType.PENDING));
     }
-    
+
     protected void checkIsAuthorOfPost(AbstractPost post) throws AccessDeniedException {
-        if (post == null || !post.getAuthorKey().equals(userAccountService.getCurrentUser().getKey())){
-            throw new AccessDeniedException("Cannot access the post, becasue current user is not the author of the post.");
+        if (post == null || !post.getAuthorKey().equals(userAccountService.getCurrentUser().getKey())) {
+            throw new AccessDeniedException(
+                    "Cannot access the post, becasue current user is not the author of the post.");
         }
     }
 
-    
 }

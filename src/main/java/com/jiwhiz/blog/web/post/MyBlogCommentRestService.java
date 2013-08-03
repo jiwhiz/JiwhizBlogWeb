@@ -18,6 +18,8 @@ package com.jiwhiz.blog.web.post;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -29,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.post.BlogPost;
+import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.CommentPost;
-import com.jiwhiz.blog.web.AbstractRestController;
+import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.web.dto.CommentPostDTO;
 
 /**
@@ -39,12 +43,14 @@ import com.jiwhiz.blog.web.dto.CommentPostDTO;
  * <p>
  * API: '<b>rest/myPost/blogs/:blogId/comments/:action:commentId/:commentAction</b>'
  * </p>
- * <p><b>:action</b> can be
+ * <p>
+ * <b>:action</b> can be
  * <ul>
  * <li>'list' - return blog post's comments.</li>
  * </ul>
  * </p>
- * <p><b>:commentAction</b> can be
+ * <p>
+ * <b>:commentAction</b> can be
  * <ul>
  * <li>'approve' - approve comment (PENDING -> APPROVED).</li>
  * <li>'disapprove' - disapprove comment (APPROVED -> PENDING).</li>
@@ -58,8 +64,20 @@ import com.jiwhiz.blog.web.dto.CommentPostDTO;
  */
 @Controller
 @RequestMapping("/rest/myPost/blogs")
-public class MyBlogCommentRestService extends AbstractRestController {
+public class MyBlogCommentRestService {
     private static final Logger logger = LoggerFactory.getLogger(MyBlogCommentRestService.class);
+
+    private final UserAccountRepository userAccountRepository;
+    private final BlogPostRepository blogPostRepository;
+    private final CommentPostRepository commentPostRepository;
+
+    @Inject
+    public MyBlogCommentRestService(UserAccountRepository userAccountRepository, BlogPostRepository blogPostRepository,
+            CommentPostRepository commentPostRepository) {
+        this.userAccountRepository = userAccountRepository;
+        this.blogPostRepository = blogPostRepository;
+        this.commentPostRepository = commentPostRepository;
+    }
 
     @RequestMapping(value = "/{blogId}/comments/list", method = RequestMethod.GET)
     @ResponseBody

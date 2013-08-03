@@ -18,6 +18,8 @@ package com.jiwhiz.blog.web.account;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -31,10 +33,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.post.AbstractPost;
 import com.jiwhiz.blog.domain.post.BlogPost;
+import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.CommentPost;
-import com.jiwhiz.blog.web.AbstractRestController;
+import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.web.dto.BlogPostDTO;
 import com.jiwhiz.blog.web.dto.CommentPostDTO;
 
@@ -53,9 +57,21 @@ import com.jiwhiz.blog.web.dto.CommentPostDTO;
  */
 @Controller
 @RequestMapping("/rest/myAccount/comments")
-public class MyCommentRestService extends AbstractRestController {
+public class MyCommentRestService {
 	private static final Logger logger = LoggerFactory.getLogger(MyCommentRestService.class);
 	
+    private final BlogPostRepository blogPostRepository;
+    private final CommentPostRepository commentPostRepository;
+    private final UserAccountService userAccountService;
+
+    @Inject
+    public MyCommentRestService(BlogPostRepository blogPostRepository, CommentPostRepository commentPostRepository,
+            UserAccountService userAccountService) {
+        this.blogPostRepository = blogPostRepository;
+        this.commentPostRepository = commentPostRepository;
+        this.userAccountService = userAccountService;
+    }
+
     @RequestMapping(value = "/list" , method = RequestMethod.GET)
     @ResponseBody
     public List<CommentPostDTO> getAllCommentsOfCurrentUser() {
