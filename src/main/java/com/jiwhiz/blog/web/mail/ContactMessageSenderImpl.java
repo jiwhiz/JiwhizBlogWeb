@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.comfirm.alphamail.services.client.AlphaMailService;
 import com.comfirm.alphamail.services.client.entities.EmailContact;
+import com.jiwhiz.blog.web.ContactForm;
 import com.jiwhiz.blog.web.ContactMessageSender;
-import com.jiwhiz.blog.web.site.ContactForm;
 
 /**
  * Implementation for ContactMessageSender. Using Alpha Mail.

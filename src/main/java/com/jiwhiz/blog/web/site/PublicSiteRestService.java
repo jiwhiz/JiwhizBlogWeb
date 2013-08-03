@@ -45,6 +45,7 @@ import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.CommentPost;
 import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.domain.post.CommentStatusType;
+import com.jiwhiz.blog.web.ContactForm;
 import com.jiwhiz.blog.web.ContactMessageSender;
 import com.jiwhiz.blog.web.dto.BlogPostDTO;
 import com.jiwhiz.blog.web.dto.CommentPostDTO;

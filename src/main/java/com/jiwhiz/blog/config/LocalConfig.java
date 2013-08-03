@@ -24,9 +24,9 @@ import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.post.BlogPost;
 import com.jiwhiz.blog.domain.post.CommentPost;
 import com.jiwhiz.blog.web.CommentNotificationSender;
+import com.jiwhiz.blog.web.ContactForm;
 import com.jiwhiz.blog.web.ContactMessageSender;
 import com.jiwhiz.blog.web.SystemMessageSender;
-import com.jiwhiz.blog.web.site.ContactForm;
 
 /**
  * Local Test configuration. Use mock email service.
