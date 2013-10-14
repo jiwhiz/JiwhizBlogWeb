@@ -46,9 +46,21 @@ function AdminMenuController($scope, $routeParams, User) {
 			$scope.adminMenu.title = ' Sign In';
 			var index = 0;
 			//social sign in
-			$scope.adminMenu.items[index++] = {menu : true, url : 'signin/google', title : ' Google Sign In', iconClass : "icon-google-plus"};
-			$scope.adminMenu.items[index++] = {menu : true, url : 'signin/facebook', title : ' Facebook Sign In', iconClass : "icon-facebook"};
-			$scope.adminMenu.items[index++] = {menu : true, url : 'signin/twitter', title : ' Twitter Sign In', iconClass : "icon-twitter"};
+			$scope.adminMenu.items[index++] = {
+					menu : true, 
+					url : 'signin/google?scope=https://www.googleapis.com/auth/userinfo.profile', 
+					title : ' Google Sign In', 
+					iconClass : "icon-google-plus"};
+			$scope.adminMenu.items[index++] = {
+					menu : true, 
+					url : 'signin/facebook', 
+					title : ' Facebook Sign In', 
+					iconClass : "icon-facebook"};
+			$scope.adminMenu.items[index++] = {
+					menu : true, 
+					url : 'signin/twitter', 
+					title : ' Twitter Sign In', 
+					iconClass : "icon-twitter"};
 		}
 	});
 	

@@ -22,31 +22,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.social.UserIdSource;
+import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
+import org.springframework.social.config.annotation.EnableSocial;
+import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
-import org.springframework.social.connect.NotConnectedException;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.support.OAuth1ConnectionFactory;
-import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.api.Google;
-import org.springframework.social.google.api.impl.GoogleTemplate;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
-import org.springframework.social.security.SocialAuthenticationServiceRegistry;
-import org.springframework.social.security.provider.OAuth1AuthenticationService;
-import org.springframework.social.security.provider.OAuth2AuthenticationService;
-import org.springframework.social.security.provider.SocialAuthenticationService;
 import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.jiwhiz.blog.domain.account.MongoUsersConnectionRepositoryImpl;
-import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.web.AutoConnectionSignUp;
@@ -56,105 +52,75 @@ import com.jiwhiz.blog.web.SystemMessageSender;
  * Configuration for Spring Social.
  * 
  * @author Yuan Ji
- *
+ * 
  */
 @Configuration
-public class SocialConfig {
+@EnableSocial
+public class SocialConfig implements SocialConfigurer {
 
-    @Inject
-    private Environment environment;
-
-    @Inject 
-    private UserAccountService userAccountService;
-        
     @Inject
     private UserSocialConnectionRepository userSocialConnectionRepository;
-
+    
     @Inject
-    private  SystemMessageSender systemMessageSender;
-    /**
-     * When a new provider is added to the app, register its {@link SocialAuthenticationService} here.
-     * 
-     */
-    @Bean
-    public SocialAuthenticationServiceLocator socialAuthenticationServiceLocator() {
-        SocialAuthenticationServiceRegistry registry = new SocialAuthenticationServiceRegistry();
-        
-        //add google
-        OAuth2ConnectionFactory<Google> googleConnectionFactory = new GoogleConnectionFactory(environment.getProperty("google.clientId"),
-                environment.getProperty("google.clientSecret"));
-        OAuth2AuthenticationService<Google> googleAuthenticationService = new OAuth2AuthenticationService<Google>(googleConnectionFactory);
-        googleAuthenticationService.setScope("https://www.googleapis.com/auth/userinfo.profile"); //get basic info only.
-        registry.addAuthenticationService(googleAuthenticationService);
+    private UserAccountService userAccountService;
+    
+    @Inject
+    private SystemMessageSender systemMessageSender;
+    
 
-        //add twitter
-        OAuth1ConnectionFactory<Twitter> twitterConnectionFactory = new TwitterConnectionFactory(environment.getProperty("twitter.consumerKey"),
-                environment.getProperty("twitter.consumerSecret"));
-        OAuth1AuthenticationService<Twitter> twitterAuthenticationService = new OAuth1AuthenticationService<Twitter>(twitterConnectionFactory);
-        registry.addAuthenticationService(twitterAuthenticationService);
-
-        //add facebook
-        OAuth2ConnectionFactory<Facebook> facebookConnectionFactory = new FacebookConnectionFactory(environment.getProperty("facebook.clientId"),
-                environment.getProperty("facebook.clientSecret"));
-        OAuth2AuthenticationService<Facebook> facebookAuthenticationService = new OAuth2AuthenticationService<Facebook>(facebookConnectionFactory);
-        facebookAuthenticationService.setScope(""); //???
-        registry.addAuthenticationService(facebookAuthenticationService);
-
-        return registry;
+    @Override
+    public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig, Environment env) {
+        cfConfig.addConnectionFactory(new TwitterConnectionFactory(env.getProperty("twitter.consumerKey"), env.getProperty("twitter.consumerSecret")));
+        cfConfig.addConnectionFactory(new FacebookConnectionFactory(env.getProperty("facebook.clientId"), env.getProperty("facebook.clientSecret")));
+        cfConfig.addConnectionFactory(new GoogleConnectionFactory(env.getProperty("google.clientId"), env.getProperty("google.clientSecret")));
     }
 
-    /**
-     * Singleton data access object providing access to connections across all users.
-     */
-    @Bean
-    public UsersConnectionRepository usersConnectionRepository() {
-        MongoUsersConnectionRepositoryImpl repository = new MongoUsersConnectionRepositoryImpl(userSocialConnectionRepository,
-                socialAuthenticationServiceLocator(), Encryptors.noOpText());
+    @Override
+    public UserIdSource getUserIdSource() {
+        return new UserIdSource() {         
+            @Override
+            public String getUserId() {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null) {
+                    throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
+                }
+                return authentication.getName();
+            }
+        };
+    }
+
+    @Override
+    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
+        MongoUsersConnectionRepositoryImpl repository = new MongoUsersConnectionRepositoryImpl(
+                userSocialConnectionRepository, (SocialAuthenticationServiceLocator)connectionFactoryLocator, Encryptors.noOpText());
         repository.setConnectionSignUp(autoConnectionSignUp());
         return repository;
     }
 
-    /**
-     * Request-scoped data access object providing access to the current user's connections.
-     */
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public ConnectionRepository connectionRepository() {
-        UserAccount user = userAccountService.getCurrentUser();
-        return usersConnectionRepository().createConnectionRepository(user.getUsername());
+    public Google google(ConnectionRepository repository) {
+        Connection<Google> connection = repository.findPrimaryConnection(Google.class);
+        return connection != null ? connection.getApi() : null;
     }
 
-    /**
-     * A proxy to a request-scoped object representing the current user's primary Google account.
-     * 
-     * @throws NotConnectedException
-     *             if the user is not connected to Google.
-     */
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public Google google() {
-        Connection<Google> google = connectionRepository().findPrimaryConnection(Google.class);
-        return google != null ? google.getApi() : new GoogleTemplate();
+    public Facebook facebook(ConnectionRepository repository) {
+        Connection<Facebook> connection = repository.findPrimaryConnection(Facebook.class);
+        return connection != null ? connection.getApi() : null;
     }
 
     @Bean
-    @Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)   
-    public Facebook facebook() {
-        Connection<Facebook> facebook = connectionRepository().findPrimaryConnection(Facebook.class);
-        return facebook != null ? facebook.getApi() : new FacebookTemplate();
-    }
-
-    @Bean
-    @Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)   
-    public Twitter twitter() {
-        Connection<Twitter> twitter = connectionRepository().findPrimaryConnection(Twitter.class);
-        return twitter != null ? twitter.getApi() : new TwitterTemplate();
+    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
+    public Twitter twitter(ConnectionRepository repository) {
+        Connection<Twitter> connection = repository.findPrimaryConnection(Twitter.class);
+        return connection != null ? connection.getApi() : null;
     }
 
     @Bean
     public ConnectionSignUp autoConnectionSignUp() {
         return new AutoConnectionSignUp(userAccountService, systemMessageSender);
     }
-
 
 }

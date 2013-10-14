@@ -24,11 +24,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
@@ -67,48 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     private SocialAuthenticationServiceLocator socialAuthenticationServiceLocator;
     
-    @Bean
-    public SocialAuthenticationFilter socialAuthenticationFilter() throws Exception{
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAccountService,
-                usersConnectionRepository, socialAuthenticationServiceLocator);
-        filter.setFilterProcessesUrl("/signin");
-        filter.setSignupUrl(null); 
-        filter.setConnectionAddedRedirectUrl("/#/myAccount");
-        filter.setPostLoginUrl("/#/myAccount"); //always open account profile page after login
-        filter.setRememberMeServices(rememberMeServices());
-        return filter;
-    }
-
-    @Bean
-    public SocialAuthenticationProvider socialAuthenticationProvider(){
-        return new SocialAuthenticationProvider(usersConnectionRepository, userAccountService);
-    }
-    
-    @Bean
-    public LoginUrlAuthenticationEntryPoint socialAuthenticationEntryPoint(){
-        return new LoginUrlAuthenticationEntryPoint("/signin");
-    }
-
-    @Bean
-    public RememberMeServices rememberMeServices(){
-        PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
-                        environment.getProperty("application.key"), userAccountService, persistentTokenRepository());
-        rememberMeServices.setAlwaysRemember(true);
-        return rememberMeServices;
-    }
-    
-    @Bean 
-    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider(){
-        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = 
-                        new RememberMeAuthenticationProvider(environment.getProperty("application.key"));
-        return rememberMeAuthenticationProvider; 
-    }
-
-    @Bean 
-    public PersistentTokenRepository persistentTokenRepository() {
-        return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
-    }
-
     @Override
     public void configure(WebSecurity builder) throws Exception {
         builder
@@ -119,10 +76,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeUrls()
-                .antMatchers("/**").permitAll()
+            .csrf().disable() // disable CSRF now. TODO figure out how to config CSRF header in AngularJS
+            .authorizeRequests()
+                .antMatchers("/**").permitAll() //FIXME add authentication for rest service URL
                 .and()
-	        //.authenticationEntryPoint(socialAuthenticationEntryPoint())
 	        .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
 	        .logout()
 	            .deleteCookies("JSESSIONID")
@@ -142,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     } 
     
     /**
-     * ???
+     * Must expose AuthenticationManager as bean.
      */
     @Bean
     @Override
@@ -150,4 +107,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             throws Exception {
         return super.authenticationManagerBean();
     }
+
+    @Bean
+    public SocialAuthenticationFilter socialAuthenticationFilter() throws Exception{
+        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAccountService,
+                usersConnectionRepository, socialAuthenticationServiceLocator);
+        filter.setFilterProcessesUrl("/signin");  //TODO fix the deprecated call. how to use RequestMatcher?
+        filter.setSignupUrl(null); 
+        filter.setConnectionAddedRedirectUrl("/#/myAccount");
+        filter.setPostLoginUrl("/#/myAccount"); //always open account profile page after login
+        filter.setRememberMeServices(rememberMeServices());
+        return filter;
+    }
+
+    @Bean
+    public SocialAuthenticationProvider socialAuthenticationProvider(){
+        return new SocialAuthenticationProvider(usersConnectionRepository, userAccountService);
+    }
+
+    @Bean
+    public RememberMeServices rememberMeServices(){
+        PersistentTokenBasedRememberMeServices rememberMeServices = new PersistentTokenBasedRememberMeServices(
+                        environment.getProperty("application.key"), userAccountService, persistentTokenRepository());
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
+    }
+    
+    @Bean 
+    public PersistentTokenRepository persistentTokenRepository() {
+        return new MongoPersistentTokenRepositoryImpl(rememberMeTokenRepository);
+    }
+
+    @Bean 
+    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider(){
+        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = 
+                        new RememberMeAuthenticationProvider(environment.getProperty("application.key"));
+        return rememberMeAuthenticationProvider; 
+    }
+
 }

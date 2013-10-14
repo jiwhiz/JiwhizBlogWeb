@@ -19,13 +19,11 @@ import javax.inject.Inject;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserAccountServiceImpl;
-import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.BlogPostService;
 import com.jiwhiz.blog.domain.post.BlogPostServiceImpl;
@@ -46,8 +44,6 @@ import com.jiwhiz.blog.domain.system.CounterServiceImpl;
  */
 @Configuration
 class MainAppConfig {
-    @Inject
-    private Environment environment;
 
     @Inject
     private UserAccountRepository accountRepository;
@@ -57,11 +53,10 @@ class MainAppConfig {
     private CommentPostRepository commentPostRepository;
     @Inject
     private SlidePostRepository slidePostRepository;
-    @Inject
-    private UserSocialConnectionRepository userSocialConnectionRepository;
+
 
     // Application Service beans
-    @Bean
+    @Bean (name={"userAccountService", "userIdSource"})
     public UserAccountService userAccountService(MongoTemplate mongoTemplate) {
         return new UserAccountServiceImpl(accountRepository, counterService(mongoTemplate));
     }
