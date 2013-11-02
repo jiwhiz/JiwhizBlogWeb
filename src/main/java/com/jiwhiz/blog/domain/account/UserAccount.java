@@ -132,14 +132,6 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
         this.connections = connections;
     }
 
-    public List<CommentPost> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentPost> comments) {
-        this.comments = comments;
-    }
-
     public UserAccount() {
         this.roles = new UserRoleType[0];
     }
