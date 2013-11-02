@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.post;
+package com.jiwhiz.blog.domain.post.impl;
 
 import javax.inject.Inject;
 
@@ -22,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
+import com.jiwhiz.blog.domain.post.AbstractPost;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**

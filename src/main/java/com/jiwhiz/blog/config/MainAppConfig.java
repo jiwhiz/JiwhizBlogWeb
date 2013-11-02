@@ -27,13 +27,13 @@ import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.impl.UserAccountServiceImpl;
 import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.BlogPostService;
-import com.jiwhiz.blog.domain.post.BlogPostServiceImpl;
 import com.jiwhiz.blog.domain.post.CommentPostRepository;
 import com.jiwhiz.blog.domain.post.CommentPostService;
-import com.jiwhiz.blog.domain.post.CommentPostServiceImpl;
 import com.jiwhiz.blog.domain.post.SlidePostRepository;
 import com.jiwhiz.blog.domain.post.SlidePostService;
-import com.jiwhiz.blog.domain.post.SlidePostServiceImpl;
+import com.jiwhiz.blog.domain.post.impl.BlogPostServiceImpl;
+import com.jiwhiz.blog.domain.post.impl.CommentPostServiceImpl;
+import com.jiwhiz.blog.domain.post.impl.SlidePostServiceImpl;
 import com.jiwhiz.blog.domain.system.CounterService;
 import com.jiwhiz.blog.domain.system.CounterServiceImpl;
 
