@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.social.UserIdSource;
 
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
@@ -53,12 +54,13 @@ class MainAppConfig {
     private CommentPostRepository commentPostRepository;
     @Inject
     private SlidePostRepository slidePostRepository;
-
+    @Inject
+    private UserIdSource userIdSource;
 
     // Application Service beans
     @Bean (name={"userAccountService", "userIdSource"})
     public UserAccountService userAccountService(MongoTemplate mongoTemplate) {
-        return new UserAccountServiceImpl(accountRepository, counterService(mongoTemplate));
+        return new UserAccountServiceImpl(accountRepository, counterService(mongoTemplate), userIdSource);
     }
 
     @Bean

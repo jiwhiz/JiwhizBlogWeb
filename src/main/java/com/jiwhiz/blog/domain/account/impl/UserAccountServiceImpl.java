@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.ConnectionData;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
@@ -45,11 +46,14 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository accountRepository;
     private final CounterService counterService;
+    private final UserIdSource userIdSource;
 
     @Inject
-    public UserAccountServiceImpl(UserAccountRepository accountRepository, CounterService counterService) {
+    public UserAccountServiceImpl(UserAccountRepository accountRepository, CounterService counterService,
+    		UserIdSource userIdSource) {
         this.accountRepository = accountRepository;
         this.counterService = counterService;
+        this.userIdSource = userIdSource;
     }
 
     @Override
@@ -100,6 +104,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getCurrentUser() {
-        return accountRepository.findByUserId(AccountUtils.getLoginUserId());
+        return accountRepository.findByUserId(userIdSource.getUserId());
     }
 }

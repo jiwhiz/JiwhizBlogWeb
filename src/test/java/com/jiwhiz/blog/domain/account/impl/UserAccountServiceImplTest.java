@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,10 +27,13 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.impl.UserAccountServiceImpl;
 import com.jiwhiz.blog.domain.system.CounterService;
 
@@ -46,13 +49,15 @@ public class UserAccountServiceImplTest {
     
     UserAccountRepository mockRepository;
     CounterService mockCounterService;
+    UserIdSource mockUserIdSource;
     UserAccountServiceImpl service;
 
     @Before
     public void setup() {
         mockRepository = mock(UserAccountRepository.class);
         mockCounterService = mock(CounterService.class);
-        service = new UserAccountServiceImpl(mockRepository, mockCounterService);
+        mockUserIdSource = mock(UserIdSource.class);
+        service = new UserAccountServiceImpl(mockRepository, mockCounterService, mockUserIdSource);
     }
 
     // -------------------------------------------------------------------------
