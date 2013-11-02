@@ -31,6 +31,7 @@ import org.springframework.social.connect.ConnectionData;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jiwhiz.blog.domain.account.impl.UserAccountServiceImpl;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**

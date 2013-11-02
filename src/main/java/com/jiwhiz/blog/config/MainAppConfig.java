@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
-import com.jiwhiz.blog.domain.account.UserAccountServiceImpl;
+import com.jiwhiz.blog.domain.account.impl.UserAccountServiceImpl;
 import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.BlogPostService;
 import com.jiwhiz.blog.domain.post.BlogPostServiceImpl;

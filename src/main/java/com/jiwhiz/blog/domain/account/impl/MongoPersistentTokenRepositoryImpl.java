@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import com.jiwhiz.blog.domain.account.RememberMeToken;
+import com.jiwhiz.blog.domain.account.RememberMeTokenRepository;
 
 /**
  * Implementation for {@link PersistentTokenRepository}. Store {@link RememberMeToken} to MongoDB.

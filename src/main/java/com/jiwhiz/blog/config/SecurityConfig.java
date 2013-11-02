@@ -32,14 +32,15 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.security.SocialAuthenticationFilter;
 import org.springframework.social.security.SocialAuthenticationProvider;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
 
-import com.jiwhiz.blog.domain.account.MongoPersistentTokenRepositoryImpl;
 import com.jiwhiz.blog.domain.account.RememberMeTokenRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
+import com.jiwhiz.blog.domain.account.impl.MongoPersistentTokenRepositoryImpl;
 
 /**
  * Configuration for Spring Security and Spring Social Security.
@@ -65,6 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Inject
     private SocialAuthenticationServiceLocator socialAuthenticationServiceLocator;
+    
+    @Inject
+    private UserIdSource userIdSource;
     
     @Override
     public void configure(WebSecurity builder) throws Exception {
@@ -110,9 +114,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SocialAuthenticationFilter socialAuthenticationFilter() throws Exception{
-        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(authenticationManager(), userAccountService,
+        SocialAuthenticationFilter filter = new SocialAuthenticationFilter(
+        		authenticationManager(), userIdSource,
                 usersConnectionRepository, socialAuthenticationServiceLocator);
-        filter.setFilterProcessesUrl("/signin");  //TODO fix the deprecated call. how to use RequestMatcher?
+        filter.setFilterProcessesUrl("/signin");  //TODO fix the deprecated call.
         filter.setSignupUrl(null); 
         filter.setConnectionAddedRedirectUrl("/#/myAccount");
         filter.setPostLoginUrl("/#/myAccount"); //always open account profile page after login

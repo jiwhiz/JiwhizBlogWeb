@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.jiwhiz.blog.domain.account.UserAccount;
 
 /**
  * 

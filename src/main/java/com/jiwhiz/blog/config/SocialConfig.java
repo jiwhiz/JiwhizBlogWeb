@@ -22,8 +22,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
@@ -38,13 +36,14 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
+import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
-import com.jiwhiz.blog.domain.account.MongoUsersConnectionRepositoryImpl;
 import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
+import com.jiwhiz.blog.domain.account.impl.MongoUsersConnectionRepositoryImpl;
 import com.jiwhiz.blog.web.AutoConnectionSignUp;
 import com.jiwhiz.blog.web.SystemMessageSender;
 
@@ -77,16 +76,7 @@ public class SocialConfig implements SocialConfigurer {
 
     @Override
     public UserIdSource getUserIdSource() {
-        return new UserIdSource() {         
-            @Override
-            public String getUserId() {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication == null) {
-                    throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
-                }
-                return authentication.getName();
-            }
-        };
+        return userIdSource();
     }
 
     @Override
@@ -122,5 +112,10 @@ public class SocialConfig implements SocialConfigurer {
     public ConnectionSignUp autoConnectionSignUp() {
         return new AutoConnectionSignUp(userAccountService, systemMessageSender);
     }
+
+	@Bean
+	public UserIdSource userIdSource() {
+		return new AuthenticationNameUserIdSource();
+	}
 
 }

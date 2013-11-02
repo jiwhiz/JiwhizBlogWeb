@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +26,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.ConnectionData;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
+import com.jiwhiz.blog.domain.account.UserAccountRepository;
+import com.jiwhiz.blog.domain.account.UserAccountService;
+import com.jiwhiz.blog.domain.account.UserRoleType;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**
@@ -95,12 +99,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public String getUserId() {
-        return AccountUtils.getLoginUserId();
-    }
-
-    @Override
     public UserAccount getCurrentUser() {
-        return accountRepository.findByUserId(getUserId());
+        return accountRepository.findByUserId(AccountUtils.getLoginUserId());
     }
 }

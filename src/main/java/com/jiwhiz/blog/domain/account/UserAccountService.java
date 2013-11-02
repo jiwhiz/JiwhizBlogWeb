@@ -17,7 +17,6 @@ package com.jiwhiz.blog.domain.account;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.security.SocialUserDetailsService;
 
@@ -28,7 +27,7 @@ import org.springframework.social.security.SocialUserDetailsService;
  * @author Yuan Ji
  *
  */
-public interface UserAccountService extends SocialUserDetailsService, UserDetailsService, UserIdSource{
+public interface UserAccountService extends SocialUserDetailsService, UserDetailsService {
     
     /**
      * Creates a new UserAccount with user social network account Connection Data.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +28,9 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
+
+import com.jiwhiz.blog.domain.account.UserSocialConnection;
+import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 
 /**
  * Implementation for Spring Social {@link UsersConnectionRepository}.

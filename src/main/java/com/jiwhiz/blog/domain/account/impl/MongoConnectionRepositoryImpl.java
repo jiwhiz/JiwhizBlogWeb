@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jiwhiz.blog.domain.account;
+package com.jiwhiz.blog.domain.account.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +37,9 @@ import org.springframework.social.security.provider.SocialAuthenticationService;
 import org.springframework.social.security.provider.SocialAuthenticationService.ConnectionCardinality;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import com.jiwhiz.blog.domain.account.UserSocialConnection;
+import com.jiwhiz.blog.domain.account.UserSocialConnectionRepository;
 
 /**
  * Implementation for Spring Social {@link ConnectionRepository}. Store {@link UserSocialConnection} to MongoDB.
