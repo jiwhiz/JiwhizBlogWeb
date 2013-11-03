@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.social.UserIdSource;
+import org.springframework.social.security.AuthenticationNameUserIdSource;
 
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
 import com.jiwhiz.blog.domain.account.UserAccountService;
@@ -55,37 +55,32 @@ class MainAppConfig {
     @Inject
     private SlidePostRepository slidePostRepository;
     @Inject
-    private UserIdSource userIdSource;
-
-    // Application Service beans
-    @Bean (name={"userAccountService", "userIdSource"})
-    public UserAccountService userAccountService(MongoTemplate mongoTemplate) {
-        return new UserAccountServiceImpl(accountRepository, counterService(mongoTemplate), userIdSource);
+    private MongoTemplate mongoTemplate;
+    
+    @Bean
+    public UserAccountService userAccountService() {
+        return new UserAccountServiceImpl(accountRepository, counterService(), new AuthenticationNameUserIdSource());
     }
 
     @Bean
-    public BlogPostService blogPostService(MongoTemplate mongoTemplate) {
-        BlogPostServiceImpl service = new BlogPostServiceImpl(accountRepository, blogPostRepository,
-                commentPostRepository, userAccountService(mongoTemplate), counterService(mongoTemplate));
-        return service;
+    public BlogPostService blogPostService() {
+        return new BlogPostServiceImpl(accountRepository, blogPostRepository, commentPostRepository,
+                userAccountService(), counterService());
     }
 
     @Bean
-    public CommentPostService commentPostService(MongoTemplate mongoTemplate) {
-        CommentPostServiceImpl service = new CommentPostServiceImpl(accountRepository, commentPostRepository,
-                userAccountService(mongoTemplate), counterService(mongoTemplate));
-        return service;
+    public CommentPostService commentPostService() {
+        return new CommentPostServiceImpl(accountRepository, commentPostRepository, userAccountService(),
+                counterService());
     }
 
     @Bean
-    public SlidePostService slidePostService(MongoTemplate mongoTemplate) {
-        SlidePostServiceImpl service = new SlidePostServiceImpl(accountRepository, slidePostRepository,
-                userAccountService(mongoTemplate), counterService(mongoTemplate));
-        return service;
+    public SlidePostService slidePostService() {
+        return new SlidePostServiceImpl(accountRepository, slidePostRepository, userAccountService(), counterService());
     }
 
     @Bean
-    public CounterService counterService(MongoTemplate mongoTemplate) {
+    public CounterService counterService() {
         return new CounterServiceImpl(mongoTemplate);
     }
 

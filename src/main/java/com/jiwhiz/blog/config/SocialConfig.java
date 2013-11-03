@@ -65,7 +65,6 @@ public class SocialConfig implements SocialConfigurer {
     
     @Inject
     private SystemMessageSender systemMessageSender;
-    
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig, Environment env) {
@@ -76,7 +75,7 @@ public class SocialConfig implements SocialConfigurer {
 
     @Override
     public UserIdSource getUserIdSource() {
-        return userIdSource();
+        return new AuthenticationNameUserIdSource();
     }
 
     @Override
@@ -112,10 +111,5 @@ public class SocialConfig implements SocialConfigurer {
     public ConnectionSignUp autoConnectionSignUp() {
         return new AutoConnectionSignUp(userAccountService, systemMessageSender);
     }
-
-	@Bean
-	public UserIdSource userIdSource() {
-		return new AuthenticationNameUserIdSource();
-	}
-
+    
 }

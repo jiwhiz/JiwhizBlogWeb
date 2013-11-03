@@ -18,8 +18,6 @@ package com.jiwhiz.blog.domain.account.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,16 +39,15 @@ import com.jiwhiz.blog.domain.system.CounterService;
  */
 public class UserAccountServiceImpl implements UserAccountService {
     private static final Logger logger = LoggerFactory.getLogger(UserAccountServiceImpl.class);
-    
+
     public static final String USER_ID_PREFIX = "user";
 
     private final UserAccountRepository accountRepository;
     private final CounterService counterService;
     private final UserIdSource userIdSource;
 
-    @Inject
     public UserAccountServiceImpl(UserAccountRepository accountRepository, CounterService counterService,
-    		UserIdSource userIdSource) {
+            UserIdSource userIdSource) {
         this.accountRepository = accountRepository;
         this.counterService = counterService;
         this.userIdSource = userIdSource;
@@ -59,7 +56,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount createUserAccount(ConnectionData data) {
         long userIdSequence = this.counterService.getNextUserIdSequence();
-        UserRoleType[] roles = (userIdSequence == 1l) ?
+        UserRoleType[] roles = (userIdSequence == 1l) ? 
                 new UserRoleType[] { UserRoleType.ROLE_USER, UserRoleType.ROLE_AUTHOR, UserRoleType.ROLE_ADMIN } :
                 new UserRoleType[] { UserRoleType.ROLE_USER };
         UserAccount account = new UserAccount(USER_ID_PREFIX + userIdSequence, roles);
@@ -68,7 +65,8 @@ public class UserAccountServiceImpl implements UserAccountService {
         if (userIdSequence == 1l) {
             account.setTrustedAccount(true);
         }
-        logger.info(String.format("A new user is created (userId='%s') for '%s'.", account.getUserId(), account.getDisplayName()));
+        logger.info(String.format("A new user is created (userId='%s') for '%s'.", account.getUserId(),
+                account.getDisplayName()));
         return this.accountRepository.save(account);
     }
 

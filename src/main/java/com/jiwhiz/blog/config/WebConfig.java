@@ -15,11 +15,8 @@
  */
 package com.jiwhiz.blog.config;
 
-import javax.inject.Inject;
-
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -34,9 +31,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @ComponentScan(basePackages = "com.jiwhiz.blog.web")
 public class WebConfig extends WebMvcConfigurerAdapter {
-
-    @Inject
-    private Environment environment;
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");

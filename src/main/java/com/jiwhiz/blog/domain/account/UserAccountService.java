@@ -53,9 +53,9 @@ public interface UserAccountService extends SocialUserDetailsService, UserDetail
     UserAccount loadUserByUserId(String userId) throws UsernameNotFoundException;
     
     /**
-     * Gets current logged in user. Reload UserAccount object from userId in SecurityContextHolder. 
+     * Gets current logged in user. Reload UserAccount object from database. 
      * 
-     * @return UserAccount object from database for current user
+     * @return UserAccount object from database for current user. Null if no logged in user.
      */
     UserAccount getCurrentUser();
 
