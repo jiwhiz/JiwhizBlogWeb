@@ -14,8 +14,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.2.4.RELEASE</spring.version>
-		<spring-security.version>3.2.0.RC1</spring-security.version>
+		<spring.version>3.2.5.RELEASE</spring.version>
+		<spring-security.version>3.2.0.RC2</spring-security.version>
 		<spring-social.version>1.1.0.BUILD-SNAPSHOT</spring-social.version>
 		<spring-social-google.version>1.0.0.M3</spring-social-google.version>
 		<cloudfoundry-runtime.version>0.8.4</cloudfoundry-runtime.version>

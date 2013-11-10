@@ -95,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
     
     @Override
-    protected void registerAuthentication(AuthenticationManagerBuilder builder) throws Exception{
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception{
         builder
         	.authenticationProvider(socialAuthenticationProvider())
         	.authenticationProvider(rememberMeAuthenticationProvider())
