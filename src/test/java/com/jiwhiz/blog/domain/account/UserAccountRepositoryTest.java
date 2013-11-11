@@ -83,4 +83,17 @@ public class UserAccountRepositoryTest {
         assertNull(accountInDb);
         assertFalse(accountRepository.exists(key));
     }
+    
+    @Test
+    public void testFindById() {
+        UserAccount account = new UserAccount();
+        account.setUserId(userId1);
+        account.setRoles(new UserRoleType[] { UserRoleType.ROLE_ADMIN, UserRoleType.ROLE_AUTHOR });
+        account.setDisplayName("John");
+        accountRepository.save(account);
+
+        UserAccount accountInDb = accountRepository.findByUserId(userId1);
+        assertEquals(accountInDb.getUsername(), userId1);
+        assertEquals("John", accountInDb.getDisplayName());
+    }
 }

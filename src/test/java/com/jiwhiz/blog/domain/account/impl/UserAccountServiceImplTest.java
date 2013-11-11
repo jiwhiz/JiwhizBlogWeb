@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
-import com.jiwhiz.blog.domain.account.impl.UserAccountServiceImpl;
+import com.jiwhiz.blog.domain.account.UserRoleType;
 import com.jiwhiz.blog.domain.system.CounterService;
 
 /**
@@ -99,10 +99,27 @@ public class UserAccountServiceImplTest {
 
     @Test
     public void testAddAuthorRole() throws Exception {
-        UserAccount account = new UserAccount();
+        UserAccount testAccount = new UserAccount(USERID, new UserRoleType[]{UserRoleType.ROLE_USER});
+        assertFalse(testAccount.isAuthor());
+        when(mockRepository.findByUserId(USERID)).thenReturn(testAccount);
+        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
         
-        when(mockRepository.findByUserId(USERID)).thenReturn(account);
+        UserAccount returnAccount = service.setAuthor(USERID, true);
         
+        assertEquals(USERID, returnAccount.getUserId());
+        assertTrue(returnAccount.isAuthor());
     }
 
+    @Test
+    public void testRemoveAuthorRole() throws Exception {
+        UserAccount testAccount = new UserAccount(USERID, new UserRoleType[]{UserRoleType.ROLE_USER, UserRoleType.ROLE_AUTHOR});
+        assertTrue(testAccount.isAuthor());
+        when(mockRepository.findByUserId(USERID)).thenReturn(testAccount);
+        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
+        
+        UserAccount returnAccount = service.setAuthor(USERID, false);
+        
+        assertEquals(USERID, returnAccount.getUserId());
+        assertFalse(returnAccount.isAuthor());
+    }
 }

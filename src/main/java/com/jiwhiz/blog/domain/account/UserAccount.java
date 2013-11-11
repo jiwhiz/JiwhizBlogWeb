@@ -17,16 +17,13 @@ package com.jiwhiz.blog.domain.account;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.security.SocialUserDetails;
 
 import com.jiwhiz.blog.domain.BaseEntity;
-import com.jiwhiz.blog.domain.post.CommentPost;
 
 /**
  * Domain Entity for user account.
@@ -53,12 +50,6 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
     private boolean accountLocked;
     
     private boolean trustedAccount;
-
-    @Transient
-    private List<UserSocialConnection> connections;
-
-    @Transient
-    private List<CommentPost> comments;
 
     public String getUserId() {
         return userId;
@@ -124,14 +115,6 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
         this.trustedAccount = trustedAccount;
     }
 
-    public List<UserSocialConnection> getConnections() {
-        return connections;
-    }
-
-    public void setConnections(List<UserSocialConnection> connections) {
-        this.connections = connections;
-    }
-
     public UserAccount() {
         this.roles = new UserRoleType[0];
     }
@@ -193,42 +176,6 @@ public class UserAccount extends BaseEntity implements SocialUserDetails {
             }
         }        
         return false;
-    }
-
-    // used for account social connection
-    public UserSocialConnection getConnection(String providerId) {
-        if (this.connections != null){
-            for (UserSocialConnection connection : this.connections){
-                if (connection.getProviderId().equals(providerId)){
-                    return connection;
-                }
-            }
-        }
-        return null;
-    }
-
-    public UserSocialConnection getGoogleConnection() {
-        return getConnection("google");
-    }
-    
-    public boolean isHasGoogleConnection(){
-        return getGoogleConnection()  != null;
-    }
-
-    public UserSocialConnection getTwitterConnection() {
-        return getConnection("twitter");
-    }
-    
-    public boolean isHasTwitterConnection(){
-        return getTwitterConnection()  != null;
-    }
-
-    public UserSocialConnection getFacebookConnection() {
-        return getConnection("facebook");
-    }
-    
-    public boolean isHasFacebookConnection(){
-        return getFacebookConnection()  != null;
     }
     
     public void updateProfile(String displayName, String email, String webSite){
