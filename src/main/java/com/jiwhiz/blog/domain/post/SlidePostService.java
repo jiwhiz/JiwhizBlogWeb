@@ -24,5 +24,16 @@ import com.jiwhiz.blog.domain.account.UserAccount;
  *
  */
 public interface SlidePostService {
+    
+    /**
+     * Creates a new slide post.
+     * 
+     * @param author
+     * @param style
+     * @param title
+     * @param content
+     * @param path
+     * @return
+     */
     SlidePost createSlide(UserAccount author, StyleType style, String title, String content, String path);
 }

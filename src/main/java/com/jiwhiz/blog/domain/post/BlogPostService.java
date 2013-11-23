@@ -24,8 +24,9 @@ import com.jiwhiz.blog.domain.account.UserAccount;
  * 
  */
 public interface BlogPostService {
+    
     /**
-     * Create a blog post.
+     * Creates a blog post.
      * 
      * @param author
      * @param title

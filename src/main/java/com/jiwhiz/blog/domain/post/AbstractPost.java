@@ -15,15 +15,8 @@
  */
 package com.jiwhiz.blog.domain.post;
 
-import java.io.StringReader;
-import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.xml.sax.InputSource;
 
 import com.jiwhiz.blog.domain.BaseAuditableEntity;
 import com.jiwhiz.blog.domain.account.UserAccount;
@@ -94,26 +87,6 @@ public abstract class AbstractPost extends BaseAuditableEntity{
         this.authorAccount = author;
         this.authorKey = author.getKey();
         this.content = content;
-    }
-
-    /**
-     * Validates content by XML parser.
-     * TODO: find a better way to do the validation for HTML5.
-     * 
-     * @return
-     */
-    public String validateHtmlContent() {
-        String htmlContent = "<?xml version=\"1.0\"?><xml>" + getContent() + "</xml>";
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating(false);
-        factory.setNamespaceAware(true);
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.parse(new InputSource(new StringReader(htmlContent)));
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
-        return null;
     }
 
 }

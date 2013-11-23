@@ -64,18 +64,17 @@ class MainAppConfig {
 
     @Bean
     public BlogPostService blogPostService() {
-        return new BlogPostServiceImpl(accountRepository, blogPostRepository, userAccountService(), counterService());
+        return new BlogPostServiceImpl(blogPostRepository, counterService());
     }
 
     @Bean
     public CommentPostService commentPostService() {
-        return new CommentPostServiceImpl(accountRepository, commentPostRepository, userAccountService(),
-                counterService());
+        return new CommentPostServiceImpl(commentPostRepository, counterService());
     }
 
     @Bean
     public SlidePostService slidePostService() {
-        return new SlidePostServiceImpl(accountRepository, slidePostRepository, userAccountService(), counterService());
+        return new SlidePostServiceImpl(slidePostRepository, counterService());
     }
 
     @Bean

@@ -17,12 +17,7 @@ package com.jiwhiz.blog.domain.post.impl;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jiwhiz.blog.domain.account.UserAccount;
-import com.jiwhiz.blog.domain.account.UserAccountRepository;
-import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.post.SlidePost;
 import com.jiwhiz.blog.domain.post.SlidePostRepository;
 import com.jiwhiz.blog.domain.post.SlidePostService;
@@ -33,19 +28,20 @@ import com.jiwhiz.blog.domain.system.CounterService;
  * Implementation for SlidePostService.
  * 
  * @author Yuan Ji
- *
+ * 
  */
-public class SlidePostServiceImpl extends AbstractPostServiceImpl implements SlidePostService{
-    final static Logger logger = LoggerFactory.getLogger(SlidePostServiceImpl.class);
+public class SlidePostServiceImpl implements SlidePostService {
+
     public static final String SLIDE_POST_ID_PREFIX = "slide";
-    
+
     private final SlidePostRepository slidePostRepository;
 
+    private final CounterService counterService;
+
     @Inject
-    public SlidePostServiceImpl(UserAccountRepository accountRepository, SlidePostRepository slidePostRepository, 
-            UserAccountService userAdminService, CounterService counterService) {
-        super(accountRepository, userAdminService, counterService);
+    public SlidePostServiceImpl(SlidePostRepository slidePostRepository, CounterService counterService) {
         this.slidePostRepository = slidePostRepository;
+        this.counterService = counterService;
     }
 
     @Override

@@ -17,12 +17,7 @@ package com.jiwhiz.blog.domain.post.impl;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jiwhiz.blog.domain.account.UserAccount;
-import com.jiwhiz.blog.domain.account.UserAccountRepository;
-import com.jiwhiz.blog.domain.account.UserAccountService;
 import com.jiwhiz.blog.domain.post.BlogPost;
 import com.jiwhiz.blog.domain.post.BlogPostRepository;
 import com.jiwhiz.blog.domain.post.BlogPostService;
@@ -34,17 +29,18 @@ import com.jiwhiz.blog.domain.system.CounterService;
  * @author Yuan Ji
  * 
  */
-public class BlogPostServiceImpl extends AbstractPostServiceImpl implements BlogPostService {
-    final static Logger logger = LoggerFactory.getLogger(BlogPostServiceImpl.class);
+public class BlogPostServiceImpl implements BlogPostService {
+
     public static final String BLOG_POST_ID_PREFIX = "blog";
 
     private final BlogPostRepository blogPostRepository;
 
+    private final CounterService counterService;
+
     @Inject
-    public BlogPostServiceImpl(UserAccountRepository accountRepository, BlogPostRepository blogPostRepository,
-            UserAccountService userAdminService, CounterService counterService) {
-        super(accountRepository, userAdminService, counterService);
+    public BlogPostServiceImpl(BlogPostRepository blogPostRepository, CounterService counterService) {
         this.blogPostRepository = blogPostRepository;
+        this.counterService = counterService;
     }
 
     @Override
