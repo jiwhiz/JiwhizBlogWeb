@@ -56,7 +56,7 @@ class MainAppConfig {
     private SlidePostRepository slidePostRepository;
     @Inject
     private MongoTemplate mongoTemplate;
-    
+
     @Bean
     public UserAccountService userAccountService() {
         return new UserAccountServiceImpl(accountRepository, counterService(), new AuthenticationNameUserIdSource());
@@ -64,8 +64,7 @@ class MainAppConfig {
 
     @Bean
     public BlogPostService blogPostService() {
-        return new BlogPostServiceImpl(accountRepository, blogPostRepository, commentPostRepository,
-                userAccountService(), counterService());
+        return new BlogPostServiceImpl(accountRepository, blogPostRepository, userAccountService(), counterService());
     }
 
     @Bean
