@@ -15,18 +15,12 @@
  */
 package com.jiwhiz.blog.config;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.MongoServiceInfo;
-import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
@@ -55,7 +49,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
     @Override
     @Bean
     public Mongo mongo() throws Exception {
-        Mongo mongo = new MongoClient("localhost");
+        Mongo mongo = new MongoClient(environment.getProperty("mongodb.host"));
         mongo.setWriteConcern(WriteConcern.SAFE);
         return mongo;
     }
@@ -75,6 +69,8 @@ public class MongoConfig extends AbstractMongoConfiguration {
         return super.mongoMappingContext();
     }
 
+// TODO: wait for DATAMONGO-802
+// https://jira.springsource.org/browse/DATAMONGO-802
 //    @Bean
 //    public MongoDbFactory mongoDbFactory() throws Exception {
 //        CloudEnvironment cloudEnvironment = new CloudEnvironment();
