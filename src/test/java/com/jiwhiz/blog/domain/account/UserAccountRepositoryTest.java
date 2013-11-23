@@ -40,7 +40,7 @@ import com.jiwhiz.blog.TestConfig;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
+@ContextConfiguration(classes = { TestConfig.class })
 public class UserAccountRepositoryTest {
     private String userId1 = "jsmith";
 
