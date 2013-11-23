@@ -17,8 +17,11 @@ package com.jiwhiz.blog.domain.account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -28,6 +31,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.jiwhiz.blog.TestConfig;
 
 /**
  * 
@@ -55,7 +60,7 @@ public class UserAccountRepositoryTest {
     // -------------------------------------------------------------------------
 
     @Test
-    public void testAccountCRUD() {
+    public void testUserAccountCRUD() {
         // create account
         UserAccount account = new UserAccount();
         account.setUserId(userId1);
@@ -95,5 +100,32 @@ public class UserAccountRepositoryTest {
         UserAccount accountInDb = accountRepository.findByUserId(userId1);
         assertEquals(accountInDb.getUsername(), userId1);
         assertEquals("John", accountInDb.getDisplayName());
+    }
+    
+    @Test
+    public void testAuditing() {
+        // create account
+        UserAccount account = new UserAccount();
+        account.setUserId(userId1);
+        account.setRoles(new UserRoleType[] { UserRoleType.ROLE_ADMIN, UserRoleType.ROLE_AUTHOR });
+        account.setDisplayName("John");
+        accountRepository.save(account);
+        String key = account.getKey();
+        assertTrue(accountRepository.exists(key));
+
+        // read
+        UserAccount accountInDb = accountRepository.findOne(key);
+        assertEquals(TestConfig.TEST_AUDITOR, accountInDb.getCreatedBy());
+        assertNotNull(accountInDb.getCreatedTime());
+        assertEquals(TestConfig.TEST_AUDITOR, accountInDb.getLastModifiedBy());
+        assertNotNull(accountInDb.getLastModifiedTime());
+
+        // update
+        Date updatedTimeBefore = accountInDb.getLastModifiedTime();
+        String newWebSite = "www.hello.com";
+        account.setWebSite(newWebSite);
+        accountRepository.save(account);
+        accountInDb = accountRepository.findOne(key);
+        assertTrue(updatedTimeBefore.before(accountInDb.getLastModifiedTime()));
     }
 }

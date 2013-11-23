@@ -57,7 +57,6 @@ public class CommentPost extends AbstractPost {
     
     public CommentPost update(String newContent) {
         setContent(newContent);
-        triggerModified();
         return this;
     }
     

@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.security.SocialUserDetails;
 
-import com.jiwhiz.blog.domain.BaseEntity;
+import com.jiwhiz.blog.domain.BaseAuditableEntity;
 
 /**
  * Domain Entity for user account.
@@ -33,7 +33,8 @@ import com.jiwhiz.blog.domain.BaseEntity;
  */
 @SuppressWarnings("serial")
 @Document(collection = "UserAccount")
-public class UserAccount extends BaseEntity implements SocialUserDetails {
+public class UserAccount extends BaseAuditableEntity implements SocialUserDetails {
+    
     @Indexed(unique=true)
     private String userId;
     

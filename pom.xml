@@ -21,7 +21,7 @@
 		<cloudfoundry-runtime.version>0.8.4</cloudfoundry-runtime.version>
 		<aspectj.version>1.6.12</aspectj.version>
 		<slf4j.version>1.6.1</slf4j.version>
-		<spring-data-mongodb.version>1.3.1.RELEASE</spring-data-mongodb.version>
+		<spring-data-mongodb.version>1.4.0.M1</spring-data-mongodb.version>
 	</properties>
 
 	<repositories>

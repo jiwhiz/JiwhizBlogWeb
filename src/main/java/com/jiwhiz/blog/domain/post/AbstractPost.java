@@ -25,7 +25,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.xml.sax.InputSource;
 
-import com.jiwhiz.blog.domain.BaseEntity;
+import com.jiwhiz.blog.domain.BaseAuditableEntity;
 import com.jiwhiz.blog.domain.account.UserAccount;
 
 /**
@@ -35,7 +35,7 @@ import com.jiwhiz.blog.domain.account.UserAccount;
  *
  */
 @SuppressWarnings("serial")
-public abstract class AbstractPost extends BaseEntity{
+public abstract class AbstractPost extends BaseAuditableEntity{
 
     /*
      * Reference to UserAccount object of the post author.
@@ -50,10 +50,6 @@ public abstract class AbstractPost extends BaseEntity{
     private String postId;
 
     private String content;
-    
-    private Date createdTime;
-    
-    private Date lastModifiedTime;
     
     @Transient
     private UserAccount authorAccount;
@@ -72,18 +68,6 @@ public abstract class AbstractPost extends BaseEntity{
     
     void setContent(String content){
         this.content = content;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
     }
 
     public UserAccount getAuthorAccount() {
@@ -110,13 +94,8 @@ public abstract class AbstractPost extends BaseEntity{
         this.authorAccount = author;
         this.authorKey = author.getKey();
         this.content = content;
-        this.createdTime = new Date();
     }
 
-    void triggerModified(){
-        this.lastModifiedTime = new Date();
-    }
-    
     /**
      * Validates content by XML parser.
      * TODO: find a better way to do the validation for HTML5.

@@ -115,14 +115,12 @@ public class BlogPost extends AbstractPost {
 
     public void updateContent(String content) {
         setContent(content);
-        triggerModified();
     }
 
     public void updateMeta(String title, String publishedPath, String tagString) {
         this.title = title;
         this.publishedPath = publishedPath;
         parseAndSetTags(tagString);
-        triggerModified();
     }
 
     void parseAndSetTags(String tagString) {
@@ -152,13 +150,11 @@ public class BlogPost extends AbstractPost {
         } else {
             publishedMonth = month;
         }
-        triggerModified();
     }
 
     public void unpublish() {
         assert isPublished() == true;
         setPublished(false);
-        triggerModified();
     }
 
 

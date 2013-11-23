@@ -88,7 +88,6 @@ public class SlidePost extends AbstractPost{
         this.publishedPath = path;
         this.title = title;
         setContent(content);
-        triggerModified();
     }
     
 }

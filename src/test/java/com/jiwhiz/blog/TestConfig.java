@@ -17,10 +17,14 @@ package com.jiwhiz.blog;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
 
 /**
@@ -29,10 +33,14 @@ import com.mongodb.WriteConcern;
  */
 @Configuration
 @EnableMongoRepositories(basePackages="com.jiwhiz.blog.domain")
-public class TestConfig extends AbstractMongoConfiguration{
+@EnableMongoAuditing(auditorAwareRef="testAuditor")
+public class TestConfig extends AbstractMongoConfiguration {
+    public static final String TEST_AUDITOR = "UnitTester";
+    
+    @Override
     @Bean
     public Mongo mongo() throws Exception {
-        Mongo mongo = new Mongo("localhost");
+        Mongo mongo = new MongoClient("localhost");
         mongo.setWriteConcern(WriteConcern.SAFE);
         return mongo;
     }
@@ -41,5 +49,23 @@ public class TestConfig extends AbstractMongoConfiguration{
     protected String getDatabaseName() {
        return "test";
     }
-
+    
+    @Override
+    protected String getMappingBasePackage() {
+        return "com.jiwhiz.blog.domain";
+    }
+    
+    @Bean(name={"mappingContext"})
+    public MongoMappingContext mongoMappingContext() throws ClassNotFoundException {
+        return super.mongoMappingContext();
+    }
+    
+    @Bean
+    public AuditorAware<String> testAuditor() {
+        return new AuditorAware<String>() {
+            public String getCurrentAuditor() {
+                return TEST_AUDITOR;
+            }
+        };
+    }
 }

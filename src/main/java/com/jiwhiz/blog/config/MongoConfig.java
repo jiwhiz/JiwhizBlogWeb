@@ -25,11 +25,16 @@ import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.jiwhiz.blog.domain.account.UserAccount;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
@@ -41,32 +46,60 @@ import com.mongodb.WriteConcern;
  * 
  */
 @Configuration
+@EnableMongoAuditing(auditorAwareRef="authenticatedAuditor")
 @EnableMongoRepositories(basePackages = "com.jiwhiz.blog.domain")
-public class MongoConfig {
+public class MongoConfig extends AbstractMongoConfiguration {
     @Inject
     private Environment environment;
     
+    @Override
+    @Bean
     public Mongo mongo() throws Exception {
         Mongo mongo = new MongoClient("localhost");
         mongo.setWriteConcern(WriteConcern.SAFE);
         return mongo;
     }
 
-    @Bean
-    public MongoDbFactory mongoDbFactory() throws Exception {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
-
-        if (cloudEnvironment.isCloudFoundry()) {
-            List<MongoServiceInfo> serviceInfo = cloudEnvironment.getServiceInfos(MongoServiceInfo.class);
-            MongoServiceCreator serviceCreator = new MongoServiceCreator();
-            return serviceCreator.createService(serviceInfo.get(0));
-        } else {
-            return new SimpleMongoDbFactory(mongo(), environment.getProperty("mongodb.dbname"));
-        }
+    @Override
+    protected String getDatabaseName() {
+       return environment.getProperty("mongodb.dbname");
+    }
+    
+    @Override
+    protected String getMappingBasePackage() {
+        return "com.jiwhiz.blog.domain";
+    }
+    
+    @Bean(name={"mappingContext"})
+    public MongoMappingContext mongoMappingContext() throws ClassNotFoundException {
+        return super.mongoMappingContext();
     }
 
+//    @Bean
+//    public MongoDbFactory mongoDbFactory() throws Exception {
+//        CloudEnvironment cloudEnvironment = new CloudEnvironment();
+//
+//        if (cloudEnvironment.isCloudFoundry()) {
+//            List<MongoServiceInfo> serviceInfo = cloudEnvironment.getServiceInfos(MongoServiceInfo.class);
+//            MongoServiceCreator serviceCreator = new MongoServiceCreator();
+//            return serviceCreator.createService(serviceInfo.get(0));
+//        } else {
+//            return super.mongoDbFactory();
+//        }
+//    }
+
     @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(mongoDbFactory());
+    public AuditorAware<String> authenticatedAuditor() {
+        return new AuditorAware<String>() {
+            public String getCurrentAuditor() {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                if (authentication == null || !authentication.isAuthenticated()) {
+                  return null;
+                }
+
+                return ((UserAccount) authentication.getPrincipal()).getUserId();
+            }
+        };
     }
 }
