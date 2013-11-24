@@ -18,10 +18,11 @@
 		<spring-security.version>3.2.0.RC2</spring-security.version>
 		<spring-social.version>1.1.0.BUILD-SNAPSHOT</spring-social.version>
 		<spring-social-google.version>1.0.0.M3</spring-social-google.version>
-		<cloudfoundry-runtime.version>0.8.4</cloudfoundry-runtime.version>
+		<cloudfoundry-runtime.version>0.8.6</cloudfoundry-runtime.version>
 		<aspectj.version>1.6.12</aspectj.version>
 		<slf4j.version>1.6.1</slf4j.version>
 		<spring-data-mongodb.version>1.4.0.M1</spring-data-mongodb.version>
+		<spring-hateoas.version>0.8.0.RELEASE</spring-hateoas.version>
 	</properties>
 
 	<repositories>
@@ -205,10 +206,10 @@
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-web</artifactId>
 				</exclusion>
-                <exclusion>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-crypto</artifactId>
-                </exclusion>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-crypto</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -233,6 +234,13 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>${spring-data-mongodb.version}</version>
+		</dependency>
+
+        <!-- Spring Hateoas -->
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>${spring-hateoas.version}</version>
 		</dependency>
 
 		<!-- Cloud Foundry runtime -->
@@ -356,13 +364,13 @@
 	</dependencies>
 
 	<build>
-	    <finalName>JiwhizBlogWeb</finalName>
-	    <resources>
-	        <resource>
-	            <directory>src/main/resources</directory>
-	            <filtering>true</filtering>
-	        </resource>
-	    </resources>
+		<finalName>JiwhizBlogWeb</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<!-- Must use java 1.5 or higher for annotations -->
