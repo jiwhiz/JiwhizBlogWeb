@@ -34,7 +34,7 @@ import com.mongodb.WriteConcern;
 @Configuration
 @EnableMongoRepositories(basePackages="com.jiwhiz.blog.domain")
 @EnableMongoAuditing(auditorAwareRef="testAuditor")
-public class TestConfig extends AbstractMongoConfiguration {
+public class RepositoryTestConfig extends AbstractMongoConfiguration {
     public static final String TEST_AUDITOR = "UnitTester";
     
     @Override

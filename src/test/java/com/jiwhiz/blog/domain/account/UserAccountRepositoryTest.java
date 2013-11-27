@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jiwhiz.blog.TestConfig;
+import com.jiwhiz.blog.RepositoryTestConfig;
 
 /**
  * 
@@ -40,7 +40,7 @@ import com.jiwhiz.blog.TestConfig;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestConfig.class })
+@ContextConfiguration(classes = { RepositoryTestConfig.class })
 public class UserAccountRepositoryTest {
     private String userId1 = "jsmith";
 
@@ -115,9 +115,9 @@ public class UserAccountRepositoryTest {
 
         // read
         UserAccount accountInDb = accountRepository.findOne(key);
-        assertEquals(TestConfig.TEST_AUDITOR, accountInDb.getCreatedBy());
+        assertEquals(RepositoryTestConfig.TEST_AUDITOR, accountInDb.getCreatedBy());
         assertNotNull(accountInDb.getCreatedTime());
-        assertEquals(TestConfig.TEST_AUDITOR, accountInDb.getLastModifiedBy());
+        assertEquals(RepositoryTestConfig.TEST_AUDITOR, accountInDb.getLastModifiedBy());
         assertNotNull(accountInDb.getLastModifiedTime());
 
         // update

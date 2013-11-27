@@ -39,7 +39,7 @@ import com.jiwhiz.blog.domain.account.UserRoleType;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
+@ContextConfiguration(classes = { com.jiwhiz.blog.RepositoryTestConfig.class })
 public class CommentPostRepositoryTest {
     @Inject
     UserAccountRepository accountRepository;

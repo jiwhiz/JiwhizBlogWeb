@@ -27,10 +27,10 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.connect.ConnectionData;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.jiwhiz.blog.domain.account.UserAccount;
 import com.jiwhiz.blog.domain.account.UserAccountRepository;
@@ -42,37 +42,39 @@ import com.jiwhiz.blog.domain.system.CounterService;
  * @author Yuan Ji
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
+@RunWith(MockitoJUnitRunner.class)
 public class UserAccountServiceImplTest {
     static final String USERID = "jsmith";
     
-    UserAccountRepository mockRepository;
-    CounterService mockCounterService;
-    UserIdSource mockUserIdSource;
+    @Mock
+    UserAccountRepository userAccountRepositoryMock;
+    
+    @Mock
+    CounterService counterServiceMock;
+    
+    @Mock
+    UserIdSource userIdSourceMock;
+    
     UserAccountServiceImpl service;
 
     @Before
     public void setup() {
-        mockRepository = mock(UserAccountRepository.class);
-        mockCounterService = mock(CounterService.class);
-        mockUserIdSource = mock(UserIdSource.class);
-        service = new UserAccountServiceImpl(mockRepository, mockCounterService, mockUserIdSource);
+        service = new UserAccountServiceImpl(userAccountRepositoryMock, counterServiceMock, userIdSourceMock);
     }
 
     // -------------------------------------------------------------------------
 
     @Test
     public void testCreateFirstUserAccount() throws Exception {
-        when(mockCounterService.getNextUserIdSequence()).thenReturn(1l);
-        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
+        when(counterServiceMock.getNextUserIdSequence()).thenReturn(1l);
+        when(userAccountRepositoryMock.save(any(UserAccount.class))).then(returnsFirstArg());
         
         ConnectionData data = new ConnectionData("providerId", "providerUserId", "John", "url", "url",  null, null, null, null);
 
         UserAccount account = service.createUserAccount(data);
         
-        verify(mockCounterService).getNextUserIdSequence();
-        verify(mockRepository).save(account);
+        verify(counterServiceMock).getNextUserIdSequence();
+        verify(userAccountRepositoryMock).save(account);
         assertTrue(account.isAuthor());
         assertTrue(account.isAdmin());
         assertEquals("user1", account.getUserId());
@@ -82,14 +84,14 @@ public class UserAccountServiceImplTest {
     
     @Test
     public void testCreateNonFirstUserAccount() throws Exception {
-        when(mockCounterService.getNextUserIdSequence()).thenReturn(2l);
-        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
+        when(counterServiceMock.getNextUserIdSequence()).thenReturn(2l);
+        when(userAccountRepositoryMock.save(any(UserAccount.class))).then(returnsFirstArg());
         
         ConnectionData data = new ConnectionData("providerId", "providerUserId", "Peter", "url", "url",  null, null, null, null);
         UserAccount account = service.createUserAccount(data);
         
-        verify(mockCounterService).getNextUserIdSequence();
-        verify(mockRepository).save(account);
+        verify(counterServiceMock).getNextUserIdSequence();
+        verify(userAccountRepositoryMock).save(account);
         assertFalse(account.isAuthor());
         assertFalse(account.isAdmin());
         assertEquals("user2", account.getUserId());
@@ -101,8 +103,8 @@ public class UserAccountServiceImplTest {
     public void testAddAuthorRole() throws Exception {
         UserAccount testAccount = new UserAccount(USERID, new UserRoleType[]{UserRoleType.ROLE_USER});
         assertFalse(testAccount.isAuthor());
-        when(mockRepository.findByUserId(USERID)).thenReturn(testAccount);
-        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
+        when(userAccountRepositoryMock.findByUserId(USERID)).thenReturn(testAccount);
+        when(userAccountRepositoryMock.save(any(UserAccount.class))).then(returnsFirstArg());
         
         UserAccount returnAccount = service.setAuthor(USERID, true);
         
@@ -114,8 +116,8 @@ public class UserAccountServiceImplTest {
     public void testRemoveAuthorRole() throws Exception {
         UserAccount testAccount = new UserAccount(USERID, new UserRoleType[]{UserRoleType.ROLE_USER, UserRoleType.ROLE_AUTHOR});
         assertTrue(testAccount.isAuthor());
-        when(mockRepository.findByUserId(USERID)).thenReturn(testAccount);
-        when(mockRepository.save(any(UserAccount.class))).then(returnsFirstArg());
+        when(userAccountRepositoryMock.findByUserId(USERID)).thenReturn(testAccount);
+        when(userAccountRepositoryMock.save(any(UserAccount.class))).then(returnsFirstArg());
         
         UserAccount returnAccount = service.setAuthor(USERID, false);
         

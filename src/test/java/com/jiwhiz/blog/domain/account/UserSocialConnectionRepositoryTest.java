@@ -34,13 +34,15 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jiwhiz.blog.RepositoryTestConfig;
+
 /**
  *
  * @author Yuan Ji
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { com.jiwhiz.blog.TestConfig.class })
+@ContextConfiguration(classes = { RepositoryTestConfig.class })
 public class UserSocialConnectionRepositoryTest {
 
     @Inject
