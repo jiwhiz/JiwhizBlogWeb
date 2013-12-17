@@ -14,3 +14,7 @@ Here are the instructions for you to build and deploy this application to Cloud 
 * [Customize Your Personal Blog Website](http://www.jiwhiz.com/post/2013/4/Customize_Your_Personal_Blog_Website)
 
 Please ask questions at [JiwhizBlog User Group](https://groups.google.com/forum/?fromgroups#!forum/jiwhizblog-user-group).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jiwhiz/jiwhizblogweb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
