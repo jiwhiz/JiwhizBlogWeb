@@ -1,5 +1,0 @@
-User-agent: *
-Disallow:/signin/
-Disallow:/myAccount/
-Disallow:/myPost/
-Disallow:/admin/
