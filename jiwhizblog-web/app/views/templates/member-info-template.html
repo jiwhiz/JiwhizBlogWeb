@@ -1,0 +1,19 @@
+<table class="member-info">
+	<tr>
+		<td><span class="member-avatar"> 
+			<img ng-src="{{ (member.imageUrl == null)? 'images/gravatar.jpg' : member.imageUrl}}" class="dashboard-member-activity-avatar" />
+		</span></td>
+	</tr>
+	<tr>
+		<td>UserId : <strong><a ng-href="#/profiles/{{member.userId}}">{{member.userId}}</a></strong></td>
+	</tr>
+	<tr>
+		<td>Name : <strong>{{member.displayName}}</strong></td>
+	</tr>
+	<tr ng-show="member.email">
+		<td>Email : {{member.email}}</td>
+	</tr>
+	<tr>
+		<td>WebSite : <a ng-href="{{member.webSite | ExternalURL}}">{{member.webSite}}</a></td>
+	</tr>
+</table>

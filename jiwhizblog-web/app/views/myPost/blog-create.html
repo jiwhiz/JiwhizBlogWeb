@@ -1,0 +1,27 @@
+<!--
+	Create a new blog post. 
+-->
+<div class="post">
+	<form role="form" ng-controller="MyBlogCreateController">
+		<!-- Title -->
+		<div class="form-group">
+			<label for="blog-title">* Title:</label>
+			<input id="blog-title" class="form-control" ng-model="blogForm.title" type="text" required placeholder="Title of this post..." />
+		</div>
+		<!-- Content -->
+		<div class="form-group">
+			<label for="blog-content">* Content:</label>
+			<textarea id="blog-content" class="form-control" ng-model="blogForm.content" rows="40" required="required" 
+					placeholder="Type something..."></textarea>
+		</div>
+		<div class="form-group">
+			<label for="blog-tag">Tags (comma separated):</label>
+			<input id="blog-tag" class="form-control" ng-model="blogForm.tagString" type="text"/>
+		</div>
+		<div class="form-group">
+			<button ng-click="cancel()" class="btn">Cancel</button>
+			<button ng-click="submit()" class="btn btn-primary">Save</button>
+		</div>
+	</form>
+
+</div>

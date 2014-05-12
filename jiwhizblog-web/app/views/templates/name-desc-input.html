@@ -1,0 +1,22 @@
+<!-- Name Description Input Dialog Template-->
+<div class="modal-header">
+	<h3>{{title}}</h3>
+</div>
+<div class="modal-body">
+	<form role="form" name="nameDescInputForm">
+		<div class="form-group {{(nameDescInputForm.inputName.$valid)?'':'has-error'}}">
+			<label for="input-name">* Name:</label> 
+			<input id="input-name" name="inputName" class="form-control" ng-model="form.name" type="text"
+				required placeholder="Input name..." />
+		</div>
+		<div class="form-group {{(nameDescInputForm.inputDesc.$valid)?'':'has-error'}}">
+			<label for="input-desc">Description:</label> 
+			<textarea id="input-desc" name="inputDesc" class="form-control" ng-model="form.description" rows="5"
+				placeholder="Input description..." ></textarea>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="save()" ng-disabled="nameDescInputForm.$invalid">Save</button>
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

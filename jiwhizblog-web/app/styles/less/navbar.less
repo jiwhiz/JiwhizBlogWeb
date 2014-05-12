@@ -1,0 +1,42 @@
+.navbar {
+	margin-bottom: 20px;
+}
+
+.navbar-toggle{
+	border-color: @brand-primary-light;
+	
+	.icon-bar {
+		background: @brand-primary-light;
+	} 
+}
+
+
+// set logo image height, original size is 394h x 150w
+.navbar-brand {
+	padding: 0px;
+	img.logo {
+		height: 70px;
+	}
+}
+
+.headmenu {
+	margin: 20px 30px 0 30px;
+	a {
+		color: @brand-primary-light;
+		&:hover {
+			background: @brand-background;
+			color: @brand-primary-light;
+		}
+	}
+
+	li.active > a {
+		background: @brand-primary-light;
+		color: @default-background;
+		
+		&:hover, &:focus {
+			background: @brand-primary;
+			color: @default-background;
+		}
+	}
+}
+

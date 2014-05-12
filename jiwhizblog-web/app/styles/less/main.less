@@ -1,0 +1,82 @@
+//generic styles
+.nav, .pagination, .carousel, .panel-title a, li a { 
+	cursor: pointer; 
+}
+
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+   display: none !important;
+}
+
+a {
+	color: @brand-primary-light;
+}
+
+a:hover {
+	color: @brand-primary;
+	text-decoration: none;
+}
+
+.btn-primary {
+	color: white;
+	background-color: @brand-primary-light;
+	border-color: @brand-primary;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  color: white;
+  background-color: @brand-primary;
+  border-color: darken(@brand-primary, 8%);
+}
+
+// Page title
+
+.page-titles {
+	margin: 30px 30px;
+	text-align: center;
+	h3 {
+		color: #3B3B3B;
+		font-weight: lighter;
+		font-size: 28px;
+		line-height: 30px;
+		margin-bottom: 5px;
+	}
+
+	p {
+		color: #888;
+		font-size: 18px;
+		line-height: 20px;
+	}
+}
+
+.slogan{
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 34px;
+    text-align: center;
+}
+
+markdown img {
+	max-width: 100%;
+	height: auto;
+}
+
+.pagination-centered {
+	text-align: center;
+}
+
+pagenation, 
+.pagination {
+	li.active > a {
+		background: @brand-primary-light;
+		color: @default-background;
+		
+		&:hover {
+			background: @brand-primary;
+			color: @default-background;
+		}
+	}
+}

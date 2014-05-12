@@ -1,0 +1,63 @@
+// Footer block
+#footer {
+	background:#f8f8f8;
+    border-top: 1px solid #fff;box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    padding-top:20px;
+    padding-bottom:20px;
+    color:#888;
+}
+
+
+.credit-line {
+	margin-bottom: 10px;
+	padding-left: 30px;
+	color: #555;
+}
+
+.credit {
+	margin-left: 0;
+	margin-right: 0;
+	width: auto;
+	ul , ol {
+		list-style-type: none;
+		padding-left: 10px;
+		li {
+			background: url("@{images}/nav-arrow.png") no-repeat 0 6px;
+			padding: 0px 0 7px 15px;
+			a {
+				color: #888;
+				&:hover {
+					color: #111;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}
+
+// Copyright text
+.copyright {
+	margin-top: 40px;
+	margin-left: 30px;
+	margin-right: 30px;
+	color: @brand-primary;
+}
+
+// Social icon links
+a.social-link {
+	color: @brand-primary;
+	text-decoration: none;
+	margin: 0 2px 10px 2px;
+	transition: background-color .3s;
+	-webkit-transition: background-color .3s;
+	-o-transition: background-color .3s;
+	-moz-transition: background-color .3s;
+	&:hover {
+		color: @brand-background;
+		border-color: @brand-primary;
+	}
+}
+

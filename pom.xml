@@ -3,36 +3,45 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.jiwhiz</groupId>
-	<artifactId>JiwhizBlogWeb</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<groupId>com.jiwhizblog</groupId>
+	<artifactId>jiwhizblog-project</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-	<name>Jiwhiz Blog Web Application</name>
-	<url>http://www.jiwhiz.com/</url>
-	<inceptionYear>2012</inceptionYear>
+	<name>Jiwhiz Blog Project</name>
+	<url>http://www.jiwhizblog.com/</url>
+	<inceptionYear>2012-2014</inceptionYear>
+
+	<modules>
+		<module>jiwhizblog-domain</module>
+		<module>jiwhizblog-rest</module>
+		<module>jiwhizblog-web</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.2.1.RELEASE</spring.version>
-		<spring-security.version>3.2.0.M2</spring-security.version>
-		<spring-social.version>1.1.0.M2</spring-social.version>
+		<spring.version>4.0.4.RELEASE</spring.version>
+		<spring-security.version>3.2.3.RELEASE</spring-security.version>
+		<spring-social.version>1.1.0.RELEASE</spring-social.version>
+		<spring-social-google.version>1.0.0.M3</spring-social-google.version>
+		<spring-data-mongodb.version>1.4.2.RELEASE</spring-data-mongodb.version>
+		<spring-hateoas.version>0.11.0.RELEASE</spring-hateoas.version>
+		<spring-plugin.version>0.8.0.RELEASE</spring-plugin.version>
+		<jackson.version>2.3.0</jackson.version>
 		<aspectj.version>1.6.12</aspectj.version>
-		<slf4j.version>1.6.1</slf4j.version>
-		<spring-data-mongodb.version>1.2.0.RELEASE</spring-data-mongodb.version>
-		<thymeleaf.version>2.0.15</thymeleaf.version>
-		<thymeleaf-extras-tiles2.version>2.0.0</thymeleaf-extras-tiles2.version>
-		<thymeleaf-extras-springsecurity3.version>2.0.0</thymeleaf-extras-springsecurity3.version>
-		<thymeleaf-extras-conditionalcomments.version>2.0.0</thymeleaf-extras-conditionalcomments.version>
-		<tiles.version>2.2.2</tiles.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<junit.version>4.11</junit.version>
+		<mockito.version>1.9.5</mockito.version>
+		<hamcrest.version>1.3</hamcrest.version>
+		<jsonpath.version>0.9.0</jsonpath.version>
+		<cloudfoundry-runtime.version>0.8.6</cloudfoundry-runtime.version>
 	</properties>
-
 
 	<repositories>
 		<repository>
 			<id>spring-maven-release</id>
 			<name>Spring Maven Release Repository</name>
-			<url>http://maven.springframework.org/release</url>
+			<url>http://repo.spring.io/release</url>
 		</repository>
 		<repository>
 			<id>spring-maven-snapshot</id>
@@ -43,22 +52,17 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<url>http://maven.springframework.org/snapshot</url>
+			<url>http://repo.spring.io/snapshot</url>
 		</repository>
 		<repository>
 			<id>spring-maven-milestone</id>
 			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
+			<url>http://repo.spring.io/milestone</url>
 		</repository>
 		<repository>
-			<id>spring.social.google</id>
+			<id>spring-social-google</id>
 			<name>Spring Social Google</name>
-			<url>https://github.com/GabiAxel/maven/raw/master/</url>
-		</repository>
-		<repository>
-			<id>jiwhiz.maven</id>
-			<name>Jiwhiz Maven Repository</name>
-			<url>https://github.com/jiwhiz/maven/raw/master/</url>
+			<url>http://gabiaxel.github.io/maven/</url>
 		</repository>
 	</repositories>
 
@@ -96,7 +100,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -153,7 +156,18 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring-security.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+			<version>${spring-hateoas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.plugin</groupId>
+			<artifactId>spring-plugin-core</artifactId>
+			<version>${spring-plugin.version}</version>
+		</dependency>
 
+		<!-- Spring Social -->
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-web</artifactId>
@@ -199,15 +213,18 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-google</artifactId>
-			<version>1.0.0.M2</version>
+			<version>${spring-social-google.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-crypto</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -233,6 +250,29 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>${spring-data-mongodb.version}</version>
+		</dependency>
+
+		<!-- Cloud Foundry runtime -->
+		<dependency>
+			<groupId>org.cloudfoundry</groupId>
+			<artifactId>cloudfoundry-runtime</artifactId>
+			<version>${cloudfoundry-runtime.version}</version>
+		</dependency>
+
+		<!-- Jackson JSON Mapper -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- Logging -->
@@ -263,13 +303,37 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>hamcrest-core</artifactId>
+					<groupId>org.hamcrest</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.9.0</version>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>${hamcrest.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>${jsonpath.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path-assert</artifactId>
+			<version>${jsonpath.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -290,91 +354,15 @@
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<version>2.2</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>jstl-api</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.web</groupId>
-			<artifactId>jstl-impl</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<!-- Thymeleaf -->
-		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf</artifactId>
-			<version>${thymeleaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring3</artifactId>
-			<version>${thymeleaf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity3</artifactId>
-			<version>${thymeleaf-extras-springsecurity3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-tiles2</artifactId>
-			<version>${thymeleaf-extras-tiles2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-conditionalcomments</artifactId>
-			<version>${thymeleaf-extras-conditionalcomments.version}</version>
-		</dependency>
-
-		<!-- Apache Tiles -->
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-core</artifactId>
-			<version>${tiles.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-api</artifactId>
-			<version>${tiles.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-template</artifactId>
-			<version>${tiles.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-servlet</artifactId>
-			<version>${tiles.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-jsp</artifactId>
-			<version>${tiles.version}</version>
-		</dependency>
-
-		<!-- JSR 303 with Hibernate Validator -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
 		</dependency>
 
 		<!-- Joda Time -->
@@ -390,24 +378,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Jackson JSON Mapper -->
+		<!-- Send Grid -->
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.9</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.github.rjeschke</groupId>
-			<artifactId>txtmark</artifactId>
-			<version>0.8</version>
-		</dependency>
-
-		<!-- AlphaMail Java Client at GitHub jiwhiz maven repository -->
-		<dependency>
-			<groupId>com.comfirm.alphamail</groupId>
-			<artifactId>alphamail-java-client</artifactId>
-			<version>0.1.0</version>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>0.1.2</version>
 		</dependency>
 
 	</dependencies>
@@ -415,13 +390,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<!-- Must use java 1.5 or higher for annotations -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -457,30 +431,13 @@
 					</additionalProjectnatures>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
-				<!-- <configuration> <failOnMissingWebXml>false</failOnMissingWebXml> 
-					</configuration> -->
 			</plugin>
-			<plugin>
-				<groupId>org.cloudfoundry</groupId>
-				<artifactId>cf-maven-plugin</artifactId>
-				<version>1.0.0.M4</version>
-				<configuration>
-					<server>mycloudfoundry-instance</server>
-					<target>http://api.cloudfoundry.com</target>
-					<appname>jiwhizblogweb</appname>
-					<memory>1024</memory>
-					<services>
-						<service>
-							<name>mongodb-jiwhizblog</name>
-							<vendor>mongodb</vendor>
-						</service>
-					</services>
-				</configuration>
-			</plugin>
+
 		</plugins>
 	</build>
 

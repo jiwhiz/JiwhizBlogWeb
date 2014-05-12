@@ -1,0 +1,64 @@
+<!--
+	Review blog post. 
+-->
+<div class="post">
+	<article class="post">
+		<header>
+			<h4 ng-show="blog.published">
+				{{blog.publishedTime | date:'mediumDate'}}
+			</h4>
+			<h4 ng-show="!blog.published" class="text-warning">Un-published</h4>
+			<h3 class="post-title">
+				{{blog.title}}
+			</h3>
+		</header>
+
+		<div class="post-content-body">
+			<blog-post content="{{blog.content}}"></blog-post>
+		</div>
+		<p></p>
+		<footer class="post-footer">
+			<div class="post-tags">
+				<span ng-repeat="tag in blog.tags">
+				<a href="#"><span class="label">{{tag}}</span></a>
+			</span>
+			</div>
+			<p>
+				Create on {{blog.createdTime | date:'mediumDate'}} at {{blog.createdTime | date:'mediumTime'}}
+			</p>
+			<div ng-show="blog.published">
+				<p>Published on {{blog.publishedTime | date:'mediumDate'}}
+				at {{blog.publishedTime | date:'mediumTime'}}</p>
+				<div class="control-group">
+					<a ng-href="#/myPost/updateBlogMeta/{{blog.id}}" class="btn">
+						<i class="fa fa-pencil" title="Edit Meta"></i> Edit Meta
+					</a>
+					<a ng-href="#/myPost/updateBlogContent/{{blog.id}}" class="btn">
+						<i class="fa fa-pencil" title="Edit Content"></i> Edit Content
+					</a>
+					<a ng-click="unpublish()" class="btn">
+						<i class="fa fa-undo" title="Un-publish"></i> Un-Publish
+					</a>
+					<a ng-href="#/blogs/{{blog.id}}" class="btn">
+						<i class="fa fa-file-text-o" title="Go to blog post and read"></i> Read
+					</a>
+				</div>
+			</div>
+
+			<div ng-show="!blog.published">
+				<div class="control-group">
+					<div class="controls">
+						<a ng-href="#/myPost/updateBlogMeta/{{blog.id}}" class="btn">
+							<i class="fa fa-pencil" title="Edit Meta"></i> Edit Meta
+						</a>
+						<a ng-href="#/myPost/updateBlogContent/{{blog.id}}" class="btn">
+							<i class="fa fa-pencil" title="Edit Content"></i> Edit Content
+						</a>
+						<button ng-click="publish()" class="btn btn-primary"><i class="icon-file-text" title="Publish"></i> Publish</button>
+					</div>
+				</div>
+
+			</div>
+		</footer>
+	</article>
+</div>

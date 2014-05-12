@@ -1,0 +1,23 @@
+<!--
+	Update blog post content. 
+-->
+<div class="post">
+
+	<h4 ng-show="blog.published">{{blog.publishedTime | date:'mediumDate'}}</h4>
+	<h4 ng-show="!blog.published">Un-published</h4>
+	<h3 class="post-title">{{blog.title}}</h3>
+
+	<!-- Content Input Form -->
+	<form role="form">
+		<!-- Content -->
+		<div class="form-group">
+			<label for="blog-content">* Content:</label>
+			<textarea id="blog-content" class="form-control" ng-model="blogForm.content" rows="40" required="required" 
+					placeholder="Type something..."></textarea>
+		</div>
+		<div class="form-group">
+				<button ng-click="cancel()" class="btn">Cancel</button>
+				<button ng-click="submit()" class="btn btn-primary">Save</button>
+		</div>
+	</form>
+</div>

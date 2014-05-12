@@ -1,0 +1,27 @@
+<!--
+	Update blog post meta data. 
+-->
+<div class="post">
+
+	<h4 ng-show="blog.published">{{blog.publishedTime | date:'mediumDate'}}</h4>
+	<h4 ng-show="!blog.published">Un-published</h4>
+	<h3 class="post-title">{{blog.title}}</h3>
+
+	<!-- Meta Data Input Form -->
+	<form role="form" >
+		<!-- Title -->
+		<div class="form-group">
+			<label for="blog-title">* Title:</label>
+			<input id="blog-title" type="text" required class="form-control" ng-model="blogForm.title" />
+		</div>
+		<!-- Tags -->
+		<div class="form-group">
+			<label for="blog-tag">Tags (comma separated):</label>
+			<input id="blog-tag" type="text" class="form-control" ng-model="blogForm.tagString" />
+		</div>
+		<div class="form-group">
+			<button ng-click="cancel()" class="btn">Cancel</button>
+			<button ng-click="submit()" class="btn btn-primary">Save</button>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,18 @@
+<!-- Comment Input Dialog Template-->
+<div class="modal-header">
+	<h3>Update Comment</h3>
+</div>
+<div class="modal-body">
+	<form role="form" name="commentInputForm">
+		<div class="form-group {{(commentInputForm.content.$valid)?'':'has-error'}}">
+			<label for="input-content" class="sr-only">Comment</label> 
+			<textarea id="input-content" name="content" class="form-control" 
+				ng-model="form.content" ng-required="true" rows="8"
+				placeholder="Input comment..." ></textarea>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="save()" ng-disabled="commentInputForm.$invalid">Save</button>
+	<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

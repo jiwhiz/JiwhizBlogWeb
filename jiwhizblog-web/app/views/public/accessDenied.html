@@ -1,0 +1,33 @@
+<!-- 
+	403 Forbidden
+-->
+<div class="row">
+	<div class="col-xs-9">
+		<div class="post">
+			<h2>Sorry, you are not allowed to see it.</h2>
+			<div ng-show="!authenticated">
+			Please
+				<div class="btn-group">
+					<a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+						sign in
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<!-- dropdown menu links -->
+						<!--  disable google
+						<li><a href="signin/google?scope=https://www.googleapis.com/auth/userinfo.profile">
+							<i class="fa fa-google-plus"></i> Google Sign In</a></li>-->
+						<li><a href="signin/facebook"><i class="fa fa-facebook"></i> Facebook Sign In</a></li>
+						<li><a href="signin/twitter"><i class="fa fa-twitter"></i> Twitter Sign In</a></li>
+					</ul>
+				</div>
+			to continue.
+			
+			</div>
+			
+			<div ng-show="authenticated">
+				<p>Please <a href="signout"><i class="fa fa-sign-out"></i> logout</a> and login again with different account.</p>
+			</div>
+		</div>
+	</div>
+</div>

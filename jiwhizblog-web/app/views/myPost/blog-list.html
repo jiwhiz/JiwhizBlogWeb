@@ -1,0 +1,130 @@
+<!--
+	List current logged in author all blog posts. 
+-->
+<div>
+	<h4>I have {{page.totalElements}} Blog Posts:</h4>
+
+	<div class="pagination-centered">
+		<pagination total-items="page.totalElements" page="page.currentPage" items-per-page="page.size" on-select-page="selectBlogPage(page)"></pagination>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Content</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr ng-repeat="blog in blogs">
+				<!-- Title and tags, with Edit Meta link -->
+				<td>
+					<h5>{{blog.title}}</h5>
+					
+					<div class="manage-data-toolbar">
+						<!-- edit meta -->
+						<a ng-href="#/myPost/updateBlogMeta/{{blog.id}}">
+							<i class="fa fa-pencil" title="Edit"></i> Edit
+						</a>
+					</div>
+				</td>
+
+				<!-- Content (just summary with Read more link if published; or summary text. Edit content link -->
+				<td>
+					<div class="manage-data-info text-info">
+						<i class="fa {{blog.iconClass}}" title="{{blog.iconTitle}}"></i>
+						Created at  {{blog.createdTime | date:'medium'}} |
+						Last modified at  {{blog.lastModifiedTime | date:'medium'}}
+					</div>
+					<div>
+						<div ng-show="!blog.published">
+							<h4 class="text-warning">Un-published</h4>
+						</div>
+						<p>
+							<blog-post content="{{blog.contentFirstParagraph}}"></blog-post>
+						</p>
+						<p ng-show="blog.published"><strong>
+							<a ng-href="#/blogs/{{blog.id}}" class="popupWin">Read more &raquo;</a></strong>
+						</p>
+					</div>
+					<div class="manage-data-toolbar">
+						<!-- edit content -->
+						<a ng-href="#/myPost/updateBlogContent/{{blog.id}}" > <i class="fa fa-pencil" title="Edit"></i>
+							Edit Content
+						</a> | 
+						<a ng-href="#/myPost/reviewBlog/{{blog.id}}"> <i class="fa fa-eye-open" title="Review"></i>
+							Review Blog Post
+						</a>
+					</div>
+					<hr /> 
+					
+					<div ng-show="blog.commentCount == 0">
+						No comment on this post.
+					</div>
+					<div ng-show="blog.commentCount > 0">
+					<!-- List of comment -->
+					<button ng-click="triggerCommentsCollapse(blog)">
+						<i class="fa fa-chevron-right" ng-show="blog.commentsCollapsed"></i>
+						<i class="fa fa-chevron-down" ng-show="!blog.commentsCollapsed"></i>
+					</button>
+					{{blog.commentCount | CommentCount}} on this post:
+					<div collapse="blog.commentsCollapsed">
+						<table class="table table-striped table-bordered bootstrap-datatable" ng-show="blog.comments.length>0">
+							<thead>
+								<tr>
+									<th>Poster</th>
+									<th>Comment</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr ng-repeat="comment in blog.comments">
+									<!-- User -->
+									<td>
+										<member-info member="comment.author"></member-info>
+									</td>
+	
+									<!-- Comment -->
+									<td>
+										<div class="manage-data-info text-info">
+											Posted on {{comment.createdTime | date:'medium'}} | 
+											<span class="{{comment.statusObj.textClass}}">
+												<i class="{{comment.statusObj.iconClass}}" title="{{comment.statusObj.title}}"></i>
+												{{comment.statusObj.name}}</span>
+										</div>
+										<div>
+											<p>
+												<markdown content="{{comment.content}}"></markdown>
+											</p>
+										</div>
+										<div class="manage-comment-toolbar">
+											<ul class="action-list">
+												<li ng-repeat="action in comment.actions"> 
+													<a ng-click="action.actionFunction(comment)" class="btn btn-default btn-sm">
+														<i class="fa {{action.iconClass}}" title="{{action.title}}"></i> 
+														{{action.name}}
+													</a>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="pagination-centered">
+		<pagination total-items="page.totalElements" page="page.currentPage" items-per-page="page.size" on-select-page="selectBlogPage(page)"></pagination>
+	</div>
+	
+	<p>
+		<a ng-href="#/myPost/createBlog" class="btn btn-primary">Add Post</a>
+	</p>
+
+</div>

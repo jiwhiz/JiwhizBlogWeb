@@ -1,0 +1,40 @@
+<!--
+	Contact page content. 
+-->
+<div class="post">
+	<iframe width="650" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+		src="https://maps.google.ca/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Edmonton,+AB&amp;aq=0&amp;oq=edmont&amp;sll=53.516644,-113.430012&amp;sspn=0.262927,0.703812&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=Edmonton,+Division+No.+11,+Alberta&amp;ll=54.521081,-113.115234&amp;spn=16.47882,45.043945&amp;z=5&amp;iwloc=A&amp;output=embed"></iframe>
+	<h2>Where I am</h2>
+	<p>Please send me a message if you want to contact me.</p>
+	<br />
+
+	<form role="form" name="contactInputForm">
+	
+		<!-- Name -->
+		<div class="form-group {{(contactInputForm.name.$valid)?'':'has-error'}}">
+			<label class="sr-only" for="input-name">Your Name</label>
+			<input id="input-name" name="name" type="text"
+					class="form-control" ng-model="contact.name" ng-required="true"
+					placeholder="Your Name..." />
+		</div>
+		
+		<!-- Email -->
+		<div class="form-group {{(contactInputForm.email.$valid)?'':'has-error'}}">
+			<label class="sr-only" for="input-email">Your Email Address</label>
+			<input id="input-email" name="email" type="email"
+					class="form-control" ng-model="contact.email" ng-required="true"
+					placeholder="Your Email Address..." />
+		</div>
+		
+		<!-- Message -->
+		<div class="form-group {{(contactInputForm.message.$valid)?'':'has-error'}}">
+			<label class="sr-only" for="input-message">Your Message</label>
+			<textarea id="input-message" name="message" type="text" rows="8"
+					class="form-control" ng-model="contact.message" ng-required="true"
+					placeholder="Your Message..." ></textarea>
+		</div>
+
+		<br />
+		<button class="btn btn-primary" ng-click="submit(contact)" ng-disabled="contactInputForm.$invalid">Send</button>
+	</form>
+</div>

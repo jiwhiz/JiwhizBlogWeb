@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.jiwhizblog</groupId>
+		<artifactId>jiwhizblog-project</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jiwhizblog-web</artifactId>
+	<packaging>war</packaging>
+
+	<name>Web UI Project</name>
+
+	<dependencies>
+		<!-- Business Domain -->
+		<dependency>
+			<groupId>com.jiwhizblog</groupId>
+			<artifactId>jiwhizblog-domain</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+		<!-- RESTful API -->
+		<dependency>
+			<groupId>com.jiwhizblog</groupId>
+			<artifactId>jiwhizblog-rest</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+				
+	</dependencies>
+
+	<build>
+		<finalName>JiwhizBlogWeb</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<!-- copy Grunt generated files to war -->
+							<directory>dist</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.cloudfoundry</groupId>
+				<artifactId>cf-maven-plugin</artifactId>
+				<version>1.0.2</version>
+				<configuration>
+					<server>mycloudfoundry-instance</server>
+					<target>https://api.run.pivotal.io</target>
+					<org>${jiwhizblog.application.org}</org>
+					<space>${jiwhizblog.application.space}</space>
+					<appname>${jiwhizblog.application.name}</appname>
+					<path>./target/JiwhizBlogWeb.war</path>
+					<url>${jiwhizblog.application.url}</url>
+					<memory>2048</memory>
+					<env>
+						<spring.profiles.active>cloud</spring.profiles.active>
+					</env>
+					<services>
+						<service>
+							<name>${jiwhizblog.mongodb.serviceName}</name>
+							<label>mongolab</label>
+							<provider>mongolab</provider>
+							<version>n/a</version>
+							<plan>${jiwhizblog.mongodb.servicePlan}</plan>
+						</service>
+						<service>
+							<name>${jiwhizblog.mail.serviceName}</name>
+							<label>sendgrid</label>
+							<provider>sendgrid</provider>
+							<version>n/a</version>
+							<plan>${jiwhizblog.mail.servicePlan}</plan>
+						</service>
+					</services>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>
