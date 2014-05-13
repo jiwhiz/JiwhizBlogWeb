@@ -31,12 +31,10 @@ public interface ApiUrls {
     String URL_SITE_RECENT_COMMENTS = "/public/recentComments";
     String URL_SITE_TAG_CLOUDS = "/public/tagClouds";
     String URL_SITE_CONTACT = "/public/contact";
-    
     String URL_SITE_BLOGS = "/public/blogs";
     String URL_SITE_BLOGS_BLOG = "/public/blogs/{blogId}";
     String URL_SITE_BLOGS_BLOG_COMMENTS = "/public/blogs/{blogId}/comments";
     String URL_SITE_BLOGS_BLOG_COMMENTS_COMMENT = "/public/blogs/{blogId}/comments/{commentId}";
-    String URL_SITE_SLIDES_SLIDE = "/public/slides/{slideId}";
     
     String URL_USER = "/user";
     String URL_USER_PROFILE = "/user/profile";
@@ -50,8 +48,6 @@ public interface ApiUrls {
     String URL_AUTHOR_BLOGS_BLOG = "/author/blogs/{blogId}";
     String URL_AUTHOR_BLOGS_BLOG_COMMENTS = "/author/blogs/{blogId}/comments";
     String URL_AUTHOR_BLOGS_BLOG_COMMENTS_COMMENT = "/author/blogs/{blogId}/comments/{commentId}";
-    String URL_AUTHOR_SLIDES = "/author/slides";
-    String URL_AUTHOR_SLIDES_SLIDE = "/author/slides/{slideId}";
     
     String URL_ADMIN = "/admin";
     String URL_ADMIN_USERS = "/admin/users";
