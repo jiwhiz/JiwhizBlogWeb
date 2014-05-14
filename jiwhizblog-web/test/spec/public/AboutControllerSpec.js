@@ -2,7 +2,7 @@
 
 describe('Controller: public/AboutController', function() {
 
-    var $rootScope, $scope;
+    var $rootScope, $scope, $controller;
     
     beforeEach(module('jiwhizWeb'));
     
@@ -15,18 +15,18 @@ describe('Controller: public/AboutController', function() {
     }));
 
     it('should make about menu item active.', function() {
-        expect(rootScope.activeMenu.about == 'active');
+        expect($rootScope.activeMenu.about == 'active');
     });
     
     it('should show title.', function() {
-        expect(rootScope.showTitle == true);
+        expect($rootScope.showTitle == true);
     });
 
     it('should have correct page title.', function() {
-        expect(rootScope.page_title).toEqual('About Me');
+        expect($rootScope.page_title).toEqual('About Me');
     });
     
     it('should have correct page description.', function() {
-        expect(rootScope.page_description).toEqual('Here is my story.');
+        expect($rootScope.page_description).toEqual('Here is my story.');
     });
 });

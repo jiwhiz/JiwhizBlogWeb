@@ -79,9 +79,20 @@ describe('Controller: public/BlogListController', function() {
             expect($scope.page.currentPage).toBe(1);
         });
 
-        it('should have blogs and first one is Test Blog.', function() {
+        it('should have two blogs and first one is Test Blog.', function() {
             expect($scope.blogs.length).toEqual(2);
             expect($scope.blogs[0].title).toEqual('Test Blog');
         });
+        
+        it('should have first blog with title "Test Blog" and author "author"', function() {
+            expect($scope.blogs[0].title).toEqual('Test Blog');
+            expect($scope.blogs[0].author.displayName).toEqual('author');
+        });
+        
+        it('should have second blog with title "Another Blog" and author "author"', function() {
+            expect($scope.blogs[1].title).toEqual('Another Blog');
+            expect($scope.blogs[1].author.displayName).toEqual('author');
+        });
+
     });
 });
