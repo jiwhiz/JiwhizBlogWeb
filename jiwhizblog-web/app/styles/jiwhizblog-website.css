@@ -73,7 +73,9 @@ pagenation li.active > a:hover,
   color: #ffffff;
 }
 .navbar {
+  margin-top: 15px;
   margin-bottom: 20px;
+  margin-right: 5px;
 }
 .navbar-toggle {
   border-color: #39831d;
