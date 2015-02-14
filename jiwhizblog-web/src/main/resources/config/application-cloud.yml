@@ -1,0 +1,33 @@
+# Put your cloud production config data in your Maven setting.xml
+application:
+    key: ${jiwhizblog.application.key}
+    email:
+        systemName: ${jiwhizblog.application.systemName}
+        systemEmail: ${jiwhizblog.application.systemEmail}
+        adminName: ${jiwhizblog.application.adminName}
+        adminEmail: ${jiwhizblog.application.adminEmail}
+
+mongoDb:
+    serviceName: ${jiwhizblog.mongoDb.serviceName}
+
+sendgrid:
+    serviceName: ${jiwhizblog.sendgrid.serviceName}
+    
+spring:
+    profiles:
+        active: prod, cloud
+    
+    social:
+        google:
+            appId: ${jiwhizblog.google.appId}
+            appSecret: ${jiwhizblog.google.appSecret}
+        facebook: 
+            appId: ${jiwhizblog.facebook.appId}
+            appSecret: ${jiwhizblog.facebook.appSecret}
+        twitter:
+            appId: ${jiwhizblog.twitter.appId}
+            appSecret: ${jiwhizblog.twitter.appSecret}
+        linkedin:
+            appId: ${jiwhizblog.linkedin.appId}
+            appSecret: ${jiwhizblog.linkedin.appSecret}
+            

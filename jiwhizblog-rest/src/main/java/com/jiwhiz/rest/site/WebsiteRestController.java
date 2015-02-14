@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,8 +54,8 @@ import com.jiwhiz.domain.post.CommentPost;
 import com.jiwhiz.domain.post.CommentPostRepository;
 import com.jiwhiz.domain.post.CommentStatusType;
 import com.jiwhiz.mail.ContactForm;
-import com.jiwhiz.mail.ContactMessageSender;
 import com.jiwhiz.rest.ApiUrls;
+import com.jiwhiz.rest.MessageSender;
 import com.jiwhiz.rest.ResourceNotFoundException;
 import com.jiwhiz.rest.UtilConstants;
 
@@ -67,15 +65,13 @@ import com.jiwhiz.rest.UtilConstants;
 @Controller
 @RequestMapping( value = ApiUrls.API_ROOT, produces = "application/hal+json" )
 public class WebsiteRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebsiteRestController.class);
-    
     public static final int MOST_RECENT_NUMBER = 4;
     
     private final UserAccountService userAccountService;
     private final UserAccountRepository userAccountRepository;
     private final BlogPostRepository blogPostRepository;
     private final CommentPostRepository commentPostRepository;
-    private final ContactMessageSender contactMessageSender;
+    private final MessageSender messageSender;
     private final WebsiteResourceAssembler websiteResourceAssembler;
     private final PublicBlogResourceAssembler publicBlogResourceAssembler;
     private final PublicCommentResourceAssembler publicCommentResourceAssembler;
@@ -87,7 +83,7 @@ public class WebsiteRestController {
             UserAccountRepository userAccountRepository, 
             BlogPostRepository blogPostRepository,
             CommentPostRepository commentPostRepository, 
-            ContactMessageSender contactMessageSender,
+            MessageSender messageSender,
             WebsiteResourceAssembler websiteResourceAssembler,
             PublicBlogResourceAssembler publicBlogResourceAssembler,
             PublicCommentResourceAssembler publicCommentResourceAssembler,
@@ -96,7 +92,7 @@ public class WebsiteRestController {
         this.userAccountRepository = userAccountRepository;
         this.blogPostRepository = blogPostRepository;
         this.commentPostRepository = commentPostRepository;
-        this.contactMessageSender = contactMessageSender;
+        this.messageSender = messageSender;
         this.websiteResourceAssembler = websiteResourceAssembler;
         this.publicBlogResourceAssembler = publicBlogResourceAssembler;
         this.publicCommentResourceAssembler = publicCommentResourceAssembler;
@@ -119,7 +115,6 @@ public class WebsiteRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_CURRENT_USER)
     public HttpEntity<Resource<UserAccount>> getCurrentUserAccount() {
-        LOGGER.debug("==>WebsiteRestController.getCurrentUserAccount()");
         UserAccount currentUser = this.userAccountService.getCurrentUser();
         Resource<UserAccount> resource = (currentUser == null)? null : new Resource<UserAccount>(currentUser);
         return new ResponseEntity<>(resource, HttpStatus.OK);
@@ -133,8 +128,6 @@ public class WebsiteRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_PROFILES_USER)
     public HttpEntity<UserProfileResource> getUserProfile(@PathVariable("userId") String userId) {
-        LOGGER.debug("==>WebsiteRestController.getUserProfile()");
-        
         UserAccount userAccount = this.userAccountRepository.findByUserId(userId);
         UserProfileResource resource = userProfileResourceAssembler.toResource(userAccount);
         return new ResponseEntity<>(resource, HttpStatus.OK);
@@ -144,10 +137,7 @@ public class WebsiteRestController {
     public HttpEntity<PagedResources<PublicCommentResource>> getUserApprovedCommentPosts(
             @PathVariable("userId") String userId,
             @PageableDefault(size = UtilConstants.DEFAULT_RETURN_RECORD_COUNT, page = 0) Pageable pageable,
-            PagedResourcesAssembler<CommentPost> assembler) 
-            throws ResourceNotFoundException {
-        LOGGER.debug("==>WebsiteRestController.getUserApprovedCommentPosts()");
-        
+            PagedResourcesAssembler<CommentPost> assembler) throws ResourceNotFoundException {
         Page<CommentPost> commentPosts = this.commentPostRepository.findByAuthorIdAndStatusOrderByCreatedTimeDesc(
                 userId, CommentStatusType.APPROVED, pageable);
         return new ResponseEntity<>(assembler.toResource(commentPosts, publicCommentResourceAssembler), HttpStatus.OK);
@@ -156,8 +146,6 @@ public class WebsiteRestController {
     
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_LATEST_BLOG)
     public HttpEntity<PublicBlogResource> getLatestBlogPost() throws ResourceNotFoundException {
-        LOGGER.debug("==>WebsiteRestController.getLatestBlogPost()");
-        
         PageRequest request = new PageRequest(0, 1);
         Page<BlogPost> blogPosts = this.blogPostRepository.findByPublishedIsTrueOrderByPublishedTimeDesc(request);
         if (blogPosts.getContent().size() != 1) {
@@ -171,7 +159,6 @@ public class WebsiteRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_RECENT_BLOGS)
     public HttpEntity<Resources<PublicBlogResource>> getRecentPublicBlogPosts() {
-        LOGGER.debug("==>WebsiteRestController.getRecentPublicBlogPosts()");
         PageRequest request = new PageRequest(0, MOST_RECENT_NUMBER);
         Collection<PublicBlogResource> blogPostResourceCollection = new ArrayList<PublicBlogResource>();
         Page<BlogPost> blogPosts = this.blogPostRepository.findByPublishedIsTrueOrderByPublishedTimeDesc(request);
@@ -240,9 +227,7 @@ public class WebsiteRestController {
     @RequestMapping(method = RequestMethod.POST, value = ApiUrls.URL_SITE_CONTACT)
     @ResponseBody
     public String submitContactMessage(@RequestBody ContactForm contactForm) {
-        LOGGER.debug("==>PublicSiteController.submitContactMessage()");
-        LOGGER.debug("contact is " + contactForm);
-        contactMessageSender.send(contactForm);
+        messageSender.notifyAdminForContactMessage(contactForm);
         return "";
     }
 

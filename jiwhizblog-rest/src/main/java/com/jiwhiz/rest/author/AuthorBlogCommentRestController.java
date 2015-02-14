@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -50,8 +48,6 @@ import com.jiwhiz.rest.UtilConstants;
  */
 @Controller
 public class AuthorBlogCommentRestController extends AbstractAuthorRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthorBlogCommentRestController.class);
-    
     private final CommentPostRepository commentPostRepository;
     private final AuthorBlogCommentResourceAssembler authorBlogCommentResourceAssembler;
     
@@ -70,9 +66,7 @@ public class AuthorBlogCommentRestController extends AbstractAuthorRestControlle
     public HttpEntity<PagedResources<AuthorBlogCommentResource>> getCommentPostsByBlogPostId(
             @PathVariable("blogId") String blogId,
             @PageableDefault(size = UtilConstants.DEFAULT_RETURN_RECORD_COUNT, page = 0) Pageable pageable,
-            PagedResourcesAssembler<CommentPost> assembler) 
-            throws ResourceNotFoundException {
-        LOGGER.debug("==>AuthorBlogCommentRestController.getCommentPostsByBlogPostId()");
+            PagedResourcesAssembler<CommentPost> assembler) throws ResourceNotFoundException {
         getBlogByIdAndCheckAuthor(blogId);
 
         Page<CommentPost> commentPosts = commentPostRepository.findByBlogPostIdOrderByCreatedTimeDesc(blogId, pageable);
@@ -81,10 +75,8 @@ public class AuthorBlogCommentRestController extends AbstractAuthorRestControlle
     
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_AUTHOR_BLOGS_BLOG_COMMENTS_COMMENT) 
     public HttpEntity<AuthorBlogCommentResource> getCommentPostById(
-            @PathVariable("blogId") String blogId, @PathVariable("commentId") String commentId) 
-            throws ResourceNotFoundException {
-        LOGGER.debug("==>AuthorBlogCommentRestController.getCommentPostById()");
-
+            @PathVariable("blogId") String blogId, 
+            @PathVariable("commentId") String commentId) throws ResourceNotFoundException {
         BlogPost blogPost = getBlogByIdAndCheckAuthor(blogId);
         CommentPost commentPost = getCommentByIdAndCheckBlog(commentId, blogPost);
         return new ResponseEntity<>(authorBlogCommentResourceAssembler.toResource(commentPost), HttpStatus.OK);
@@ -95,8 +87,6 @@ public class AuthorBlogCommentRestController extends AbstractAuthorRestControlle
             @PathVariable("blogId") String blogId, 
             @PathVariable("commentId") String commentId,
             @RequestBody Map<String, String> updateMap) throws ResourceNotFoundException {
-        LOGGER.info("==>AuthorBlogCommentRestController.updateCommentPost() with " + updateMap);
-        
         BlogPost blogPost = getBlogByIdAndCheckAuthor(blogId);
         CommentPost commentPost = getCommentByIdAndCheckBlog(commentId, blogPost);
         
@@ -109,8 +99,6 @@ public class AuthorBlogCommentRestController extends AbstractAuthorRestControlle
             CommentStatusType status = CommentStatusType.valueOf(statusString);
             if (status != null) {
                 commentPost.setStatus(status);
-            } else {
-                //TODO throw exception for invalid status
             }
         }
         commentPostRepository.save(commentPost);

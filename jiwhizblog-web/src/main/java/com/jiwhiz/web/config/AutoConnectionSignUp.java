@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.springframework.social.connect.ConnectionSignUp;
 
 import com.jiwhiz.domain.account.UserAccount;
 import com.jiwhiz.domain.account.UserAccountService;
-import com.jiwhiz.mail.SystemMessageSender;
+import com.jiwhiz.rest.MessageSender;
 
 /**
  * Automatically sign up user who is already signin through other social network account (google or twitter).
@@ -38,24 +38,24 @@ public class AutoConnectionSignUp implements ConnectionSignUp{
     private static final Logger logger = LoggerFactory.getLogger(AutoConnectionSignUp.class);
     
     private final UserAccountService userAccountService;
-    private final SystemMessageSender systemMessageSender;
+    private final MessageSender messageSender;
     
     @Inject
-    public AutoConnectionSignUp(UserAccountService userAccountService, SystemMessageSender systemMessageSender){
+    public AutoConnectionSignUp(UserAccountService userAccountService, MessageSender messageSender){
         this.userAccountService = userAccountService;
-        this.systemMessageSender = systemMessageSender;
+        this.messageSender = messageSender;
     }
     
     public String execute(Connection<?> connection) {
         ConnectionData data = connection.createData();
-        UserAccount account = this.userAccountService.createUserAccount(data);
+        UserAccount account = this.userAccountService.createUserAccount(data, connection.fetchUserProfile());
         
         if (logger.isDebugEnabled()) {
             logger.debug("Automatically create a new user account '"+account.getUserId()+"', for "+account.getDisplayName());
             logger.debug("connection data is from provider '"+data.getProviderId()+"', providerUserId is '"+data.getProviderUserId());
         }
         
-        systemMessageSender.sendNewUserRegistered(account);
+        messageSender.sendNewUserRegistered(account);
         return account.getUserId();
     }
 }

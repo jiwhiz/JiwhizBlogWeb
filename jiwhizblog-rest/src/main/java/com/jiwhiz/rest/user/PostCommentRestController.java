@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.jiwhiz.rest.user;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,8 +35,8 @@ import com.jiwhiz.domain.post.BlogPostRepository;
 import com.jiwhiz.domain.post.CommentPost;
 import com.jiwhiz.domain.post.CommentPostRepository;
 import com.jiwhiz.domain.post.CommentStatusType;
-import com.jiwhiz.mail.CommentNotificationSender;
 import com.jiwhiz.rest.ApiUrls;
+import com.jiwhiz.rest.MessageSender;
 import com.jiwhiz.rest.ResourceNotFoundException;
 
 /**
@@ -46,28 +44,28 @@ import com.jiwhiz.rest.ResourceNotFoundException;
  */
 @Controller
 public class PostCommentRestController extends AbstractUserRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostCommentRestController.class);
-
     private final UserAccountRepository userAccountRepository;
     private final BlogPostRepository blogPostRepository;
     private final CommentPostRepository commentPostRepository;
-    private final CommentNotificationSender commentNotificationSender;
+    private final MessageSender messageSender;
 
     @Inject
     public PostCommentRestController(
-            UserAccountService userAccountService, UserAccountRepository userAccountRepository, BlogPostRepository blogPostRepository,
-            CommentPostRepository commentPostRepository, CommentNotificationSender commentNotificationSender) {
+            UserAccountService userAccountService, 
+            UserAccountRepository userAccountRepository, 
+            BlogPostRepository blogPostRepository,
+            CommentPostRepository commentPostRepository, 
+            MessageSender messageSender) {
         super(userAccountService);
         this.userAccountRepository = userAccountRepository;
         this.blogPostRepository = blogPostRepository;
         this.commentPostRepository = commentPostRepository;
-        this.commentNotificationSender = commentNotificationSender;
+        this.messageSender = messageSender;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = ApiUrls.URL_USER_BLOGS_BLOG_COMMENTS, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource<CommentPost>> postComment(@PathVariable("blogId") String blogId,
             @RequestBody CommentForm newComment) throws ResourceNotFoundException {
-        LOGGER.debug("==>PostCommentRestController.postComment() for blog " + blogId);
         UserAccount currentUser = getCurrentAuthenticatedUser();
         BlogPost blogPost = this.blogPostRepository.findOne(blogId);
         if (blogPost == null || !blogPost.isPublished()) {
@@ -80,9 +78,9 @@ public class PostCommentRestController extends AbstractUserRestController {
         comment = commentPostRepository.save(comment);
         
         //send email to author if someone else posted a comment to blog.
-        if (this.commentNotificationSender != null && !blogPost.getAuthorId().equals(currentUser.getUserId())) {
+        if (this.messageSender != null && !blogPost.getAuthorId().equals(currentUser.getUserId())) {
             UserAccount author = userAccountRepository.findByUserId(blogPost.getAuthorId());
-            this.commentNotificationSender.send(author, currentUser, comment, blogPost);
+            this.messageSender.notifyAuthorForNewComment(author, currentUser, comment, blogPost);
         }
 
         Resource<CommentPost> resource = new Resource<CommentPost>(comment);

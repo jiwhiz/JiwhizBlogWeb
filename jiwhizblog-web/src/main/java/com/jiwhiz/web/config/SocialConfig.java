@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,39 +23,33 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
-import org.springframework.social.config.annotation.SocialConfigurer;
+import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.api.Google;
+import org.springframework.social.google.api.impl.GoogleTemplate;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
-import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.jiwhiz.domain.account.UserAccountService;
 import com.jiwhiz.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.domain.account.impl.MongoUsersConnectionRepositoryImpl;
-import com.jiwhiz.mail.SystemMessageSender;
+import com.jiwhiz.rest.MessageSender;
 
 /**
  * Configuration for Spring Social.
  * 
  * @author Yuan Ji
- * 
+ *
  */
 @Configuration
 @EnableSocial
-public class SocialConfig implements SocialConfigurer {
-
+public class SocialConfig extends SocialConfigurerAdapter {
     @Inject
     private UserSocialConnectionRepository userSocialConnectionRepository;
     
@@ -63,20 +57,13 @@ public class SocialConfig implements SocialConfigurer {
     private UserAccountService userAccountService;
     
     @Inject
-    private SystemMessageSender systemMessageSender;
+    private MessageSender messageSender;
     
-    @Override
-    public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig, Environment env) {
-        cfConfig.addConnectionFactory(new GoogleConnectionFactory(env.getProperty("google.clientId"), env.getProperty("google.clientSecret")));
-        cfConfig.addConnectionFactory(new FacebookConnectionFactory(env.getProperty("facebook.appId"), env.getProperty("facebook.appSecret")));
-        cfConfig.addConnectionFactory(new TwitterConnectionFactory(env.getProperty("twitter.apiKey"), env.getProperty("twitter.apiSecret")));
+    @Bean
+    public ConnectionSignUp autoConnectionSignUp() {
+        return new AutoConnectionSignUp(userAccountService, messageSender);
     }
-
-    @Override
-    public UserIdSource getUserIdSource() {
-        return new AuthenticationNameUserIdSource();
-    }
-
+    
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
         MongoUsersConnectionRepositoryImpl repository = new MongoUsersConnectionRepositoryImpl(
@@ -84,31 +71,17 @@ public class SocialConfig implements SocialConfigurer {
         repository.setConnectionSignUp(autoConnectionSignUp());
         return repository;
     }
-
+    
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
     public Google google(ConnectionRepository repository) {
         Connection<Google> connection = repository.findPrimaryConnection(Google.class);
-        return connection != null ? connection.getApi() : null;
+        return connection != null ? connection.getApi() : new GoogleTemplate();
     }
-
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public Facebook facebook(ConnectionRepository repository) {
-        Connection<Facebook> connection = repository.findPrimaryConnection(Facebook.class);
-        return connection != null ? connection.getApi() : null;
+    
+    @Override
+    public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
+        configurer.addConnectionFactory(new GoogleConnectionFactory(
+                environment.getProperty("spring.social.google.appId"), environment.getProperty("spring.social.google.appSecret")));
     }
-
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public Twitter twitter(ConnectionRepository repository) {
-        Connection<Twitter> connection = repository.findPrimaryConnection(Twitter.class);
-        return connection != null ? connection.getApi() : null;
-    }
-
-    @Bean
-    public ConnectionSignUp autoConnectionSignUp() {
-        return new AutoConnectionSignUp(userAccountService, systemMessageSender);
-    }
-
 }

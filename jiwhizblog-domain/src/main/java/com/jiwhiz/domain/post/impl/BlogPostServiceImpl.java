@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package com.jiwhiz.domain.post.impl;
 
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
 import com.jiwhiz.domain.account.UserAccount;
 import com.jiwhiz.domain.post.BlogPost;
 import com.jiwhiz.domain.post.BlogPostRepository;
@@ -28,6 +30,7 @@ import com.jiwhiz.domain.post.BlogPostService;
  * @author Yuan Ji
  * 
  */
+@Service
 public class BlogPostServiceImpl implements BlogPostService {
 
     private final BlogPostRepository blogPostRepository;

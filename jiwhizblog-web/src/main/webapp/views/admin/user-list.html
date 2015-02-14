@@ -1,0 +1,110 @@
+<!--
+	List all users.
+-->
+<div class="post">
+	<h4>
+		There are {{page.totalElements}} users in the system:
+	</h4>
+
+	<div class="pagination-centered">
+		<pagination total-items="page.totalElements" ng-model="page.currentPage" items-per-page="page.size" ng-change="pageChanged()"></pagination>
+	</div>
+
+	<table class="table table-striped table-bordered bootstrap-datatable">
+		<thead>
+			<tr>
+				<th>Profile</th>
+				<th>Social</th>
+				<th>Locked</th>
+				<th>Trusted</th>
+				<th>Roles</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr ng-repeat="user in users">
+				<!-- User Profile-->
+				<td>
+					<member-info member="user"></member-info>
+				</td>
+
+				<!-- Social Connections -->
+				<td>
+					<table class="member-info">
+						<tr ng-show="user.socialConnections['google']">
+							<td><i class="fa fa-google-plus"></i></td>
+							<td><a ng-href="{{user.socialConnections['google'].profileUrl}}" 
+								   title="{{user.socialConnections['google'].displayName}}" target="_blank">
+									<img ng-src="{{user.socialConnections['google'].imageUrl}}" class="dashboard-member-activity-avatar" />
+							</a></td>
+						</tr>
+						<tr ng-show="user.socialConnections['facebook']">
+							<td><i class="fa fa-facebook"></i></td>
+							<td><a ng-href="{{user.socialConnections['facebook'].profileUrl}}"
+								   title="{{user.socialConnections['facebook'].displayName}}" target="_blank">
+									<img ng-src="{{user.socialConnections['facebook'].imageUrl}}" class="dashboard-member-activity-avatar" />
+							</a></td>
+						</tr>
+                        <tr ng-show="user.socialConnections['twitter']">
+                            <td><i class="fa fa-twitter"></i></td>
+                            <td><a ng-href="{{user.socialConnections['twitter'].profileUrl}}"
+                                   title="{{user.socialConnections['twitter'].displayName}}" target="_blank">
+                                    <img ng-src="{{user.socialConnections['twitter'].imageUrl}}" class="dashboard-member-activity-avatar" />
+                            </a></td>
+                        </tr>
+                        <tr ng-show="user.socialConnections['linkedin']">
+                            <td><i class="fa fa-linkedin"></i></td>
+                            <td><a ng-href="{{user.socialConnections['linkedin'].profileUrl}}"
+                                   title="{{user.socialConnections['linkedin'].displayName}}" target="_blank">
+                                    <img ng-src="{{user.socialConnections['linkedin'].imageUrl}}" class="dashboard-member-activity-avatar" />
+                            </a></td>
+                        </tr>
+					</table>
+				</td>
+
+				<!-- Lock Account -->
+				<td>{{user.accountLocked}}
+					<div class="manage-data-toolbar">
+						<span ng-show="user.accountLocked">
+							<a ng-click="unlock(user)"> <i class="fa fa-ok" title="Unlock User"></i> Unlock</a>
+						</span>
+						<span ng-show="!user.accountLocked">
+							<a ng-click="lock(user)"> <i class="fa fa-lock" title="Lock User"></i> Lock</a>
+						</span>
+					</div>
+				</td>
+
+				<!-- Trusted -->
+				<td>{{user.trustedAccount}}
+					<div class="manage-data-toolbar">
+						<span ng-show="user.trustedAccount">
+							<a ng-click="untrust(user)"> <i class="fa fa-question" title="UnTrust User"></i> Untrust</a>
+						</span>
+						<span ng-show="!user.trustedAccount">
+							<a ng-click="trust(user)"> <i class="fa fa-ok" title="Trust User"></i> Trust</a>
+						</span>
+					</div>
+				</td>
+
+				<!-- Roles -->
+				<td><span class="label label-info">USER</span> 
+					<span ng-show="user.isAuthor()" class="label label-success">AUTHOR</span>
+					<span ng-show="user.isAdmin()" class="label label-danger">ADMIN</span>
+					<div class="manage-data-toolbar">
+						<span ng-show="user.isAuthor()">
+							<a ng-click="removeAuthorRole(user)"> <i class="fa fa-eraser" title="Remove Author Role"></i> Remove Author</a>
+						</span>
+						<span ng-show="!user.isAuthor()">
+							<a ng-click="addAuthorRole(user)"> <i class="fa fa-plus" title="Add Author Role"></i> Add Author</a>
+						</span>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="pagination-centered">
+		<pagination total-items="page.totalElements" ng-model="page.currentPage" items-per-page="page.size" ng-change="pageChanged()"></pagination>
+	</div>
+
+</div>

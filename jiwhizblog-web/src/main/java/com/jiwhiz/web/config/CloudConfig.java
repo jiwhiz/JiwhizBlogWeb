@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,58 +17,35 @@ package com.jiwhiz.web.config;
 
 import javax.inject.Inject;
 
+import org.springframework.cloud.config.java.AbstractCloudConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.MongoDbFactory;
 
-import com.jiwhiz.mail.CommentNotificationSender;
-import com.jiwhiz.mail.ContactMessageSender;
-import com.jiwhiz.mail.SystemMessageSender;
-import com.jiwhiz.mail.sendgrid.AbstractMailSender;
-import com.jiwhiz.mail.sendgrid.CommentNotificationSenderImpl;
-import com.jiwhiz.mail.sendgrid.ContactMessageSenderImpl;
-import com.jiwhiz.mail.sendgrid.SystemMessageSenderImpl;
+import com.jiwhiz.mail.EmailService;
+import com.jiwhiz.mail.sendgrid.EmailServiceImpl;
 
 /**
  * @author Yuan Ji
  */
 @Configuration
 @Profile("cloud")
-@PropertySource(value={"classpath:cloud.properties", "classpath:sendgrid.properties"})
-public class CloudConfig {
+public class CloudConfig extends AbstractCloudConfig {
     @Inject
     private Environment environment;
 
     @Bean
-    public ContactMessageSender contactMessageSender() {
-        ContactMessageSenderImpl sender = new ContactMessageSenderImpl();
-        configSendGrid(sender);
-        return sender;
-    }
-
-    @Bean
-    public CommentNotificationSender commentNotificationSender() {
-        CommentNotificationSenderImpl sender = new CommentNotificationSenderImpl();
-        configSendGrid(sender);
-        return sender;
+    public EmailService emailService() {
+        String sendgridServiceName = environment.getProperty("sendgrid.serviceName");
+        String credentialPath = "vcap.services." + sendgridServiceName + ".credentials.";
+        return new EmailServiceImpl(environment.getProperty(credentialPath + "username"), 
+                                    environment.getProperty(credentialPath + "password"));
     }
     
     @Bean
-    public SystemMessageSender systemMessageSender() {
-        SystemMessageSenderImpl sender = new SystemMessageSenderImpl();
-        configSendGrid(sender);
-        return sender;
-    }
-
-    private void configSendGrid(AbstractMailSender sender) {
-        sender.setSendGridUsername(environment.getProperty("sendgrid.username"));
-        sender.setSendGridPassword(environment.getProperty("sendgrid.password"));
-        sender.setSystemName(environment.getProperty("application.systemName"));
-        sender.setSystemEmail(environment.getProperty("application.systemEmail"));
-        sender.setAdminName(environment.getProperty("application.adminName"));
-        sender.setAdminEmail(environment.getProperty("application.adminEmail"));
-        sender.setApplicationBaseUrl(environment.getProperty("application.baseUrl"));
+    public MongoDbFactory mongoDbFactory() {
+        return connectionFactory().mongoDbFactory(environment.getProperty("mongoDb.serviceName"));
     }
 }

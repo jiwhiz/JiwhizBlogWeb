@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.jiwhiz.rest.admin;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +35,6 @@ import com.jiwhiz.rest.ApiUrls;
  */
 @Controller
 public class AdminAccountRestController extends AbstractAdminRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminAccountRestController.class);
-
     private final AdminAccountResourceAssembler adminAccountResourceAssembler;
     
     @Inject
@@ -55,8 +51,6 @@ public class AdminAccountRestController extends AbstractAdminRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_ADMIN)
     public HttpEntity<AdminAccountResource> getAdminAccount() {
-        LOGGER.debug("==>SystemAdminRestController.getAdminInfo()");
-        
         UserAccount currentUser = getCurrentAuthenticatedAdmin();
         AdminAccountResource resource = adminAccountResourceAssembler.toResource(currentUser);
         

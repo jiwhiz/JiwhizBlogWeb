@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -49,8 +47,6 @@ import com.jiwhiz.rest.UtilConstants;
  */
 @Controller
 public class CommentRestController extends AbstractAdminRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommentRestController.class);
-
     private final CommentPostRepository commentPostRepository;
     private final CommentResourceAssembler commentResourceAssembler;
 
@@ -68,16 +64,14 @@ public class CommentRestController extends AbstractAdminRestController {
     public HttpEntity<PagedResources<CommentResource>> getCommentPosts(
             @PageableDefault(size = UtilConstants.DEFAULT_RETURN_RECORD_COUNT, 
                              page = 0, sort="createdTime", direction=Direction.DESC) Pageable pageable,
-                             PagedResourcesAssembler<CommentPost> assembler) {
+            PagedResourcesAssembler<CommentPost> assembler) {
         Page<CommentPost> commentPosts = this.commentPostRepository.findAll(pageable);
         return new ResponseEntity<>(assembler.toResource(commentPosts, commentResourceAssembler), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_ADMIN_COMMENTS_COMMENT) 
     public HttpEntity<CommentResource> getCommentPostById(
-            @PathVariable("commentId") String commentId) 
-            throws ResourceNotFoundException {
-        LOGGER.debug("==>AdminCommentRestController.getCommentPostById()");
+            @PathVariable("commentId") String commentId) throws ResourceNotFoundException {
         CommentPost commentPost = getCommentById(commentId);
         return new ResponseEntity<>(commentResourceAssembler.toResource(commentPost), HttpStatus.OK);
     }
@@ -86,7 +80,6 @@ public class CommentRestController extends AbstractAdminRestController {
     public HttpEntity<Void> updateCommentPost(
             @PathVariable("commentId") String commentId,
             @RequestBody Map<String, String> updateMap) throws ResourceNotFoundException {
-        LOGGER.info("==>AdminCommentRestController.updateCommentPost() with " + updateMap);
         CommentPost commentPost = getCommentById(commentId);
         
         String content = updateMap.get("content");
@@ -98,12 +91,18 @@ public class CommentRestController extends AbstractAdminRestController {
             CommentStatusType status = CommentStatusType.valueOf(statusString);
             if (status != null) {
                 commentPost.setStatus(status);
-            } else {
-                //TODO throw exception for invalid status
             }
         }
         commentPostRepository.save(commentPost);
         
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = ApiUrls.URL_ADMIN_COMMENTS_COMMENT) 
+    public HttpEntity<Void> deleteCommentPostById(
+            @PathVariable("commentId") String commentId) throws ResourceNotFoundException {
+        CommentPost commentPost = getCommentById(commentId);
+        commentPostRepository.delete(commentPost);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

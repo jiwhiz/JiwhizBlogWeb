@@ -1,95 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.jiwhizblog</groupId>
-		<artifactId>jiwhizblog-project</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
-	</parent>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jiwhizblog</groupId>
+        <artifactId>jiwhizblog-project</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>jiwhizblog-web</artifactId>
-	<packaging>war</packaging>
+    <artifactId>jiwhizblog-web</artifactId>
+    <packaging>war</packaging>
 
-	<name>Web UI Project</name>
+    <name>Web UI Project</name>
+    <properties>
+        <start-class>com.jiwhiz.JiwhizBlogWebApplication</start-class>
+    </properties>
 
-	<dependencies>
-		<!-- Business Domain -->
-		<dependency>
-			<groupId>com.jiwhizblog</groupId>
-			<artifactId>jiwhizblog-domain</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
-		</dependency>
-		<!-- RESTful API -->
-		<dependency>
-			<groupId>com.jiwhizblog</groupId>
-			<artifactId>jiwhizblog-rest</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
-		</dependency>
-				
-	</dependencies>
+    <dependencies>
+        <!-- Business Domain -->
+        <dependency>
+            <groupId>com.jiwhizblog</groupId>
+            <artifactId>jiwhizblog-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-	<build>
-		<finalName>JiwhizBlogWeb</finalName>
+        <!-- RESTful API -->
+        <dependency>
+            <groupId>com.jiwhizblog</groupId>
+            <artifactId>jiwhizblog-rest</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
 
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
-						<resource>
-							<!-- copy Grunt generated files to war -->
-							<directory>dist</directory>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cloud-connectors</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
 
-			<plugin>
-				<groupId>org.cloudfoundry</groupId>
-				<artifactId>cf-maven-plugin</artifactId>
-				<version>1.0.2</version>
-				<configuration>
-					<server>mycloudfoundry-instance</server>
-					<target>https://api.run.pivotal.io</target>
-					<org>${jiwhizblog.application.org}</org>
-					<space>${jiwhizblog.application.space}</space>
-					<appname>${jiwhizblog.application.name}</appname>
-					<path>./target/JiwhizBlogWeb.war</path>
-					<url>${jiwhizblog.application.url}</url>
-					<memory>2048</memory>
-					<env>
-						<spring.profiles.active>cloud</spring.profiles.active>
-					</env>
-					<services>
-						<service>
-							<name>${jiwhizblog.mongodb.serviceName}</name>
-							<label>mongolab</label>
-							<provider>mongolab</provider>
-							<version>n/a</version>
-							<plan>${jiwhizblog.mongodb.servicePlan}</plan>
-						</service>
-						<service>
-							<name>${jiwhizblog.mail.serviceName}</name>
-							<label>sendgrid</label>
-							<provider>sendgrid</provider>
-							<version>n/a</version>
-							<plan>${jiwhizblog.mail.servicePlan}</plan>
-						</service>
-					</services>
-				</configuration>
-			</plugin>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-google</artifactId>
+            <version>${spring-social-google.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-crypto</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		</plugins>
-	</build>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <build>                
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.trecloux</groupId>
+                        <artifactId>yeoman-maven-plugin</artifactId>
+                        <version>0.2</version>
+                        <executions>
+                            <execution>
+                                <id>run-grunt</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <gruntBuildArgs>build --force</gruntBuildArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>src/main/webapp/dist</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>.tmp</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>node_modules</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=prod</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

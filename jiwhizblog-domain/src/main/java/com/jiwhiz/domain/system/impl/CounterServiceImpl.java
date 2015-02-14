@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
 
 import com.jiwhiz.domain.system.Counter;
 import com.jiwhiz.domain.system.CounterService;
@@ -29,6 +30,7 @@ import com.jiwhiz.domain.system.CounterService;
  * @author Yuan Ji
  *
  */
+@Service
 public class CounterServiceImpl implements CounterService {
     public static final String USER_ID_SEQUENCE_NAME = "user_id";
 

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.jiwhiz.domain.account;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.connect.ConnectionData;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.social.security.SocialUserDetailsService;
 
 /**
@@ -30,13 +31,14 @@ import org.springframework.social.security.SocialUserDetailsService;
 public interface UserAccountService extends SocialUserDetailsService, UserDetailsService {
     
     /**
-     * Creates a new UserAccount with user social network account Connection Data.
-     * Default has ROLE_USER
+     * Creates a new UserAccount with user social network account Connection Data and UserProfile.
+     * Default has ROLE_USER role.
      * 
      * @param data
+     * @param profile
      * @return
      */
-    UserAccount createUserAccount(ConnectionData data);
+    UserAccount createUserAccount(ConnectionData data, UserProfile profile);
 
     /**
      * Add role to user account.

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +38,6 @@ import com.jiwhiz.rest.ResourceNotFoundException;
  */
 @Controller
 public class UserAccountRestController extends AbstractUserRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountRestController.class);
-    
     private final UserAccountRepository userAccountRepository;
     private final UserAccountResourceAssembler userAccountResourceAssembler;
 
@@ -61,7 +57,6 @@ public class UserAccountRestController extends AbstractUserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_USER)
     public HttpEntity<UserAccountResource> getCurrentUserAccount() {
-        LOGGER.debug("==>UserRestController.getCurrentUserAccount()");
         return new ResponseEntity<>(userAccountResourceAssembler.toResource(getCurrentAuthenticatedUser()), HttpStatus.OK);
     }
 
@@ -74,8 +69,6 @@ public class UserAccountRestController extends AbstractUserRestController {
      */
     @RequestMapping(method = RequestMethod.PATCH, value = ApiUrls.URL_USER_PROFILE)
     public HttpEntity<Void> patchUserProfile(@RequestBody Map<String, String> updateMap) throws ResourceNotFoundException {
-        LOGGER.info("==>UserRestController.patchUserProfile() ");
-        
         UserAccount currentUser = getCurrentAuthenticatedUser();
         String displayName = updateMap.get("displayName");
         if (displayName != null) {

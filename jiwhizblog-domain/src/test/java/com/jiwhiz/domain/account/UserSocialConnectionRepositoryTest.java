@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.jiwhiz.config.MongoConfig;
-import com.jiwhiz.config.TestRepositoryConfig;
+import com.jiwhiz.domain.JiwhizBlogRepositoryTestApplication;
 
 /**
  *
@@ -43,7 +42,7 @@ import com.jiwhiz.config.TestRepositoryConfig;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestRepositoryConfig.class, MongoConfig.class })
+@SpringApplicationConfiguration(classes = JiwhizBlogRepositoryTestApplication.class)
 public class UserSocialConnectionRepositoryTest {
 
     @Inject

@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import com.jiwhiz.domain.account.UserRoleType;
 import com.jiwhiz.domain.account.impl.MongoPersistentTokenRepositoryImpl;
 
 /**
- * Configuration for Spring Security and Spring Social Security.
+ * Configuration for Spring Security.
  * 
  * @author Yuan Ji
  *
@@ -72,10 +72,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserIdSource userIdSource;
     
     @Override
-    public void configure(WebSecurity builder) throws Exception {
-        builder
-            .ignoring()
-                .antMatchers("/resources/**", "/scripts/**", "styles/**", "images/**", "fonts/**", "views/**", "bower_components/**");
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+            .antMatchers("/bower_components/**")
+            .antMatchers("/fonts/**")
+            .antMatchers("/images/**")
+            .antMatchers("/scripts/**")
+            .antMatchers("/styles/**")
+            .antMatchers("/views/**")
+            .antMatchers("/index.html")
+            .antMatchers("/")
+            ;
     }
     
     @Override
@@ -84,21 +91,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable() // disable CSRF now. TODO figure out how to config CSRF header in AngularJS
             .authorizeRequests()
                 .antMatchers("/api/admin/**").hasAuthority(UserRoleType.ROLE_ADMIN.name())
+                .antMatchers("/api/author/**").hasAuthority(UserRoleType.ROLE_AUTHOR.name())
                 .antMatchers("/api/user/**").authenticated()
                 .antMatchers("/api/public/**").permitAll()
                 .antMatchers("/api/currentUser").permitAll()
-                .antMatchers("/signin").permitAll()
+                .antMatchers("/signin/**").permitAll()
+                .antMatchers("/connect/**").permitAll()
                 .antMatchers("/about").permitAll()
                 .antMatchers("/contact").permitAll()
-                .antMatchers("/bower_components/**").permitAll()
-                .antMatchers("/fonts/**").permitAll()
-                .antMatchers("/images/**").permitAll()
-                .antMatchers("/scripts/**").permitAll()
-                .antMatchers("/styles/**").permitAll()
-                .antMatchers("/views/**").permitAll()
-                .antMatchers("/post/**").permitAll()
-                .antMatchers("/index.html").permitAll()
-                .antMatchers("/presentation/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .addFilterBefore(socialAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)

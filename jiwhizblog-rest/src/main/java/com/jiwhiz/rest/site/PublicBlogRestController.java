@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,8 +90,8 @@ public class PublicBlogRestController {
      * @throws ResourceNotFoundException
      */
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_BLOGS_BLOG)
-    public HttpEntity<PublicBlogResource> getPublicBlogPostById(@PathVariable("blogId") String id) 
-            throws ResourceNotFoundException {
+    public HttpEntity<PublicBlogResource> getPublicBlogPostById(
+    		@PathVariable("blogId") String id) throws ResourceNotFoundException {
         
         BlogPost blogPost = getPublishedBlogById(id);
         PublicBlogResource resource = publicBlogResourceAssembler.toResource(blogPost);
@@ -111,8 +111,7 @@ public class PublicBlogRestController {
     public HttpEntity<PagedResources<PublicCommentResource>> getBlogApprovedCommentPosts(
             @PathVariable("blogId") String id,
             @PageableDefault(size = UtilConstants.DEFAULT_RETURN_RECORD_COUNT, page = 0) Pageable pageable,
-            PagedResourcesAssembler<CommentPost> assembler) 
-            throws ResourceNotFoundException {
+            PagedResourcesAssembler<CommentPost> assembler) throws ResourceNotFoundException {
         getPublishedBlogById(id); //security check
         
         Page<CommentPost> commentPosts = 
@@ -131,8 +130,7 @@ public class PublicBlogRestController {
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_SITE_BLOGS_BLOG_COMMENTS_COMMENT)
     public HttpEntity<Resource<CommentPost>> getBlogApprovedCommentPostById(
             @PathVariable("blogId") String blogId,
-            @PathVariable("commentId") String commentId) 
-            throws ResourceNotFoundException {
+            @PathVariable("commentId") String commentId) throws ResourceNotFoundException {
         
         BlogPost blogPost = getPublishedBlogById(blogId);
         CommentPost commentPost = commentPostRepository.findOne(commentId);

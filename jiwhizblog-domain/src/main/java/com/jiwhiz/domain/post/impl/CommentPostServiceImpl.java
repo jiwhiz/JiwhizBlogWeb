@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.jiwhiz.domain.account.UserAccount;
 import com.jiwhiz.domain.post.BlogPost;
@@ -32,6 +33,7 @@ import com.jiwhiz.domain.post.CommentPostService;
  * @author Yuan Ji
  * 
  */
+@Service
 public class CommentPostServiceImpl implements CommentPostService {
     private final static Logger LOGGER = LoggerFactory.getLogger(CommentPostServiceImpl.class);
 

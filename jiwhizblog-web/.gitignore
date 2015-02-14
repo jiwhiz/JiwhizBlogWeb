@@ -6,4 +6,6 @@ node_modules
 dist
 .tmp
 .sass-cache
-app/bower_components
+src/main/webapp/dist
+src/main/webapp/bower_components
+/npm-debug.log

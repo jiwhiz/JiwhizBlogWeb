@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,8 @@ import com.jiwhiz.domain.account.UserAccountService;
 import com.jiwhiz.domain.account.UserSocialConnectionRepository;
 import com.jiwhiz.domain.post.BlogPostRepository;
 import com.jiwhiz.domain.post.CommentPostRepository;
-import com.jiwhiz.mail.CommentNotificationSender;
-import com.jiwhiz.mail.ContactMessageSender;
-import com.jiwhiz.mail.SystemMessageSender;
+import com.jiwhiz.mail.EmailProperties;
+import com.jiwhiz.mail.EmailService;
 
 /**
  * @author Yuan Ji
@@ -59,18 +58,11 @@ public class TestRestServiceConfig {
     }
     
     @Bean
-    public ContactMessageSender contactMessageSender() {
-        return Mockito.mock(ContactMessageSender.class);
+    public EmailProperties emailProperties() {
+        return new EmailProperties();
     }
-
     @Bean
-    public SystemMessageSender systemMessageSender() {
-        return Mockito.mock(SystemMessageSender.class);
+    public EmailService emailService() {
+        return Mockito.mock(EmailService.class);
     }
-
-    @Bean
-    public CommentNotificationSender commentNotificationSender() {
-        return Mockito.mock(CommentNotificationSender.class);
-    }
-
 }

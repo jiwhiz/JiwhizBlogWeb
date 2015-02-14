@@ -1,5 +1,5 @@
 /* 
- * Copyright 2013-2014 JIWHIZ Consulting Inc.
+ * Copyright 2013-2015 JIWHIZ Consulting Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -50,8 +48,6 @@ import com.jiwhiz.rest.UtilConstants;
  */
 @Controller
 public class AuthorBlogRestController extends AbstractAuthorRestController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthorBlogRestController.class);
-    
     private final AuthorBlogResourceAssembler authorBlogResourceAssembler;
     @Inject
     public AuthorBlogRestController(
@@ -66,7 +62,6 @@ public class AuthorBlogRestController extends AbstractAuthorRestController {
     public HttpEntity<PagedResources<AuthorBlogResource>> getBlogPosts(
             @PageableDefault(size = UtilConstants.DEFAULT_RETURN_RECORD_COUNT, page = 0)Pageable pageable,
             PagedResourcesAssembler<BlogPost> assembler) {
-        LOGGER.debug("==>AuthorBlogRestController.getBlogPosts()");
         UserAccount currentUser = getCurrentAuthenticatedAuthor();        
         Page<BlogPost> blogPosts = this.blogPostRepository.findByAuthorIdOrderByCreatedTimeDesc(currentUser.getUserId(), pageable);
         return new ResponseEntity<>(assembler.toResource(blogPosts, authorBlogResourceAssembler), HttpStatus.OK);
@@ -75,16 +70,13 @@ public class AuthorBlogRestController extends AbstractAuthorRestController {
     @RequestMapping(method = RequestMethod.GET, value = ApiUrls.URL_AUTHOR_BLOGS_BLOG) 
     public HttpEntity<AuthorBlogResource> getBlogPostById(@PathVariable("blogId") String blogId) 
             throws ResourceNotFoundException {
-        LOGGER.debug("==>AuthorBlogRestController.getBlogPostById()");
-        
         BlogPost blogPost = getBlogByIdAndCheckAuthor(blogId);
         return new ResponseEntity<>(authorBlogResourceAssembler.toResource(blogPost), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = ApiUrls.URL_AUTHOR_BLOGS)
-    public HttpEntity<Void> createBlogPost(@RequestBody BlogPostForm blogPostForm) throws ResourceNotFoundException {
-        LOGGER.info("==>AuthorBlogRestController.createBlogPost()");
-        
+    public HttpEntity<Void> createBlogPost(
+    		@RequestBody BlogPostForm blogPostForm) throws ResourceNotFoundException {
         UserAccount currentUser = getCurrentAuthenticatedAuthor();
         BlogPost blogPost = new BlogPost(currentUser.getUserId(), blogPostForm.getTitle(), 
                 blogPostForm.getContent(), blogPostForm.getTagString());
@@ -98,10 +90,9 @@ public class AuthorBlogRestController extends AbstractAuthorRestController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = ApiUrls.URL_AUTHOR_BLOGS_BLOG)
-    public HttpEntity<Void> updateBlogPost(@PathVariable("blogId") String blogId, 
+    public HttpEntity<Void> updateBlogPost(
+    		@PathVariable("blogId") String blogId, 
             @RequestBody BlogPostForm blogPostForm) throws ResourceNotFoundException {
-        LOGGER.info("==>AuthorBlogRestController.updateBlogPost() for "+blogId);
-        
         BlogPost blogPost = getBlogByIdAndCheckAuthor(blogId);
         blogPost.setContent(blogPostForm.getContent());
         blogPost.setTitle(blogPostForm.getTitle());
@@ -119,8 +110,6 @@ public class AuthorBlogRestController extends AbstractAuthorRestController {
     public HttpEntity<AuthorBlogResource> patchBlogPost(
             @PathVariable("blogId") String blogId, 
             @RequestBody Map<String, String> updateMap) throws ResourceNotFoundException {
-        LOGGER.info("==>AuthorBlogRestController.patchBlogPost() for "+blogId);
-        
         BlogPost blogPost = getBlogByIdAndCheckAuthor(blogId);
         String content = updateMap.get("content");
         if (content != null) {
