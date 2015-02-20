@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Util class to get sendgrid username/password from VCAP_SEVICES environment variables on CloudFoundry.
  * <p>
  * Copied from <a href="https://github.com/motdotla/vcapenv">https://github.com/motdotla/vcapenv</a>
- * 
- * @author yuan
  *
  */
 public class Vcapenv {

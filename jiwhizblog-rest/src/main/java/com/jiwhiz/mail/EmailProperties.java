@@ -17,6 +17,11 @@ package com.jiwhiz.mail;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * 
+ * @author Yuan Ji
+ *
+ */
 @ConfigurationProperties("application.email")
 public class EmailProperties {
 	/**

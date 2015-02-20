@@ -34,6 +34,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -45,6 +46,7 @@ import com.jiwhiz.mail.EmailProperties;
 @EnableHypermediaSupport(type = { EnableHypermediaSupport.HypermediaType.HAL })
 @EnableMongoAuditing(auditorAwareRef="auditorAware")
 @EnableAspectJAutoProxy
+@EnableAsync
 @EnableConfigurationProperties(EmailProperties.class)
 public class JiwhizBlogWebApplication {
     private final Logger log = LoggerFactory.getLogger(JiwhizBlogWebApplication.class);

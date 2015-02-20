@@ -24,6 +24,7 @@ import com.jiwhiz.domain.account.UserAccount;
 import com.jiwhiz.domain.post.BlogPost;
 import com.jiwhiz.domain.post.CommentPost;
 import com.jiwhiz.mail.ContactForm;
+import com.jiwhiz.mail.EmailMessage;
 import com.jiwhiz.mail.EmailProperties;
 import com.jiwhiz.mail.EmailService;
 
@@ -47,8 +48,7 @@ public class MessageSender {
     public void notifyAuthorForNewComment(UserAccount blogAuthor, UserAccount commentUser, CommentPost comment, BlogPost blog) {
         String subject = "You got comment on your blog post " + blog.getTitle();
         String message = commentUser.getDisplayName() + " posted a comment on your blog: " + comment.getContent();
-        emailService.sendEmail(properties.getSystemEmail(), properties.getSystemName(), 
-                blogAuthor.getEmail(), blogAuthor.getDisplayName(), subject, message, null);        
+        emailService.sendEmail(new EmailMessage(properties, blogAuthor.getEmail(), blogAuthor.getDisplayName(), subject, message, null));
     }
     
     /**
@@ -59,8 +59,7 @@ public class MessageSender {
     public void notifyAdminForContactMessage(ContactForm contact) {
         String subject = "Contact message from " + contact.getName();
         String message = contact.getName() + " tried to contact you on your website: " + contact.getMessage();
-        emailService.sendEmail(properties.getSystemEmail(), properties.getSystemName(),
-                properties.getAdminEmail(), properties.getAdminName(), subject, message, contact.getEmail());
+        emailService.sendEmail(new EmailMessage(properties, subject, message, contact.getEmail()));
      }
 
     /**
@@ -74,8 +73,7 @@ public class MessageSender {
         }
         String subject = "New user registered";
         String message = "A new user registered: name is " + user.getDisplayName() + ", email is " + userEmail;
-        emailService.sendEmail(properties.getSystemEmail(), properties.getSystemName(),
-                properties.getAdminEmail(), properties.getAdminName(), subject, message, null);        
+        emailService.sendEmail(new EmailMessage(properties, subject, message, null));
     }
     
     /**
@@ -86,8 +84,7 @@ public class MessageSender {
     public void sendNewPostPublished(UserAccount author, BlogPost blog) {
         String subject = "New post published";
         String message = "A new post was published: title is " + blog.getTitle() + ", author is " + author.getDisplayName();
-        emailService.sendEmail(properties.getSystemEmail(), properties.getSystemName(),
-                properties.getAdminEmail(), properties.getAdminName(), subject, message, null);                
+        emailService.sendEmail(new EmailMessage(properties, subject, message, null));
     }
 
 }

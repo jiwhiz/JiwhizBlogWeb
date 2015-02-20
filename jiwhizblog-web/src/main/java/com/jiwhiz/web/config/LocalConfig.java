@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.jiwhiz.mail.EmailMessage;
 import com.jiwhiz.mail.EmailService;
 
 /**
@@ -31,9 +32,9 @@ public class LocalConfig {
     public EmailService emailService() {
         return new EmailService() {
             @Override
-            public void sendEmail(String fromEmail, String fromName, String toEmail, String toName, 
-                    String subject, String message, String replyTo) {
-                System.out.println(String.format("Local test: Send email to %s. From  %s: \" %s \"", toEmail, fromEmail, message));
+            public void sendEmail(EmailMessage message) {
+                System.out.println(String.format("Local test: Send email to %s. From  %s: \" %s \"", 
+                		message.getToEmail(), message.getFromEmail(), message.getMessage()));
             }
             
         };

@@ -17,8 +17,11 @@ package com.jiwhiz.mail.sendgrid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.util.StringUtils;
 
 import com.github.sendgrid.SendGrid;
+import com.jiwhiz.mail.EmailMessage;
 import com.jiwhiz.mail.EmailService;
 
 /**
@@ -30,7 +33,6 @@ import com.jiwhiz.mail.EmailService;
 public class EmailServiceImpl implements EmailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
     
-    private boolean initSuccess;
     private String username;
     private String password;
     
@@ -39,9 +41,7 @@ public class EmailServiceImpl implements EmailService {
             Vcapenv vcapenv = new Vcapenv();
             this.username = vcapenv.SENDGRID_USERNAME();
             this.password = vcapenv.SENDGRID_PASSWORD();
-            this.initSuccess = true;
         } catch (Exception ex) {
-            this.initSuccess = false;
             LOGGER.error("Cannot get sendgrid username and password. Please check the service binding. "+ex.getMessage());
         }
     }
@@ -49,34 +49,35 @@ public class EmailServiceImpl implements EmailService {
     public EmailServiceImpl(String username, String password) {
         this.username = username;
         this.password = password;
-        this.initSuccess = true;
     }
     
-    @Override
-    public void sendEmail(String fromEmail, String fromName, String toEmail, String toName,
-            String subject, String message, String replyTo) {
-        if (!initSuccess) {
-            return;
-        }
-        
-        SendGrid sendgrid = new SendGrid(username, password);
-        sendgrid.setFrom(fromEmail);
-        sendgrid.setFromName(fromName);
-        sendgrid.addTo(toEmail);
-        sendgrid.addToName(toName);
-        sendgrid.setReplyTo(replyTo);
-        
-        sendgrid.setSubject(subject);
-        sendgrid.setText(message);
+    /**
+     * Sends email asynchronously through Sendgrid. 
+     */
+	@Override
+	@Async
+	public void sendEmail(final EmailMessage message) {
+		if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+			return;
+		}
+		
+		SendGrid sendgrid = new SendGrid(username, password);
+        sendgrid.setFrom(message.getFromEmail());
+        sendgrid.setFromName(message.getFromName());
+        sendgrid.addTo(message.getToEmail());
+        sendgrid.addToName(message.getToName());
+        sendgrid.setReplyTo(message.getReplyTo());
+        sendgrid.setSubject(message.getSubject());
+        sendgrid.setText(message.getMessage());
 
         try {
-            LOGGER.info("Try to send email to {}, message is: {}", toEmail, message);
+            LOGGER.info("Try to send email to {}, message is: {}", message.getToEmail(), message);
             String response = sendgrid.send();
             LOGGER.info("Sent email successfully, response from SendGrid is: {}", response);
         } catch (Exception ex) {
-            ex.printStackTrace();
-           LOGGER.error("Got exception when sending email through sendgrid: " + ex.getMessage());
+            LOGGER.debug("Exception:", ex);
+            LOGGER.error("Got exception when sending email through sendgrid: {}", ex.getMessage());
         }
-    }
-
+		
+	}
 }

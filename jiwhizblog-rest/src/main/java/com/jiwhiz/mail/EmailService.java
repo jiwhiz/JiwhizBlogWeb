@@ -22,7 +22,10 @@ package com.jiwhiz.mail;
  *
  */
 public interface EmailService {
-
-    void sendEmail(String fromEmail, String fromName, String toEmail, String toName, 
-            String subject, String message, String replyTo);
+	/**
+	 * Sends email.
+	 * 
+	 * @param message
+	 */
+    void sendEmail(EmailMessage message);
 }
