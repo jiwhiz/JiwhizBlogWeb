@@ -86,7 +86,7 @@ public class AuthorBlogCommentRestControllerTest extends AbstractRestControllerT
         CommentPost comment1 = new CommentPost("author1", BLOG_ID, "My question comment...");
         CommentPost comment2 = new CommentPost("author2", BLOG_ID, "My answer comment...");
         when(commentPostRepositoryMock.findByBlogPostIdOrderByCreatedTimeDesc(eq(BLOG_ID), any(Pageable.class)))
-            .thenReturn(new PageImpl<CommentPost>(Arrays.asList(comment1, comment2), new PageRequest(0, 10), 1));
+            .thenReturn(new PageImpl<CommentPost>(Arrays.asList(comment1, comment2), new PageRequest(0, 10), 10));
         
         mockMvc.perform(get(ApiUrls.API_ROOT + ApiUrls.URL_AUTHOR_BLOGS_BLOG_COMMENTS, BLOG_ID))
                 .andExpect(status().isOk())

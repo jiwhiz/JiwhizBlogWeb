@@ -61,7 +61,7 @@ public class UserRestControllerTest extends AbstractRestControllerTest {
     
     @Test
     public void getUserAccounts_ShouldReturnAllUserAccounts() throws Exception {
-        Page<UserAccount> page = new PageImpl<UserAccount>(getTestUserAccountList() , new PageRequest(0, 10), 1);
+        Page<UserAccount> page = new PageImpl<UserAccount>(getTestUserAccountList() , new PageRequest(0, 10), 10);
         
         when(userAccountRepositoryMock.findAll(any(Pageable.class))).thenReturn(page);
         

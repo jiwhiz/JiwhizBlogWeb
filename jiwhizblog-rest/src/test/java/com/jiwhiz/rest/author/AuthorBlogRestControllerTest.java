@@ -87,7 +87,7 @@ public class AuthorBlogRestControllerTest extends AbstractRestControllerTest {
         blog2.setContent("My second article...");
 
         when(blogPostRepositoryMock.findByAuthorIdOrderByCreatedTimeDesc(eq(user.getUserId()), any(Pageable.class)))
-            .thenReturn(new PageImpl<BlogPost>(Arrays.asList(blog1, blog2), new PageRequest(0, 10), 1));
+            .thenReturn(new PageImpl<BlogPost>(Arrays.asList(blog1, blog2), new PageRequest(0, 10), 10));
         
         mockMvc.perform(get(ApiUrls.API_ROOT + ApiUrls.URL_AUTHOR_BLOGS))
                 .andExpect(status().isOk())
