@@ -24,7 +24,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
-import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -48,7 +47,6 @@ import com.jiwhiz.rest.MessageSender;
  *
  */
 @Configuration
-@EnableSocial
 public class SocialConfig extends SocialConfigurerAdapter {
     @Inject
     private UserSocialConnectionRepository userSocialConnectionRepository;
