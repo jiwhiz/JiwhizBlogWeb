@@ -88,6 +88,9 @@
                                     <directory>src/main/webapp/dist</directory>
                                 </fileset>
                                 <fileset>
+                                    <directory>src/main/webapp/bower_components</directory>
+                                </fileset>
+                                <fileset>
                                     <directory>.tmp</directory>
                                 </fileset>
                                 <fileset>
