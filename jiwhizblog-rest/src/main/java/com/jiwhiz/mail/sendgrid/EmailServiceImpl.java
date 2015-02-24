@@ -68,10 +68,10 @@ public class EmailServiceImpl implements EmailService {
         sendgrid.addToName(message.getToName());
         sendgrid.setReplyTo(message.getReplyTo());
         sendgrid.setSubject(message.getSubject());
-        sendgrid.setText(message.getMessage());
+        sendgrid.setText(message.getBody());
 
         try {
-            LOGGER.info("Try to send email to {}, message is: {}", message.getToEmail(), message);
+            LOGGER.info("Try to send email to {}, message is: {}", message.getToEmail(), message.getBody());
             String response = sendgrid.send();
             LOGGER.info("Sent email successfully, response from SendGrid is: {}", response);
         } catch (Exception ex) {

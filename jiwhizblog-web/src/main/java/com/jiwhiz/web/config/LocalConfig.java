@@ -34,7 +34,7 @@ public class LocalConfig {
             @Override
             public void sendEmail(EmailMessage message) {
                 System.out.println(String.format("Local test: Send email to %s. From  %s: \" %s \"", 
-                		message.getToEmail(), message.getFromEmail(), message.getMessage()));
+                		message.getToEmail(), message.getFromEmail(), message.getBody()));
             }
             
         };
